@@ -10,10 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_io.h"
+//////////////
+#include <stdio.h>
 
 int		handle_keyboard_down(int key, void **mlx)
 {
+	printf("%d\n", key);
 	set_key(1, key);
 	main_loop(mlx);
 	return (0);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_io.h"
 
 t_int_xy	set_cursor(int call, int x, int y)
 {

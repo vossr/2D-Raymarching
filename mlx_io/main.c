@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_io.h"
 
 void	ft_error(char *error)
 {
@@ -48,29 +48,14 @@ void	put_usage(char *arg)
 {
 	ft_putstr("usage: ");
 	ft_putstr(arg);
-	ft_putstr(" [mandelbrot | julia | burningship]\n");
+	ft_putstr(" [map_file]\n");
 }
 
 int		main(int argc, char **argv)
 {
 	if (argc != 2)
 		put_usage(argv[0]);
-	else if (!ft_strcmp(argv[1], "mandelbrot"))
-	{
-		set_fractal(1);
-		init_window("mandlelbrot");
-	}
-	else if (!ft_strcmp(argv[1], "julia"))
-	{
-		set_fractal(2);
-		init_window("julia");
-	}
-	else if (!ft_strcmp(argv[1], "burningship"))
-	{
-		set_fractal(3);
-		init_window("burningship");
-	}
 	else
-		put_usage(argv[0]);
+		init_window("Wolf3D");
 	return (0);
 }

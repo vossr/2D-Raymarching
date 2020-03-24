@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_io.h"
 
 int		loop_hook(void **mlx)
 {
@@ -20,6 +20,7 @@ int		loop_hook(void **mlx)
 
 void	main_loop(void **mlx)
 {
-	fractal();
+	wolf3D();
 	mlx_put_image_to_window(mlx[0], mlx[1], mlx[2], 0, 0);
+	mlx_clear_image(mlx);
 }

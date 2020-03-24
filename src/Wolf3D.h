@@ -12,8 +12,9 @@
 
 #ifndef FRACTAL_H
 # define FRACTAL_H
-# include "fdf.h"
+# include "mlx_io.h"
 # include <pthread.h>
+# include <math.h>
 
 #include <stdio.h>
 
@@ -22,16 +23,9 @@ typedef struct	s_float_xy {
 	float		y;
 }				t_float_xy;
 
-typedef struct	s_args {
-	t_float_xy	pos;
-	float		zoom;
-	int			max_iter;
-}				t_args;
-
-void			mandelbrot_loop(t_float_xy pos, float zoom,
-														int max_iter, int i);
-void			julia_loop(t_float_xy pos, float zoom, int max_iter, int i);
-void			burningship_loop(t_float_xy pos, float zoom,
-														int max_iter, int i);
+typedef struct	s_double_xy {
+	double		x;
+	double		y;
+}				t_double_xy;
 
 #endif

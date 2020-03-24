@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   mlx_io.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef MLX_IO_H
+# define MLX_IO_H
 # include "mlx.h"
 # include "libft.h"
 
@@ -41,7 +41,7 @@ void			mlx_clear_image(void **mlx);
 void			init_image(void **mlx);
 void			ft_error(char *str);
 
-void			fractal(void);
+void			wolf3D(void);
 int				set_fractal(int f);
 
 #endif
