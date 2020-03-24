@@ -14,7 +14,7 @@ NAME = Wolf3D
 LIB = libft/libft.a
 HEADERS = minilibx libft mlx_io src
 MAIN_FILES = main.c handle_hook.c input_state.c input_state_wrappers.c  main_loop.c image.c
-FILES = Wolf3D.c
+FILES = Wolf3D.c line.c
 .PHONY: clean fclean re all
 
 all: $(NAME)

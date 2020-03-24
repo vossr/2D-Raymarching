@@ -23,9 +23,17 @@ typedef struct	s_float_xy {
 	float		y;
 }				t_float_xy;
 
+typedef struct	s_float_xyz {
+	float		x;
+	float		y;
+	float		z;
+}				t_float_xyz;
+
 typedef struct	s_double_xy {
 	double		x;
 	double		y;
 }				t_double_xy;
+
+void	print_line(t_float_xy start, t_float_xy stop, t_float_xy color);
 
 #endif

@@ -34,7 +34,7 @@ void	megapixel_put(int x, int y, int color)
 
 //void	camera()
 
-void	rotate(t_double_xy *vertex, double angle)
+void	rotate(t_float_xy *vertex, double angle)
 {
 	double	sin_angle;
 	double	cos_angle;
@@ -49,43 +49,62 @@ void	rotate(t_double_xy *vertex, double angle)
 	vertex->y = y * cos_angle - x * sin_angle;
 }
 
-void	wolf3D(void)
+void	player_movement(t_float_xy *pos, t_float_xy *camera)
 {
-	static t_double_xy	pos = {.x = 100, .y = 100};
-	static t_double_xy	camera = {.x = 0, .y = 100};
-	static t_double_xy	camera_tan = {.x = 100, .y = 0};
+	static t_float_xy	camera_tan = {.x = 100, .y = 0};
 	static t_int_xy		last_cursor = {.x = 0, .y = 0};
 	t_int_xy		cursor;
 
-	if (is_key_down(53))
-		exit(0);
 	if (is_key_down(126))
 	{
-		pos.x += camera.x / 100;
-		pos.y += camera.y / 100;
+		pos->x += camera->x / 100;
+		pos->y += camera->y / 100;
 	}
 	if (is_key_down(123))
 	{
-		pos.x += camera_tan.x / 100;
-		pos.y += camera_tan.y / 100;
+		pos->x += camera_tan.x / 100;
+		pos->y += camera_tan.y / 100;
 	}
 	if (is_key_down(125))
 	{
-		pos.x -= camera.x / 100;
-		pos.y -= camera.y / 100;
+		pos->x -= camera->x / 100;
+		pos->y -= camera->y / 100;
 	}
 	if (is_key_down(124))
 	{
-		pos.x -= camera_tan.x / 100;
-		pos.y -= camera_tan.y / 100;
+		pos->x -= camera_tan.x / 100;
+		pos->y -= camera_tan.y / 100;
 	}
-
 	cursor = get_cursor();
-	rotate(&camera, (last_cursor.x - cursor.x) * .01);
+	rotate(camera, (last_cursor.x - cursor.x) * .01);
 	rotate(&camera_tan, (last_cursor.x - cursor.x) * .01);
 	last_cursor = cursor;
+}
+
+void	wolf3D(void)
+{
+	static t_float_xy	pos = {.x = 100, .y = 100};
+	static t_float_xy	camera = {.x = 0, .y = 100};
+
+	if (is_key_down(53))
+		exit(0);
+	player_movement(&pos, &camera);
 
 	pixel_put(pos.x, pos.y, 0xFFFFFF);
 	pixel_put(pos.x + camera.x, pos.y + camera.y, 0xFFFF00);
-	pixel_put(pos.x + camera_tan.x, pos.y + camera_tan.y, 0x00FF00);
+
+	t_float_xy xdd;
+	xdd.x = pos.x;
+	xdd.y = pos.y;
+
+	t_float_xy asd;
+	asd.x = pos.x + camera.x;
+	asd.y = pos.y + camera.y;
+
+	t_float_xy color;
+	color.x = 0xFFFFFF;
+	color.y = 0xFFFFFF;
+
+	print_line(xdd, asd, color);
+
 }
