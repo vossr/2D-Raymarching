@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 13:22:18 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/15 14:33:20 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
 	int x = 0;
 	t_float_xy color;
 
+	(void)camera_tan;
 	while (x < 1280)
 	{
 		color.x = 0xFFFFFF;
@@ -148,6 +149,36 @@ void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
 	//printf("j = %d\n", 1000 / j);
 }
 
+void	map(t_float_xy pos, t_float_xy camera)
+{
+	t_float_xy	relative_camera;
+	t_float_xy	color;
+	int			x;
+	int			y;
+
+	color.x = 0xFF00;
+	color.y = 0xFF00;
+	relative_camera.x = pos.x + camera.x * 100;
+	relative_camera.y = pos.y + camera.y * 100;
+	pos.x *= 4;
+	pos.y *= 4;
+	relative_camera.x *= 4;
+	relative_camera.y *= 4;
+	print_line(pos, relative_camera, color);
+	y = 0;
+	while (y < 20)
+	{
+		x = 0;
+		while (x < 20)
+		{
+			if (x == 0 || x == 19 || y == 0 || y == 19)
+				megapixel_put(x * 4, y * 4, 0xaaaaaa);
+			x++;
+		}
+		y++;
+	}
+}
+
 int		wolf(void)
 {
 	static t_float_xy	pos = {.x = 10, .y = 10};
@@ -157,20 +188,8 @@ int		wolf(void)
 	if (is_key_down(53))
 		exit(0);
 	player_movement(&pos, &camera, &camera_tan);
-
-	t_float_xy relative_camera;
-	relative_camera.x = pos.x + camera.x * 100;
-	relative_camera.y = pos.y + camera.y * 100;
-
-	t_float_xy color;
-	color.x = 0xFF00;
-	color.y = 0xFF00;
-
 	raycast(pos, camera, camera_tan);
-	print_line(pos, relative_camera, color);
-	for (int i = 0; i < 20; i++)
-		for (int j = 0; j < 20; j++)
-			if (i == 0 || i == 19 || j == 0 || j == 19)
-				pixel_put(i, j, 0xFF0000);
+	map(pos, camera);
+	update_image();
 	return (0);
 }
