@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 14:33:20 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/15 17:53:55 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,21 @@ void	rotate(t_float_xy *vertex, double angle)
 	vertex->y = y * cos_angle - x * sin_angle;
 }
 
-void	player_movement(t_float_xy *pos, t_float_xy *camera, t_float_xy *camera_tan)
+void	player_movement(t_float_xy *pos, t_float_xy *camera)
 {
 	static t_int_xy		last_cursor = {.x = 0, .y = 0};
 	t_int_xy		cursor;
 
 	if (is_key_down(126))
-		pos->x += camera->x;
+		pos->x += camera->x * 100;
 	if (is_key_down(126))
-		pos->y += camera->y;
-	if (is_key_down(123))
-		pos->x += camera_tan->x;
-	if (is_key_down(123))
-		pos->y += camera_tan->y;
+		pos->y += camera->y * 100;
 	if (is_key_down(125))
-		pos->x -= camera->x;
+		pos->x -= camera->x * 100;
 	if (is_key_down(125))
-		pos->y -= camera->y;
-	if (is_key_down(124))
-		pos->x -= camera_tan->x;
-	if (is_key_down(124))
-		pos->y -= camera_tan->y;
+		pos->y -= camera->y * 100;
 	cursor = get_cursor();
 	rotate(camera, (last_cursor.x - cursor.x) * .01);
-	rotate(camera_tan, (last_cursor.x - cursor.x) * .01);
 	last_cursor = cursor;
 }
 
@@ -104,7 +95,7 @@ int	**read_map(char *str)
 }
 
 //1280
-void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
+void	raycast(t_float_xy pos, t_float_xy camera)
 {
 	static int	**map = NULL;
 	t_float_xy	cast;
@@ -114,14 +105,27 @@ void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
 	int x = 0;
 	t_float_xy color;
 
-	(void)camera_tan;
+	const int wall_height = 1000000;
+	//t_float_xy camera_cpy = camera;
 	while (x < 1280)
 	{
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
 		cast = pos;
-		cast.x += camera_tan.x * .1 * (x + 1 - 640);
-		cast.y += camera_tan.y * .1 * (x + 1 - 640);
+		//if (x < 1280 / 2)
+			rotate(&camera, 0.001);
+		/*
+		else
+		{
+			static int asd = 1;
+			if (asd)
+			{
+				asd = 0;
+				camera = camera_cpy;
+			}
+			rotate(&camera, 0.001);
+		}
+		*/
 		int dist = 0;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
@@ -136,13 +140,13 @@ void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
 		start.x = 1279 - x;
 		start.y = 360;
 		stop.x = 1279 - x;
-		stop.y = 360 - 10000 / dist;
-		//printf("%f\n", 360.0 - (10000 / dist));
+		stop.y = 360 - wall_height / dist;
+		//printf("%f\n", 360.0 - (wall_height / dist));
 
-		color.x = 0xFFFFFF - (10000 / dist);
-		color.y = 0xFFFFFF - (10000 / dist);
+		color.x = 0xFFFFFF - (wall_height / dist);
+		color.y = 0xFFFFFF - (wall_height / dist);
 		print_line(start, stop, color);
-		stop.y = 360 + 10000 / dist;
+		stop.y = 360 + wall_height / dist;
 		print_line(start, stop, color);
 		x++;
 	}
@@ -182,13 +186,12 @@ void	map(t_float_xy pos, t_float_xy camera)
 int		wolf(void)
 {
 	static t_float_xy	pos = {.x = 10, .y = 10};
-	static t_float_xy	camera = {.x = 0, .y = .1};
-	static t_float_xy	camera_tan = {.x = .1, .y = 0};
+	static t_float_xy	camera = {.x = 0, .y = .001};
 
 	if (is_key_down(53))
 		exit(0);
-	player_movement(&pos, &camera, &camera_tan);
-	raycast(pos, camera, camera_tan);
+	player_movement(&pos, &camera);
+	raycast(pos, camera);
 	map(pos, camera);
 	update_image();
 	return (0);
