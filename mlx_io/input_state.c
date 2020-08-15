@@ -33,7 +33,7 @@ int			set_key(int call, int key)
 	{
 		i = 0;
 		if (!(keyb = (int*)malloc(sizeof(int) * 310)))
-			ft_error(NULL);
+			exit(0);
 		while (i < 300)
 		{
 			keyb[i] = 0;
@@ -58,7 +58,7 @@ int			set_mouse(int call, int button)
 	{
 		i = 0;
 		if (!(mouse = (int*)malloc(sizeof(int) * 7)))
-			ft_error(NULL);
+			exit(0);
 		while (i < 6)
 		{
 			mouse[i] = 0;

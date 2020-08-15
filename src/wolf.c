@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Wolf3D.c                                           :+:      :+:    :+:   */
+/*   wolf.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/03/12 22:01:42 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/15 13:22:18 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Wolf3D.h"
+#include "wolf.h"
 
 void	megapixel_put(int x, int y, int color)
 {
@@ -148,7 +148,7 @@ void	raycast(t_float_xy pos, t_float_xy camera, t_float_xy camera_tan)
 	//printf("j = %d\n", 1000 / j);
 }
 
-void	wolf3D(void)
+int		wolf(void)
 {
 	static t_float_xy	pos = {.x = 10, .y = 10};
 	static t_float_xy	camera = {.x = 0, .y = .1};
@@ -172,4 +172,5 @@ void	wolf3D(void)
 		for (int j = 0; j < 20; j++)
 			if (i == 0 || i == 19 || j == 0 || j == 19)
 				pixel_put(i, j, 0xFF0000);
+	return (0);
 }

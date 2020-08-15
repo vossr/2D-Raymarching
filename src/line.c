@@ -1,4 +1,4 @@
-#include "Wolf3D.h"
+#include "wolf.h"
 
 double	ft_abs(double n)
 {

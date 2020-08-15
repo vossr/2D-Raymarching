@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_loop.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/08 20:58:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/03/12 20:09:31 by rpehkone         ###   ########.fr       */
+/*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
+/*   Updated: 2020/08/15 13:22:41 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx_io.h"
+#include "wolf.h"
 
-int		loop_hook(void **mlx)
+void		put_usage(char *arg)
 {
-	main_loop(mlx);
-	return (0);
+	ft_putstr("usage: ");
+	ft_putstr(arg);
+	ft_putstr(" [file ...]\n");
 }
 
-void	main_loop(void **mlx)
+int			main(int argc, char **argv)
 {
-	wolf3D();
-	mlx_put_image_to_window(mlx[0], mlx[1], mlx[2], 0, 0);
-	mlx_clear_image(mlx);
+	if (argc != 2)
+		put_usage(argv[0]);
+	init_window(1280, 720, "Wolf3D");
+	return (0);
 }
