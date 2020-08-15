@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 17:53:55 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/15 18:36:44 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	raycast(t_float_xy pos, t_float_xy camera)
 {
 	static int	**map = NULL;
 	t_float_xy	cast;
+	t_float_xy	cast2;
 
 	if (!map)
 		map = read_map(NULL);
@@ -112,6 +113,7 @@ void	raycast(t_float_xy pos, t_float_xy camera)
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
 		cast = pos;
+		cast2 = pos;
 		//if (x < 1280 / 2)
 			rotate(&camera, 0.001);
 		/*
@@ -129,6 +131,8 @@ void	raycast(t_float_xy pos, t_float_xy camera)
 		int dist = 0;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
+			cast2.x = cast.x;
+			cast2.y = cast.y;
 			cast.x += camera.x;
 			cast.y += camera.y;
 			dist++;
@@ -143,8 +147,30 @@ void	raycast(t_float_xy pos, t_float_xy camera)
 		stop.y = 360 - wall_height / dist;
 		//printf("%f\n", 360.0 - (wall_height / dist));
 
-		color.x = 0xFFFFFF - (wall_height / dist);
-		color.y = 0xFFFFFF - (wall_height / dist);
+		//color.x = 0xFFFFFF - (wall_height / dist);
+		//color.y = 0xFFFFFF - (wall_height / dist);
+
+		if ((int)cast.x < (int)cast2.x)
+		{
+			color.x = 0xFFFFFF;
+			color.y = 0xFFFFFF;
+		}
+		else if ((int)cast.y < (int)cast2.y)
+		{
+			color.x = 0xFF0000;
+			color.y = 0xFF0000;
+		}
+		else if ((int)cast.y > (int)cast2.y)
+		{
+			color.x = 0xFF00;
+			color.y = 0xFF00;
+		}
+		//if ((int)cast.y > (int)cast2.y)
+		else
+		{
+			color.x = 0xFF;
+			color.y = 0xFF;
+		}
 		print_line(start, stop, color);
 		stop.y = 360 + wall_height / dist;
 		print_line(start, stop, color);
