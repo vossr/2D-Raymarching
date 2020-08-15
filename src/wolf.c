@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 18:36:44 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/15 19:16:27 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,20 @@
 
 void	megapixel_put(int x, int y, int color)
 {
-	pixel_put(x + 0, y + 0, color);
-	pixel_put(x + 0, y + 1, color);
-	pixel_put(x + 0, y + 2, color);
-	pixel_put(x + 0, y + 3, color);
-	pixel_put(x + 1, y + 0, color);
-	pixel_put(x + 1, y + 1, color);
-	pixel_put(x + 1, y + 2, color);
-	pixel_put(x + 1, y + 3, color);
-	pixel_put(x + 2, y + 0, color);
-	pixel_put(x + 2, y + 1, color);
-	pixel_put(x + 2, y + 2, color);
-	pixel_put(x + 2, y + 3, color);
-	pixel_put(x + 3, y + 0, color);
-	pixel_put(x + 3, y + 1, color);
-	pixel_put(x + 3, y + 2, color);
-	pixel_put(x + 3, y + 3, color);
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 8)
+	{
+		j = 0;
+		while (j < 8)
+		{
+			pixel_put(x + i, y + j, color);
+			j++;
+		}
+		i++;
+	}
 }
 
 //void	camera()
@@ -49,7 +47,7 @@ void	rotate(t_float_xy *vertex, double angle)
 	vertex->y = y * cos_angle - x * sin_angle;
 }
 
-void	player_movement(t_float_xy *pos, t_float_xy *camera)
+void	player_movement(t_float_xy *pos, t_float_xy *camera, int map_width, int map_height)
 {
 	static t_int_xy		last_cursor = {.x = 0, .y = 0};
 	t_int_xy		cursor;
@@ -62,17 +60,27 @@ void	player_movement(t_float_xy *pos, t_float_xy *camera)
 		pos->x -= camera->x * 100;
 	if (is_key_down(125))
 		pos->y -= camera->y * 100;
+	if (pos->x < 1.1)
+		pos->x = 1.1;
+	else if (pos->x > map_width - 1.1)
+		pos->x = map_width - 1.1;
+	if (pos->y < 1.1)
+		pos->y = 1.1;
+	else if (pos->y > map_height - 1.1)
+		pos->y = map_height - 1.1;
 	cursor = get_cursor();
 	rotate(camera, (last_cursor.x - cursor.x) * .01);
 	last_cursor = cursor;
 }
 
-int	**read_map(char *str)
+int	**read_map(char *str, int *map_width, int *map_height)
 {
 	static int	**map = NULL;
 	int		i;
 	int		j;
 
+	*map_width = 20;
+	*map_height = 20;
 	(void)str;
 	map = (int**)malloc(sizeof(int*) * 20);
 	i = 0;
@@ -95,14 +103,11 @@ int	**read_map(char *str)
 }
 
 //1280
-void	raycast(t_float_xy pos, t_float_xy camera)
+void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 {
-	static int	**map = NULL;
 	t_float_xy	cast;
 	t_float_xy	cast2;
 
-	if (!map)
-		map = read_map(NULL);
 	int x = 0;
 	t_float_xy color;
 
@@ -179,7 +184,7 @@ void	raycast(t_float_xy pos, t_float_xy camera)
 	//printf("j = %d\n", 1000 / j);
 }
 
-void	map(t_float_xy pos, t_float_xy camera)
+void	map_print(t_float_xy pos, t_float_xy camera, int **map)
 {
 	t_float_xy	relative_camera;
 	t_float_xy	color;
@@ -201,8 +206,8 @@ void	map(t_float_xy pos, t_float_xy camera)
 		x = 0;
 		while (x < 20)
 		{
-			if (x == 0 || x == 19 || y == 0 || y == 19)
-				megapixel_put(x * 4, y * 4, 0xaaaaaa);
+			if (map[y][x] == 1)
+				megapixel_put(x * 8, y * 8, 0x10FFFFFF);
 			x++;
 		}
 		y++;
@@ -211,14 +216,19 @@ void	map(t_float_xy pos, t_float_xy camera)
 
 int		wolf(void)
 {
-	static t_float_xy	pos = {.x = 10, .y = 10};
-	static t_float_xy	camera = {.x = 0, .y = .001};
+	static t_float_xy	location = {.x = 10, .y = 10};
+	static t_float_xy	direction = {.x = 0, .y = .001};
+	static int			**map = NULL;
+	static int			map_width;
+	static int			map_height;
 
 	if (is_key_down(53))
 		exit(0);
-	player_movement(&pos, &camera);
-	raycast(pos, camera);
-	map(pos, camera);
+	else if (!map)
+		map = read_map(NULL, &map_width, &map_height);
+	player_movement(&location, &direction, map_width, map_height);
+	raycast(location, direction, map);
+	map_print(location, direction, map);
 	update_image();
 	return (0);
 }
