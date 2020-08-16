@@ -12,7 +12,7 @@
 
 #include "wolf.h"
 
-void	rotate(t_float_xy *direction, double angle)
+static void	rotate(t_float_xy *direction, double angle)
 {
 	double	sin_angle;
 	double	cos_angle;
@@ -27,7 +27,7 @@ void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
-void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_size)
+static void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_size)
 {
 	if (is_key_down(126))
 		location->x += direction->x * 100;
@@ -51,42 +51,28 @@ void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_s
 		rotate(direction, 0.05);
 }
 
-void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_height, int x)
+static void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_height, int x)
 {
 	t_float_xy	start;
 	t_float_xy	stop;
-	t_float_xy	color;
 
-	start.x = WIN_WIDTH - 1 - x;
+	if (wall_height > WIN_HEIGHT / 2)
+		wall_height = WIN_HEIGHT / 2;
+	start.x = WIN_WIDTH - x;
 	stop.x = start.x;
-	start.y = WIN_HEIGHT / 2;
+	start.y = WIN_HEIGHT / 2 + wall_height;
 	stop.y = WIN_HEIGHT / 2 - wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
-	{
-		color.x = 0xFFFFFF;
-		color.y = 0xFFFFFF;
-	}
+		print_line(start, stop, 0xFFFFFF);
 	else if ((int)cast.y < (int)(cast.y - direction.y))
-	{
-		color.x = 0xFF0000;
-		color.y = 0xFF0000;
-	}
+		print_line(start, stop, 0xFF0000);
 	else if ((int)cast.y > (int)(cast.y - direction.y))
-	{
-		color.x = 0xFF00;
-		color.y = 0xFF00;
-	}
+		print_line(start, stop, 0xFF00);
 	else
-	{
-		color.x = 0xFF;
-		color.y = 0xFF;
-	}
-	print_line(start, stop, color);
-	stop.y = WIN_HEIGHT / 2 + wall_height;
-	print_line(start, stop, color);
+		print_line(start, stop, 0xFF);
 }
 
-void	raycast(t_float_xy location, t_float_xy direction, int **map)
+static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 {
 	t_float_xy	cast;
 	int			x;
@@ -105,7 +91,7 @@ void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			cast.y += direction.y;
 			cast_lenght++;
 		}
-		texture_offsets(direction, cast, 1000000 / cast_lenght, x);
+		texture_offsets(direction, cast, 1000000 / cast_lenght, x - 1);
 		x++;
 	}
 }

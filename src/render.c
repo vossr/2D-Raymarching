@@ -7,35 +7,6 @@ double	ft_abs(double n)
 	return (n);
 }
 
-int		make_fade(t_float_xy color, unsigned fade, signed xred)
-{
-	signed xgrn;
-	signed xblu;
-	signed yred;
-	signed ygrn;
-	signed yblu;
-
-	if (color.x == color.y)
-		return ((int)color.x);
-	xred = (((int)color.x % 0x1000000) >> 4 * 4) - fade;
-	xgrn = (((int)color.x % 0x10000) >> 4 * 2) - fade;
-	xblu = ((int)color.x % 0x100) - fade;
-	yred = (((int)color.y % 0x1000000) >> 4 * 4);
-	ygrn = (((int)color.y % 0x10000) >> 4 * 2);
-	yblu = ((int)color.y % 0x100);
-	yred = (int)(((double)fade / 0xFF) * yred);
-	ygrn = (int)(((double)fade / 0xFF) * ygrn);
-	yblu = (int)(((double)fade / 0xFF) * yblu);
-	xred = xred < 0 ? 0 : xred;
-	xgrn = xgrn < 0 ? 0 : xgrn;
-	xblu = xblu < 0 ? 0 : xblu;
-	yred = yred > 0xFF ? 0xFF : yred;
-	ygrn = ygrn > 0xFF ? 0xFF : ygrn;
-	yblu = yblu > 0xFF ? 0xFF : yblu;
-	return ((xred << 4 * 4) + (xgrn << 4 * 2) + xblu +
-			(yred << 4 * 4) + (ygrn << 4 * 2) + yblu);
-}
-
 void	megapixel_put(int x, int y, int color)
 {
 	int	i;
@@ -56,17 +27,14 @@ void	megapixel_put(int x, int y, int color)
 
 void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int **map)
 {
-	t_float_xy	color;
 	int			x;
 	int			y;
 
-	color.x = 0xFF00;
-	color.y = 0xFF00;
 	location.x *= 8;
 	location.y *= 8;
 	direction.x = location.x + 20000 * direction.x;
 	direction.y = location.y + 20000 * direction.y;
-	print_line(location, direction, color);
+	print_line(location, direction, 0xFF00);
 	y = 0;
 	while (y < map_size.y)
 	{
@@ -81,7 +49,7 @@ void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int
 	}
 }
 
-void	print_line(t_float_xy start, t_float_xy stop, t_float_xy color)
+void	print_line(t_float_xy start, t_float_xy stop, int color)
 {
 	t_float_xyz	step;
 	t_float_xyz	pos;
@@ -97,8 +65,7 @@ void	print_line(t_float_xy start, t_float_xy stop, t_float_xy color)
 	step.y = (stop.y - start.y) / (float)step.z;
 	while (pos.z <= step.z && i < 1000)
 	{
-		pixel_put(pos.x, pos.y,
-				make_fade(color, 0xFF * ((pos.z) / (step.z)), 0));
+		pixel_put(pos.x, pos.y, color);
 		pos.x += step.x;
 		pos.y += step.y;
 		pos.z++;
