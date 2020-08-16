@@ -51,58 +51,61 @@ void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_s
 		rotate(direction, 0.05);
 }
 
-void	raycast(t_float_xy location, t_float_xy direction, int **map)
+void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_height, int x)
 {
-	t_float_xy	cast;
+	t_float_xy	start;
+	t_float_xy	stop;
+	t_float_xy	color;
 
-	int x = 0;
-	t_float_xy color;
-
-	const int wall_height = 1000000;
-	while (x < WIN_WIDTH)
+	start.x = WIN_WIDTH - 1 - x;
+	stop.x = start.x;
+	start.y = WIN_HEIGHT / 2;
+	stop.y = WIN_HEIGHT / 2 - wall_height;
+	if ((int)cast.x < (int)(cast.x - direction.x))
 	{
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
+	}
+	else if ((int)cast.y < (int)(cast.y - direction.y))
+	{
+		color.x = 0xFF0000;
+		color.y = 0xFF0000;
+	}
+	else if ((int)cast.y > (int)(cast.y - direction.y))
+	{
+		color.x = 0xFF00;
+		color.y = 0xFF00;
+	}
+	else
+	{
+		color.x = 0xFF;
+		color.y = 0xFF;
+	}
+	print_line(start, stop, color);
+	stop.y = WIN_HEIGHT / 2 + wall_height;
+	print_line(start, stop, color);
+}
+
+void	raycast(t_float_xy location, t_float_xy direction, int **map)
+{
+	t_float_xy	cast;
+	int			x;
+	int			cast_lenght;
+
+	rotate(&direction, -0.001 * (WIN_WIDTH / 2));
+	x = 0;
+	while (x < WIN_WIDTH)
+	{
 		cast = location;
-			rotate(&direction, 0.001);
-		int dist = 0;
+		rotate(&direction, 0.001);
+		cast_lenght = 1;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
-			dist++;
+			cast_lenght++;
 		}
-		if (!dist)
-			dist = 1;
-		t_float_xy start;
-		t_float_xy stop;
-		start.x = WIN_WIDTH - 1 - x;
-		stop.x = start.x;
-		start.y = WIN_HEIGHT / 2;
-		stop.y = WIN_HEIGHT / 2 - wall_height / dist;
-		if ((int)cast.x < (int)(cast.x - direction.x))
-		{
-			color.x = 0xFFFFFF;
-			color.y = 0xFFFFFF;
-		}
-		else if ((int)cast.y < (int)(cast.y - direction.y))
-		{
-			color.x = 0xFF0000;
-			color.y = 0xFF0000;
-		}
-		else if ((int)cast.y > (int)(cast.y - direction.y))
-		{
-			color.x = 0xFF00;
-			color.y = 0xFF00;
-		}
-		else
-		{
-			color.x = 0xFF;
-			color.y = 0xFF;
-		}
-		print_line(start, stop, color);
-		stop.y = WIN_HEIGHT / 2 + wall_height / dist;
-		print_line(start, stop, color);
+		texture_offsets(direction, cast, 1000000 / cast_lenght, x);
 		x++;
 	}
 }
