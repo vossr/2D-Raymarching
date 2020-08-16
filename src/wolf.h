@@ -35,5 +35,6 @@ typedef struct	s_double_xy {
 }				t_double_xy;
 
 void	print_line(t_float_xy start, t_float_xy stop, t_float_xy color);
-
+void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int **map);
+int		**read_map(char *str, t_int_xy *map_size);
 #endif

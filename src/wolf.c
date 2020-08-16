@@ -12,24 +12,6 @@
 
 #include "wolf.h"
 
-void	megapixel_put(int x, int y, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < 8)
-	{
-		j = 0;
-		while (j < 8)
-		{
-			pixel_put(x + i, y + j, color);
-			j++;
-		}
-		i++;
-	}
-}
-
 void	rotate(t_float_xy *direction, double angle)
 {
 	double	sin_angle;
@@ -69,36 +51,7 @@ void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_s
 		rotate(direction, 0.05);
 }
 
-int	**read_map(char *str, t_int_xy *map_size)
-{
-	static int	**map = NULL;
-	int		i;
-	int		j;
-
-	map_size->x = 20;
-	map_size->y = 20;
-	(void)str;
-	map = (int**)malloc(sizeof(int*) * 20);
-	i = 0;
-	while (i < 20)
-	{
-		map[i] = (int*)malloc(sizeof(int) * 20);
-		j = 0;
-		while (j < 20)
-		{
-			if (i == 0 || i == 19 || j == 0 || j == 19)
-				map[i][j] = 1;
-			else
-				map[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-	map[4][4] = 1;
-	return (map);
-}
-
-void	raycast(t_float_xy location, t_float_xy position, int **map)
+void	raycast(t_float_xy location, t_float_xy direction, int **map)
 {
 	t_float_xy	cast;
 
@@ -151,33 +104,6 @@ void	raycast(t_float_xy location, t_float_xy position, int **map)
 		stop.y = 360 + wall_height / dist;
 		print_line(start, stop, color);
 		x++;
-	}
-}
-
-void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int **map)
-{
-	t_float_xy	color;
-	int			x;
-	int			y;
-
-	color.x = 0xFF00;
-	color.y = 0xFF00;
-	location.x *= 8;
-	location.y *= 8;
-	direction.x = location.x + 20000 * direction.x;
-	direction.y = location.y + 20000 * direction.y;
-	print_line(location, direction, color);
-	y = 0;
-	while (y < map_size.y)
-	{
-		x = 0;
-		while (x < map_size.x)
-		{
-			if (map[y][x] == 1)
-				megapixel_put(x * 8, y * 8, 0x10FFFFFF);
-			x++;
-		}
-		y++;
 	}
 }
 
