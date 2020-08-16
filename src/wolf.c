@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 19:16:27 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/16 17:36:48 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ static void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_heig
 	line.y = WIN_HEIGHT / 2 + wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
 	{
-		put_texture(x, line, 0, (int)(cast.x - cast.x));
+		put_texture(x, line, 0, 1.0 - (cast.y - (int)cast.y));
 	}
 	else if ((int)cast.y < (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, 1, (int)(cast.y - cast.y));
+		put_texture(x, line, 1, cast.x - (int)cast.x);
 	}
 	else if ((int)cast.y > (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, 2, (int)cast.x - cast.y);
+		put_texture(x, line, 2, 1.0 - (cast.x - (int)cast.x));
 	}
 	else
 	{
-		put_texture(x, line, 3, (int)cast.y - cast.x);
+		put_texture(x, line, 3, cast.y - (int)cast.y);
 	}
 }
 

@@ -50,13 +50,13 @@ void	put_texture(int line_x, t_float_xy line, int texture_id, float texture_x)
 	while (y < line.y)
 	{
 		if (texture_id == 0)
-			pixel_put(line_x, y, 0xFFFFFF);
+			pixel_put(line_x, y, texture_x * 0xFF);
 		else if (texture_id == 1)
-			pixel_put(line_x, y, 0xFF0000);
+			pixel_put(line_x, y, texture_x * 0xFF);
 		else if (texture_id == 2)
-			pixel_put(line_x, y, 0xFF00);
+			pixel_put(line_x, y, texture_x * 0xFF);
 		else if (texture_id == 3)
-			pixel_put(line_x, y, 0xFF - texture_x / 0xFF);
+			pixel_put(line_x, y, texture_x * 0xFF);
 		y++;
 	}
 	(void)texture_x;
