@@ -55,7 +55,10 @@ int		main(int argc, char **argv)
 		ft_putstr(argv[0]);
 		ft_putstr(" [file ...]\n");
 	}
-	read_map(argv[1], NULL);
-	init_window(WIN_WIDTH, WIN_HEIGHT, "Wolf3D");
+	else
+	{
+		read_map(argv[1], NULL);
+		init_window(WIN_WIDTH, WIN_HEIGHT, "Wolf3D");
+	}
 	return (0);
 }

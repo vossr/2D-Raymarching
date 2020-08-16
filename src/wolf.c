@@ -53,23 +53,28 @@ static void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_x
 
 static void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_height, int x)
 {
-	t_float_xy	start;
-	t_float_xy	stop;
+	t_float_xy	line;
 
 	if (wall_height > WIN_HEIGHT / 2)
 		wall_height = WIN_HEIGHT / 2;
-	start.x = WIN_WIDTH - x;
-	stop.x = start.x;
-	start.y = WIN_HEIGHT / 2 + wall_height;
-	stop.y = WIN_HEIGHT / 2 - wall_height;
+	line.x = WIN_HEIGHT / 2 - wall_height;
+	line.y = WIN_HEIGHT / 2 + wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
-		print_line(start, stop, 0xFFFFFF);
+	{
+		put_texture(x, line, 0, (int)(cast.x - cast.x));
+	}
 	else if ((int)cast.y < (int)(cast.y - direction.y))
-		print_line(start, stop, 0xFF0000);
+	{
+		put_texture(x, line, 1, (int)(cast.y - cast.y));
+	}
 	else if ((int)cast.y > (int)(cast.y - direction.y))
-		print_line(start, stop, 0xFF00);
+	{
+		put_texture(x, line, 2, (int)cast.x - cast.y);
+	}
 	else
-		print_line(start, stop, 0xFF);
+	{
+		put_texture(x, line, 3, (int)cast.y - cast.x);
+	}
 }
 
 static void	raycast(t_float_xy location, t_float_xy direction, int **map)
@@ -91,7 +96,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			cast.y += direction.y;
 			cast_lenght++;
 		}
-		texture_offsets(direction, cast, 1000000 / cast_lenght, x - 1);
+		texture_offsets(direction, cast, 1000000 / cast_lenght, WIN_WIDTH - x - 1);
 		x++;
 	}
 }
@@ -109,7 +114,7 @@ int		wolf(void)
 		map = read_map(NULL, &map_size);
 	player_movement(&location, &direction, map_size);
 	raycast(location, direction, map);
-	map_print(location, direction, map_size, map);
+	map_print(location, map_size, map);
 	update_image();
 	return (0);
 }

@@ -1,12 +1,5 @@
 #include "wolf.h"
 
-double	ft_abs(double n)
-{
-	if (n < 0)
-		return (n * -1);
-	return (n);
-}
-
 void	megapixel_put(int x, int y, int color)
 {
 	int	i;
@@ -25,16 +18,11 @@ void	megapixel_put(int x, int y, int color)
 	}
 }
 
-void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int **map)
+void	map_print(t_float_xy location, t_int_xy map_size, int **map)
 {
 	int			x;
 	int			y;
 
-	location.x *= 8;
-	location.y *= 8;
-	direction.x = location.x + 20000 * direction.x;
-	direction.y = location.y + 20000 * direction.y;
-	print_line(location, direction, 0xFF00);
 	y = 0;
 	while (y < map_size.y)
 	{
@@ -42,33 +30,34 @@ void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int
 		while (x < map_size.x)
 		{
 			if (map[y][x] == 1)
-				megapixel_put(x * 8, y * 8, 0x10FFFFFF);
+				megapixel_put(x * 8, y * 8, 0xFFFFFF);
+			else
+				megapixel_put(x * 8, y * 8, 0);
 			x++;
 		}
 		y++;
 	}
+	location.x *= 8;
+	location.y *= 8;
+	megapixel_put((int)location.x - 4, (int)location.y - 4, 0xFF00);
 }
 
-void	print_line(t_float_xy start, t_float_xy stop, int color)
+void	put_texture(int line_x, t_float_xy line, int texture_id, float texture_x)
 {
-	t_float_xyz	step;
-	t_float_xyz	pos;
-	int		i;
+	int		y;
 
-	i = 0;
-	pos.x = start.x;
-	pos.y = start.y;
-	pos.z = 0;
-	step.z = ft_abs(stop.x - start.x) > ft_abs(stop.y - start.y) ?
-			ft_abs(stop.x - start.x) : ft_abs(stop.y - start.y);
-	step.x = (stop.x - start.x) / (float)step.z;
-	step.y = (stop.y - start.y) / (float)step.z;
-	while (pos.z <= step.z && i < 1000)
+	y = line.x;
+	while (y < line.y)
 	{
-		pixel_put(pos.x, pos.y, color);
-		pos.x += step.x;
-		pos.y += step.y;
-		pos.z++;
-		i++;
+		if (texture_id == 0)
+			pixel_put(line_x, y, 0xFFFFFF);
+		else if (texture_id == 1)
+			pixel_put(line_x, y, 0xFF0000);
+		else if (texture_id == 2)
+			pixel_put(line_x, y, 0xFF00);
+		else if (texture_id == 3)
+			pixel_put(line_x, y, 0xFF - texture_x / 0xFF);
+		y++;
 	}
+	(void)texture_x;
 }
