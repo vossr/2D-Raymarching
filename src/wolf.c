@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/16 17:36:48 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/16 20:04:37 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
-static void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_size)
+static void	player_movement(t_float_xy *location,
+					t_float_xy *direction, t_int_xy map_size)
 {
 	if (is_key_down(126))
 		location->x += direction->x * 100;
@@ -51,7 +52,8 @@ static void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_x
 		rotate(direction, 0.05);
 }
 
-static void	texture_offsets(t_float_xy direction, t_float_xy cast, int wall_height, int x)
+static void	texture_offsets(t_float_xy direction,
+				t_float_xy cast, int wall_height, int x)
 {
 	t_float_xy	line;
 
@@ -96,12 +98,13 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			cast.y += direction.y;
 			cast_lenght++;
 		}
-		texture_offsets(direction, cast, 1000000 / cast_lenght, WIN_WIDTH - x - 1);
+		texture_offsets(direction, cast,
+				1000000 / cast_lenght, WIN_WIDTH - x - 1);
 		x++;
 	}
 }
 
-int		wolf(void)
+int			wolf(void)
 {
 	static t_float_xy	location = {.x = 10, .y = 10};
 	static t_float_xy	direction = {.x = 0, .y = .001};

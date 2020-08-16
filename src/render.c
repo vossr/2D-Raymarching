@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
+/*   Updated: 2020/08/16 20:03:21 by rpehkone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 int		***load_texture(void)
@@ -84,7 +96,8 @@ void	map_print(t_float_xy location, t_int_xy map_size, int **map)
 	megapixel_put((int)location.x - 4, (int)location.y - 4, 0xFF00);
 }
 
-void	put_texture(int line_x, t_float_xy line, int texture_id, float texture_x)
+void	put_texture(int line_x, t_float_xy line,
+					int texture_id, float texture_x)
 {
 	static int	***texture = NULL;
 	int			y;
@@ -100,7 +113,8 @@ void	put_texture(int line_x, t_float_xy line, int texture_id, float texture_x)
 	y = line.x;
 	while (y < line.y)
 	{
-		pixel_put(line_x, y, texture[texture_id][(int)(64 * (((float)y - line.x) / (line.y - line.x)))][(int)(64 * texture_x)]);
+		pixel_put(line_x, y, texture[texture_id][(int)(64 * (((float)y
+			- line.x) / (line.y - line.x)))][(int)(64 * texture_x)]);
 		y++;
 	}
 	while (y < WIN_HEIGHT)
