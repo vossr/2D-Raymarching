@@ -59,7 +59,7 @@ void	raycast(t_float_xy location, t_float_xy direction, int **map)
 	t_float_xy color;
 
 	const int wall_height = 1000000;
-	while (x < 1280)
+	while (x < WIN_WIDTH)
 	{
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
@@ -76,10 +76,10 @@ void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			dist = 1;
 		t_float_xy start;
 		t_float_xy stop;
-		start.x = 1279 - x;
-		start.y = 360;
-		stop.x = 1279 - x;
-		stop.y = 360 - wall_height / dist;
+		start.x = WIN_WIDTH - 1 - x;
+		stop.x = start.x;
+		start.y = WIN_HEIGHT / 2;
+		stop.y = WIN_HEIGHT / 2 - wall_height / dist;
 		if ((int)cast.x < (int)(cast.x - direction.x))
 		{
 			color.x = 0xFFFFFF;
@@ -101,7 +101,7 @@ void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			color.y = 0xFF;
 		}
 		print_line(start, stop, color);
-		stop.y = 360 + wall_height / dist;
+		stop.y = WIN_HEIGHT / 2 + wall_height / dist;
 		print_line(start, stop, color);
 		x++;
 	}

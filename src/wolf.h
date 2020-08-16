@@ -15,6 +15,8 @@
 # include "mlx_io.h"
 # include <pthread.h>
 # include <math.h>
+# define WIN_WIDTH 1280
+# define WIN_HEIGHT 720
 
 #include <stdio.h>
 
