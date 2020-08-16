@@ -45,40 +45,40 @@ void	rotate(t_float_xy *vertex, double angle)
 	vertex->y = y * cos_angle - x * sin_angle;
 }
 
-void	player_movement(t_float_xy *pos, t_float_xy *camera, int map_width, int map_height)
+void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_size)
 {
 	static t_int_xy		last_cursor = {.x = 0, .y = 0};
 	t_int_xy		cursor;
 
 	if (is_key_down(126))
-		pos->x += camera->x * 100;
+		location->x += direction->x * 100;
 	if (is_key_down(126))
-		pos->y += camera->y * 100;
+		location->y += direction->y * 100;
 	if (is_key_down(125))
-		pos->x -= camera->x * 100;
+		location->x -= direction->x * 100;
 	if (is_key_down(125))
-		pos->y -= camera->y * 100;
-	if (pos->x < 1.1)
-		pos->x = 1.1;
-	else if (pos->x > map_width - 1.1)
-		pos->x = map_width - 1.1;
-	if (pos->y < 1.1)
-		pos->y = 1.1;
-	else if (pos->y > map_height - 1.1)
-		pos->y = map_height - 1.1;
+		location->y -= direction->y * 100;
+	if (location->x < 1.1)
+		location->x = 1.1;
+	else if (location->x > map_size.x - 1.1)
+		location->x = map_size.x - 1.1;
+	if (location->y < 1.1)
+		location->y = 1.1;
+	else if (location->y > map_size.y - 1.1)
+		location->y = map_size.y - 1.1;
 	cursor = get_cursor();
-	rotate(camera, (last_cursor.x - cursor.x) * .01);
+	rotate(direction, (last_cursor.x - cursor.x) * .01);
 	last_cursor = cursor;
 }
 
-int	**read_map(char *str, int *map_width, int *map_height)
+int	**read_map(char *str, t_int_xy *map_size)
 {
 	static int	**map = NULL;
 	int		i;
 	int		j;
 
-	*map_width = 20;
-	*map_height = 20;
+	map_size->x = 20;
+	map_size->y = 20;
 	(void)str;
 	map = (int**)malloc(sizeof(int*) * 20);
 	i = 0;
@@ -156,27 +156,24 @@ void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 	}
 }
 
-void	map_print(t_float_xy pos, t_float_xy camera, int **map)
+void	map_print(t_float_xy location, t_float_xy direction, t_int_xy map_size, int **map)
 {
-	t_float_xy	relative_camera;
 	t_float_xy	color;
 	int			x;
 	int			y;
 
 	color.x = 0xFF00;
 	color.y = 0xFF00;
-	relative_camera.x = pos.x + camera.x * 100;
-	relative_camera.y = pos.y + camera.y * 100;
-	pos.x *= 4;
-	pos.y *= 4;
-	relative_camera.x *= 4;
-	relative_camera.y *= 4;
-	print_line(pos, relative_camera, color);
+	location.x *= 8;
+	location.y *= 8;
+	direction.x = location.x + 20000 * direction.x;
+	direction.y = location.y + 20000 * direction.y;
+	print_line(location, direction, color);
 	y = 0;
-	while (y < 20)
+	while (y < map_size.y)
 	{
 		x = 0;
-		while (x < 20)
+		while (x < map_size.x)
 		{
 			if (map[y][x] == 1)
 				megapixel_put(x * 8, y * 8, 0x10FFFFFF);
@@ -190,17 +187,16 @@ int		wolf(void)
 {
 	static t_float_xy	location = {.x = 10, .y = 10};
 	static t_float_xy	direction = {.x = 0, .y = .001};
+	static t_int_xy		map_size;
 	static int			**map = NULL;
-	static int			map_width;
-	static int			map_height;
 
 	if (is_key_down(53))
 		exit(0);
 	else if (!map)
-		map = read_map(NULL, &map_width, &map_height);
-	player_movement(&location, &direction, map_width, map_height);
+		map = read_map(NULL, &map_size);
+	player_movement(&location, &direction, map_size);
 	raycast(location, direction, map);
-	map_print(location, direction, map);
+	map_print(location, direction, map_size, map);
 	update_image();
 	return (0);
 }
