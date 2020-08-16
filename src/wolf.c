@@ -30,8 +30,6 @@ void	megapixel_put(int x, int y, int color)
 	}
 }
 
-//void	camera()
-
 void	rotate(t_float_xy *vertex, double angle)
 {
 	double	sin_angle;
@@ -102,42 +100,23 @@ int	**read_map(char *str, int *map_width, int *map_height)
 	return (map);
 }
 
-//1280
 void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 {
 	t_float_xy	cast;
-	t_float_xy	cast2;
 
 	int x = 0;
 	t_float_xy color;
 
 	const int wall_height = 1000000;
-	//t_float_xy camera_cpy = camera;
 	while (x < 1280)
 	{
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
 		cast = pos;
-		cast2 = pos;
-		//if (x < 1280 / 2)
 			rotate(&camera, 0.001);
-		/*
-		else
-		{
-			static int asd = 1;
-			if (asd)
-			{
-				asd = 0;
-				camera = camera_cpy;
-			}
-			rotate(&camera, 0.001);
-		}
-		*/
 		int dist = 0;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
-			cast2.x = cast.x;
-			cast2.y = cast.y;
 			cast.x += camera.x;
 			cast.y += camera.y;
 			dist++;
@@ -150,27 +129,21 @@ void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 		start.y = 360;
 		stop.x = 1279 - x;
 		stop.y = 360 - wall_height / dist;
-		//printf("%f\n", 360.0 - (wall_height / dist));
-
-		//color.x = 0xFFFFFF - (wall_height / dist);
-		//color.y = 0xFFFFFF - (wall_height / dist);
-
-		if ((int)cast.x < (int)cast2.x)
+		if ((int)cast.x < (int)(cast.x - camera.x))
 		{
 			color.x = 0xFFFFFF;
 			color.y = 0xFFFFFF;
 		}
-		else if ((int)cast.y < (int)cast2.y)
+		else if ((int)cast.y < (int)(cast.y - camera.y))
 		{
 			color.x = 0xFF0000;
 			color.y = 0xFF0000;
 		}
-		else if ((int)cast.y > (int)cast2.y)
+		else if ((int)cast.y > (int)(cast.y - camera.y))
 		{
 			color.x = 0xFF00;
 			color.y = 0xFF00;
 		}
-		//if ((int)cast.y > (int)cast2.y)
 		else
 		{
 			color.x = 0xFF;
@@ -181,7 +154,6 @@ void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 		print_line(start, stop, color);
 		x++;
 	}
-	//printf("j = %d\n", 1000 / j);
 }
 
 void	map_print(t_float_xy pos, t_float_xy camera, int **map)
