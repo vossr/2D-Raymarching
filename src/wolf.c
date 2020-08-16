@@ -30,7 +30,7 @@ void	megapixel_put(int x, int y, int color)
 	}
 }
 
-void	rotate(t_float_xy *vertex, double angle)
+void	rotate(t_float_xy *direction, double angle)
 {
 	double	sin_angle;
 	double	cos_angle;
@@ -39,17 +39,14 @@ void	rotate(t_float_xy *vertex, double angle)
 
 	sin_angle = sin(angle);
 	cos_angle = cos(angle);
-	x = vertex->x;
-	y = vertex->y;
-	vertex->x = x * cos_angle + y * sin_angle;
-	vertex->y = y * cos_angle - x * sin_angle;
+	x = direction->x;
+	y = direction->y;
+	direction->x = x * cos_angle + y * sin_angle;
+	direction->y = y * cos_angle - x * sin_angle;
 }
 
 void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_size)
 {
-	static t_int_xy		last_cursor = {.x = 0, .y = 0};
-	t_int_xy		cursor;
-
 	if (is_key_down(126))
 		location->x += direction->x * 100;
 	if (is_key_down(126))
@@ -66,9 +63,10 @@ void	player_movement(t_float_xy *location, t_float_xy *direction, t_int_xy map_s
 		location->y = 1.1;
 	else if (location->y > map_size.y - 1.1)
 		location->y = map_size.y - 1.1;
-	cursor = get_cursor();
-	rotate(direction, (last_cursor.x - cursor.x) * .01);
-	last_cursor = cursor;
+	if (is_key_down(124))
+		rotate(direction, -0.05);
+	if (is_key_down(123))
+		rotate(direction, 0.05);
 }
 
 int	**read_map(char *str, t_int_xy *map_size)
@@ -100,7 +98,7 @@ int	**read_map(char *str, t_int_xy *map_size)
 	return (map);
 }
 
-void	raycast(t_float_xy pos, t_float_xy camera, int **map)
+void	raycast(t_float_xy location, t_float_xy position, int **map)
 {
 	t_float_xy	cast;
 
@@ -112,13 +110,13 @@ void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 	{
 		color.x = 0xFFFFFF;
 		color.y = 0xFFFFFF;
-		cast = pos;
-			rotate(&camera, 0.001);
+		cast = location;
+			rotate(&direction, 0.001);
 		int dist = 0;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
-			cast.x += camera.x;
-			cast.y += camera.y;
+			cast.x += direction.x;
+			cast.y += direction.y;
 			dist++;
 		}
 		if (!dist)
@@ -129,17 +127,17 @@ void	raycast(t_float_xy pos, t_float_xy camera, int **map)
 		start.y = 360;
 		stop.x = 1279 - x;
 		stop.y = 360 - wall_height / dist;
-		if ((int)cast.x < (int)(cast.x - camera.x))
+		if ((int)cast.x < (int)(cast.x - direction.x))
 		{
 			color.x = 0xFFFFFF;
 			color.y = 0xFFFFFF;
 		}
-		else if ((int)cast.y < (int)(cast.y - camera.y))
+		else if ((int)cast.y < (int)(cast.y - direction.y))
 		{
 			color.x = 0xFF0000;
 			color.y = 0xFF0000;
 		}
-		else if ((int)cast.y > (int)(cast.y - camera.y))
+		else if ((int)cast.y > (int)(cast.y - direction.y))
 		{
 			color.x = 0xFF00;
 			color.y = 0xFF00;
