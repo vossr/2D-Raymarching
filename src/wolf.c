@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/16 20:04:37 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/17 15:41:28 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ static void	texture_offsets(t_float_xy direction,
 {
 	t_float_xy	line;
 
-	if (wall_height > WIN_HEIGHT / 2)
-		wall_height = WIN_HEIGHT / 2;
 	line.x = WIN_HEIGHT / 2 - wall_height;
 	line.y = WIN_HEIGHT / 2 + wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
@@ -119,5 +117,6 @@ int			wolf(void)
 	raycast(location, direction, map);
 	map_print(location, map_size, map);
 	update_image();
+	fps();
 	return (0);
 }
