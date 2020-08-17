@@ -12,13 +12,18 @@
 
 #include "wolf.h"
 
-int		load(void)
+int		load(int aaaa)
 {
 	static int i = -1;
 	int fd;
 	static unsigned char	buffer[1000000];
 	static int first = 1;
 
+	if (aaaa)
+	{
+		i++;
+		return (0);
+	}
 	if (first)
 	{
 		fd = open("eagle", O_RDONLY);
@@ -27,7 +32,21 @@ int		load(void)
 		first = 0;
 	}
 	i++;
-	return (buffer[i]);
+	unsigned char test;
+	test = buffer[i];
+	int red = 0x10000 * test;
+
+	i++;
+	test = buffer[i];
+	int grn = 0x100 * test;
+
+	i++;
+	test = buffer[i];
+	int blu = 0x1 * test;
+
+	return (red + grn + blu);
+	//return (red);
+	//(void)red;
 }
 
 int		***load_texture(void)
@@ -50,12 +69,12 @@ int		***load_texture(void)
 			while (x < 64)
 			{
 				if (i == 0)
-					texture[i][y][x] = load();
+					texture[i][y][x] = load(0);
 				else
 					texture[i][y][x] = texture[0][y][x];
 				x++;
 			}
-			load();
+			load(1);
 			y++;
 		}
 		i++;
