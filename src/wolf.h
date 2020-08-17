@@ -13,9 +13,10 @@
 #ifndef WOLF_H
 # define WOLF_H
 # include "mlx_io.h"
-# include <pthread.h>
-# include <math.h>
 # include <sys/time.h>
+# include <pthread.h>
+# include <fcntl.h>
+# include <math.h>
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 

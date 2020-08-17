@@ -12,6 +12,24 @@
 
 #include "wolf.h"
 
+int		load(void)
+{
+	static int i = -1;
+	int fd;
+	static unsigned char	buffer[1000000];
+	static int first = 1;
+
+	if (first)
+	{
+		fd = open("eagle", O_RDONLY);
+		ft_memset(&buffer, 0, 1000000);
+		read(fd, buffer, 999999);
+		first = 0;
+	}
+	i++;
+	return (buffer[i]);
+}
+
 int		***load_texture(void)
 {
 	int ***texture;
@@ -32,21 +50,12 @@ int		***load_texture(void)
 			while (x < 64)
 			{
 				if (i == 0)
-					texture[i][y][x] = 0xFFFFFF;
-				else if (i == 1)
-					texture[i][y][x] = 0xFF0000;
-				else if (i == 2)
-					texture[i][y][x] = 0xFF00;
-				else if (y < 32 && x < 32)
-					texture[i][y][x] = 0xFF0000;
-				else if (y < 32)
-					texture[i][y][x] = 0xFF00;
-				else if (x < 32)
-					texture[i][y][x] = 0xFF;
+					texture[i][y][x] = load();
 				else
-					texture[i][y][x] = 0xFFFFFF;
+					texture[i][y][x] = texture[0][y][x];
 				x++;
 			}
+			load();
 			y++;
 		}
 		i++;
