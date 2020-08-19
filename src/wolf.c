@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 19:54:41 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 20:30:46 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,20 @@ static void	rotate(t_float_xy *direction, double angle)
 }
 
 static void	player_movement(t_float_xy *location,
-					t_float_xy *direction, t_int_xy map_size)
+					t_float_xy *direction, t_int_xy map_size, int **map)
 {
-	if (is_key_down(126))
-		location->x += direction->x * 100;
-	if (is_key_down(126))
-		location->y += direction->y * 100;
-	if (is_key_down(125))
-		location->x -= direction->x * 100;
-	if (is_key_down(125))
-		location->y -= direction->y * 100;
+	if (is_key_down(124))
+		rotate(direction, -0.05);
+	if (is_key_down(123))
+		rotate(direction, 0.05);
+	if (is_key_down(126) && 0 == map[(int)(location->x + direction->x * 10)][(int)location->y])
+		location->x += direction->x * 10;
+	if (is_key_down(126) && 0 == map[(int)location->x][(int)(location->y + direction->y * 10)])
+		location->y += direction->y * 10;
+	if (is_key_down(125) && 0 == map[(int)(location->x - direction->x * 10)][(int)location->y])
+		location->x -= direction->x * 10;
+	if (is_key_down(125) && 0 == map[(int)location->x][(int)(location->y - direction->y * 10)])
+		location->y -= direction->y * 10;
 	if (location->x < 1.1)
 		location->x = 1.1;
 	else if (location->x > map_size.y - 1.1)
@@ -46,10 +50,6 @@ static void	player_movement(t_float_xy *location,
 		location->y = 1.1;
 	else if (location->y > map_size.x - 1.1)
 		location->y = map_size.x - 1.1;
-	if (is_key_down(124))
-		rotate(direction, -0.05);
-	if (is_key_down(123))
-		rotate(direction, 0.05);
 }
 
 #include <stdio.h>
@@ -114,11 +114,48 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 		x++;
 	}
 }
+/*
+void	*split_screen(void *settings)
+{
+	static int	s = 0;
+
+	s++;
+	if (s >= THREAD_AMOUNT)
+	{
+		((t_settings*)settings)->fractal(((t_settings*)settings),
+			(HEIGHT / THREAD_AMOUNT) * (s - 1), HEIGHT);
+		s = 0;
+	}
+	else
+		((t_settings*)settings)->fractal(((t_settings*)settings),
+			(HEIGHT / THREAD_AMOUNT) * (s - 1), (HEIGHT / THREAD_AMOUNT) * s);
+	return (NULL);
+}
+
+void	print_fractal(t_settings *settings)
+{
+	pthread_t	tid[THREAD_AMOUNT];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_AMOUNT)
+	{
+		pthread_create(&tid[i], NULL, split_screen, (void*)settings);
+		usleep(1000);
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_AMOUNT)
+	{
+		pthread_join(tid[i], NULL);
+		i++;
+	}
+}*/
 
 int			wolf(void)
 {
 	static t_float_xy	location = {.x = 1, .y = 1};
-	static t_float_xy	direction = {.x = 0.0, .y = .001};
+	static t_float_xy	direction = {.x = 0.0, .y = .01};
 	static t_int_xy		map_size;
 	static int			**map = NULL;
 
@@ -126,7 +163,7 @@ int			wolf(void)
 		exit(0);
 	else if (!map)
 		map = read_map(NULL, &map_size);
-	player_movement(&location, &direction, map_size);
+	player_movement(&location, &direction, map_size, map);
 	raycast(location, direction, map);
 	map_print(location, map_size, map);
 	update_image();

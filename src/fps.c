@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 10:59:13 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/17 13:41:11 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 20:02:17 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	put_fps(int fps)
 
 	str = NULL;
 	str = ft_itoa(fps);
-	string_to_image(10, 10, 0xFFFF00, str);
+	string_to_image(10, WIN_HEIGHT - 30, 0xFFFF00, str);
 	free(str);
 	str = NULL;
 }
