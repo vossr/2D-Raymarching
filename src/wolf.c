@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 19:15:53 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 19:54:41 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ static void	player_movement(t_float_xy *location,
 		location->y -= direction->y * 100;
 	if (location->x < 1.1)
 		location->x = 1.1;
-	else if (location->x > map_size.x - 1.1)
-		location->x = map_size.x - 1.1;
+	else if (location->x > map_size.y - 1.1)
+		location->x = map_size.y - 1.1;
 	if (location->y < 1.1)
 		location->y = 1.1;
-	else if (location->y > map_size.y - 1.1)
-		location->y = map_size.y - 1.1;
+	else if (location->y > map_size.x - 1.1)
+		location->y = map_size.x - 1.1;
 	if (is_key_down(124))
 		rotate(direction, -0.05);
 	if (is_key_down(123))
@@ -117,7 +117,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 
 int			wolf(void)
 {
-	static t_float_xy	location = {.x = 10, .y = 10};
+	static t_float_xy	location = {.x = 1, .y = 1};
 	static t_float_xy	direction = {.x = 0.0, .y = .001};
 	static t_int_xy		map_size;
 	static int			**map = NULL;

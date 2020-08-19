@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 19:09:34 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 19:57:54 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	map_print(t_float_xy location, t_int_xy map_size, int **map)
 	}
 	location.x *= 8;
 	location.y *= 8;
-	megapixel_put((int)location.x - 4, (int)location.y - 4, 0xFF00);
+	megapixel_put((int)location.y - 4, (int)location.x - 4, 0xFF00);
 }
 
 void	put_texture(int line_x, t_float_xy line,
