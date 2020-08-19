@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 17:17:32 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 19:15:53 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ static void	player_movement(t_float_xy *location,
 		rotate(direction, 0.05);
 }
 
+#include <stdio.h>
 static void	texture_offsets(t_float_xy direction,
-				t_float_xy cast, int wall_height, int x)
+				t_float_xy cast, int wall_height, int x, int texture_id)
 {
 	t_float_xy	line;
 
@@ -61,27 +62,27 @@ static void	texture_offsets(t_float_xy direction,
 	line.y = WIN_HEIGHT / 2 + wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
 	{
-		put_texture(x, line, 0, 1.0 - (cast.y - (int)cast.y));
+		put_texture(x, line, texture_id + 0, 1.0 - (cast.y - (int)cast.y));
 	}
 	else if ((int)cast.y < (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, 1, cast.x - (int)cast.x);
+		put_texture(x, line, texture_id + 1, cast.x - (int)cast.x);
 	}
 	else if ((int)cast.y > (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, 2, 1.0 - (cast.x - (int)cast.x));
+		put_texture(x, line, texture_id + 2, 1.0 - (cast.x - (int)cast.x));
 	}
 	else
 	{
-		put_texture(x, line, 7, cast.y - (int)cast.y);
+		put_texture(x, line, texture_id + 3, cast.y - (int)cast.y);
 	}
 }
-#include <stdio.h>
+
 static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 {
 	t_float_xy	cast;
 	int			x;
-	int			cast_lenght;
+	int			cast_length;
 	static float fov = 0.00163625;
 	static int	wmod = 310000;
 
@@ -101,15 +102,15 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 	{
 		cast = location;
 		rotate(&direction, fov);
-		cast_lenght = 1;
-		while (map[(int)cast.x][(int)cast.y] != 1)
+		cast_length = 1;
+		while (map[(int)cast.x][(int)cast.y] == 0)
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
-			cast_lenght++;
+			cast_length++;
 		}
-		texture_offsets(direction, cast,
-				wmod / cast_lenght, WIN_WIDTH - x - 1);
+		texture_offsets(direction, cast, wmod / cast_length,
+		WIN_WIDTH - x - 1, (map[(int)cast.x][(int)cast.y] - 1) * 4);
 		x++;
 	}
 }

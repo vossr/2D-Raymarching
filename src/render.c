@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 16:32:37 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 19:09:34 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	map_print(t_float_xy location, t_int_xy map_size, int **map)
 		x = 0;
 		while (x < map_size.x)
 		{
-			if (map[y][x] == 1)
+			if (map[y][x] != 0)
 				megapixel_put(x * 8, y * 8, 0xFFFFFF);
 			else
 				megapixel_put(x * 8, y * 8, 0);

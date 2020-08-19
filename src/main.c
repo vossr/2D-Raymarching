@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 13:22:41 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 19:09:02 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int		**read_map(char *str, t_int_xy *get_map_size)
 		y++;
 	}
 	map[4][4] = 1;
+	map[4][6] = 2;
+	map[2][2] = 2;
 	return (NULL);
 }
 
