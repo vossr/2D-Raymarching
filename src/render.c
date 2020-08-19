@@ -11,75 +11,27 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
+#define TEX_SIZE 64
 
-int		load(int aaaa)
+int		read_texture(int id, int y, int x)
 {
-	static int i = -1;
-	int fd;
-	static unsigned char	buffer[1000000];
-	static int first = 1;
+	static void **mlx = NULL;
+	char		filename[4][40] = {"textures/stone.xpm", "textures/redbrick.xpm", "textures/bluewall.xpm", "textures/door.xpm"};
+	void	*texture[4];
+	static unsigned char	*data[4];
+	static int			bps, line_s, endian;
 
-	if (aaaa)
+	if (!mlx)
 	{
-		i++;
-		return (0);
-	}
-	if (first)
-	{
-		fd = open("eagle", O_RDONLY);
-		ft_memset(&buffer, 0, 1000000);
-		read(fd, buffer, 999999);
-		first = 0;
-	}
-	i++;
-	unsigned char test;
-	test = buffer[i];
-	int red = 0x10000 * test;
-
-	i++;
-	test = buffer[i];
-	int grn = 0x100 * test;
-
-	i++;
-	test = buffer[i];
-	int blu = 0x1 * test;
-
-	return (red + grn + blu);
-	//return (red);
-	//(void)red;
-}
-
-int		***load_texture(void)
-{
-	int ***texture;
-	int	i;
-	int	x;
-	int	y;
-
-	texture = (int***)malloc(sizeof(int**) * 4);
-	i = 0;
-	while (i < 4)
-	{
-		texture[i] = (int**)malloc(sizeof(int*) * 64);
-		y = 0;
-		while (y < 64)
+		mlx = get_mlx(NULL);
+		for (int j = 0; j < 4; j++)
 		{
-			texture[i][y] = (int*)malloc(sizeof(int) * 64);
-			x = 0;
-			while (x < 64)
-			{
-				if (i == 0)
-					texture[i][y][x] = load(0);
-				else
-					texture[i][y][x] = texture[0][y][x];
-				x++;
-			}
-			load(1);
-			y++;
+			texture[j] = mlx_xpm_file_to_image(mlx[0], filename[j], &bps, &line_s);
+			data[j] = (unsigned char*)mlx_get_data_addr(texture[j], &bps, &line_s, &endian);
 		}
-		i++;
 	}
-	return (texture);
+	return (data[id][y * line_s + x * 4 + 2] * 0x10000 +
+	data[id][y * line_s + x * 4 + 1] * 0x100 + data[id][y * line_s + x * 4 + 0]);
 }
 
 void	megapixel_put(int x, int y, int color)
@@ -127,11 +79,8 @@ void	map_print(t_float_xy location, t_int_xy map_size, int **map)
 void	put_texture(int line_x, t_float_xy line,
 					int texture_id, float texture_x)
 {
-	static int	***texture = NULL;
 	int			y;
 
-	if (!texture)
-		texture = load_texture();
 	y = 0;
 	while (y < line.x)
 	{
@@ -141,8 +90,8 @@ void	put_texture(int line_x, t_float_xy line,
 	y = line.x;
 	while (y < line.y)
 	{
-		pixel_put(line_x, y, texture[texture_id][(int)(64 * (((float)y
-			- line.x) / (line.y - line.x)))][(int)(64 * texture_x)]);
+		pixel_put(line_x, y, read_texture(texture_id, (int)(TEX_SIZE * (((float)y
+			- line.x) / (line.y - line.x))), (int)(TEX_SIZE * texture_x)));
 		y++;
 	}
 	while (y < WIN_HEIGHT)
