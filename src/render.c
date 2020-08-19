@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 19:57:54 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 20:43:17 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ void	put_texture(int line_x, t_float_xy line,
 		y++;
 	}
 	y = line.x;
-	while (y < line.y)
+	if (y < 0)
+		y = 0;
+	while (y < line.y && y < WIN_HEIGHT)
 	{
 		int xd = (int)(TEX_SIZE * texture_x);
 		int yd = (int)(TEX_SIZE * (((float)y - line.x) / (line.y - line.x)));
