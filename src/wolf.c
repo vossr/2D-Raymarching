@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/17 15:41:28 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/19 17:17:32 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,22 +73,34 @@ static void	texture_offsets(t_float_xy direction,
 	}
 	else
 	{
-		put_texture(x, line, 3, cast.y - (int)cast.y);
+		put_texture(x, line, 7, cast.y - (int)cast.y);
 	}
 }
-
+#include <stdio.h>
 static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 {
 	t_float_xy	cast;
 	int			x;
 	int			cast_lenght;
+	static float fov = 0.00163625;
+	static int	wmod = 310000;
 
-	rotate(&direction, -0.001 * (WIN_WIDTH / 2));
+	if (is_key_down(18))
+		wmod += 10000;
+	if (is_key_down(19))
+		wmod -= 10000;
+	if (is_key_down(20))
+		fov += 0.0001;
+	if (is_key_down(21))
+		fov -= 0.0001;
+	printf("fov = %f\n", fov);
+	printf("wmod = %d\n", wmod);
+	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
 		cast = location;
-		rotate(&direction, 0.001);
+		rotate(&direction, fov);
 		cast_lenght = 1;
 		while (map[(int)cast.x][(int)cast.y] != 1)
 		{
@@ -97,7 +109,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 			cast_lenght++;
 		}
 		texture_offsets(direction, cast,
-				1000000 / cast_lenght, WIN_WIDTH - x - 1);
+				wmod / cast_lenght, WIN_WIDTH - x - 1);
 		x++;
 	}
 }
@@ -105,7 +117,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 int			wolf(void)
 {
 	static t_float_xy	location = {.x = 10, .y = 10};
-	static t_float_xy	direction = {.x = 0, .y = .001};
+	static t_float_xy	direction = {.x = 0.0, .y = .001};
 	static t_int_xy		map_size;
 	static int			**map = NULL;
 
