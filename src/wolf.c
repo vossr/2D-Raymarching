@@ -28,11 +28,21 @@ static void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
+void		collision(t_float_xy *location, t_float_xy *direction, int speed, int neg, int **map)
+{
+	t_int_xy	loc_on_map_f;
+
+	loc_on_map_f.x = map[(int)(location->x + neg * direction->x * speed)][(int)location->y];
+	loc_on_map_f.y = map[(int)location->x][(int)(location->y + neg * direction->y * speed)];
+	if (1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
+		location->x += direction->x * speed * neg;
+	if (1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
+		location->y += direction->y * speed * neg;
+}
+
 static void	player_movement(t_float_xy *location,
 					t_float_xy *direction, t_int_xy map_size, int **map)
 {
-	t_int_xy	loc_on_map_f;
-	t_int_xy	loc_on_map_b;
 	t_int_xy	cursor;
 	int speed;
 	int fwd;
@@ -57,18 +67,10 @@ static void	player_movement(t_float_xy *location,
 		rotate(direction, -0.05);
 	if (is_key_down(123))
 		rotate(direction, 0.05);
-	loc_on_map_f.x = map[(int)(location->x + direction->x * speed)][(int)location->y];
-	loc_on_map_f.y = map[(int)location->x][(int)(location->y + direction->y * speed)];
-	loc_on_map_b.x = map[(int)(location->x - direction->x * speed)][(int)location->y];
-	loc_on_map_b.y = map[(int)location->x][(int)(location->y - direction->y * speed)];
-	if (fwd && 1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
-		location->x += direction->x * speed;
-	if (fwd && 1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
-		location->y += direction->y * speed;
-	if (bwd && 1 != loc_on_map_b.x && 2 != loc_on_map_b.x && loc_on_map_b.x != 3)
-		location->x -= direction->x * speed;
-	if (bwd && 1 != loc_on_map_b.y && 2 != loc_on_map_b.y && loc_on_map_b.y != 3)
-		location->y -= direction->y * speed;
+	if (fwd)
+		collision(location, direction, speed, 1, map);
+	if (bwd)
+		collision(location, direction, speed, -1, map);
 	(void)map_size;
 	if (map[(int)location->x][(int)(location->y)] == 4)
 	{
