@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 16:45:06 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 18:51:02 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <pthread.h>
 # include <fcntl.h>
 # include <math.h>
+# define THREAD_AMOUNT 4
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 

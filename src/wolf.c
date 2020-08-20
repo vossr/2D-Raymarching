@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 17:45:46 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 19:00:03 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static void	put_sprite(int x, int cast_length)
 		pixel_put_blend(x, WIN_HEIGHT / 2 - cast_length / 2 + y, 0xDD550000);
 }
 
-static void	sprite(t_float_xy location, t_float_xy direction, int **map)
+static void	sprite(t_float_xy location, t_float_xy direction, int **map, int start, int stop)
 {
 	t_float_xy	cast;
 	int			x;
@@ -115,8 +115,9 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map)
 	static int	wmod = 310000;
 
 	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
-	x = 0;
-	while (x < WIN_WIDTH)
+	rotate(&direction, fov * (start));
+	x = start;
+	while (x < stop)
 	{
 		cast = location;
 		rotate(&direction, fov);
@@ -128,12 +129,12 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map)
 			cast_length++;
 		}
 		if (map[(int)cast.x][(int)cast.y] == 3)
-			put_sprite(WIN_WIDTH - x - 1, wmod / cast_length / 2);
+			put_sprite(WIN_WIDTH - x - 1, wmod / cast_length);
 		x++;
 	}
 }
 
-static void	raycast(t_float_xy location, t_float_xy direction, int **map)
+static void	raycast(t_float_xy location, t_float_xy direction, int **map, int start, int stop)
 {
 	t_float_xy	cast;
 	int			x;
@@ -152,8 +153,9 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 	//printf("fov = %f\n", fov);
 	//printf("wmod = %d\n", wmod);
 	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
-	x = 0;
-	while (x < WIN_WIDTH)
+	rotate(&direction, fov * (start));
+	x = start;
+	while (x < stop)
 	{
 		cast = location;
 		rotate(&direction, fov);
@@ -170,43 +172,6 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map)
 		x++;
 	}
 }
-/*
-void	*split_screen(void *settings)
-{
-	static int	s = 0;
-
-	s++;
-	if (s >= THREAD_AMOUNT)
-	{
-		((t_settings*)settings)->fractal(((t_settings*)settings),
-			(HEIGHT / THREAD_AMOUNT) * (s - 1), HEIGHT);
-		s = 0;
-	}
-	else
-		((t_settings*)settings)->fractal(((t_settings*)settings),
-			(HEIGHT / THREAD_AMOUNT) * (s - 1), (HEIGHT / THREAD_AMOUNT) * s);
-	return (NULL);
-}
-
-void	print_fractal(t_settings *settings)
-{
-	pthread_t	tid[THREAD_AMOUNT];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_AMOUNT)
-	{
-		pthread_create(&tid[i], NULL, split_screen, (void*)settings);
-		usleep(1000);
-		i++;
-	}
-	i = 0;
-	while (i < THREAD_AMOUNT)
-	{
-		pthread_join(tid[i], NULL);
-		i++;
-	}
-}*/
 
 void	**load_gun(int *line_s)
 {
@@ -263,6 +228,44 @@ void	put_gun(void)
 	mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2, WIN_HEIGHT - 200);
 }
 
+void	test(t_settings *settings, int id)
+{
+	int scale = WIN_WIDTH / THREAD_AMOUNT;
+	raycast(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
+	sprite(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
+}
+
+void	*split_screen(void *settings)
+{
+	static int	s = 0;
+
+	s++;
+	test(((t_settings*)settings), s);
+	if (s >= THREAD_AMOUNT)
+		s = 0;
+	return (NULL);
+}
+
+void	make_threads(t_settings *settings)
+{
+	pthread_t	tid[THREAD_AMOUNT];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_AMOUNT)
+	{
+		pthread_create(&tid[i], NULL, split_screen, (void*)settings);
+		usleep(1000);
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_AMOUNT)
+	{
+		pthread_join(tid[i], NULL);
+		i++;
+	}
+}
+
 int			wolf(void)
 {
 	static t_settings settings;
@@ -278,8 +281,9 @@ int			wolf(void)
 		settings.map = read_map(NULL, &settings.map_size);
 	}
 	player_movement(&settings.location, &settings.direction, settings.map_size, settings.map);
-	raycast(settings.location, settings.direction, settings.map);
-	sprite(settings.location, settings.direction, settings.map);
+
+	make_threads(&settings);
+
 	map_print(settings.location, settings.map_size, settings.map);
 	crosshair(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	update_image();
