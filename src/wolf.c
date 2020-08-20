@@ -290,14 +290,13 @@ int			wolf(void)
 	put_gun();
 	fps();
 
-
 	UInt32 dispid;
 	dispid = CGMainDisplayID();
 	CGDisplayHideCursor(dispid);
 
 	CGPoint cursor;
 	cursor.x = 700;
-	cursor.y = 800;
+	cursor.y = 700;
 	//CGDisplayMoveCursorToPoint(dispid, cursor);
 	CGWarpMouseCursorPosition(cursor);
 	return (0);

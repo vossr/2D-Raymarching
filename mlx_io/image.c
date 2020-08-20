@@ -38,30 +38,27 @@ void	pixel_put_blend(int x, int y, unsigned color)
 	}
 	if (x * 4 >= win_size.x || y >= win_size.y || x < 0 || y < 0)
 		return ;
-	unsigned char red = ((color << 8 * 1) >> 8 * 3) * (color >> 8 * 3);
-	if (red + data[(y * win_size.x) + (x * 4) + 2] > 255)
+	int red = ((color << 8 * 1) >> 8 * 3) * (color >> 8 * 3);
+	red += data[(y * win_size.x) + (x * 4) + 2];
+	if (red > 255)
 		red = 255;
-	else if (red + data[(y * win_size.x) + (x * 4) + 2] < 0)
+	if (red < 0)
 		red = 0;
-	else
-		red = red + data[(y * win_size.x) + (x * 4) + 2];
-	data[(y * win_size.x) + (x * 4) + 2] = red;
-	unsigned char grn = ((color << 8 * 2) >> 8 * 3) * (color >> 8 * 3);
-	if (grn + data[(y * win_size.x) + (x * 4) + 1] > 255)
+	data[(y * win_size.x) + (x * 4) + 2] = (char)red;
+	int grn = ((color << 8 * 2) >> 8 * 3) * (color >> 8 * 3);
+	grn += data[(y * win_size.x) + (x * 4) + 1];
+	if (grn > 255)
 		grn = 255;
-	else if (red + data[(y * win_size.x) + (x * 4) + 1] < 0)
+	if (grn < 0)
 		grn = 0;
-	else
-		grn = grn + data[(y * win_size.x) + (x * 4) + 1];
-	data[(y * win_size.x) + (x * 4) + 1] = grn;
-	unsigned char blu = ((color << 8 * 3) >> 8 * 3) * (color >> 8 * 3);
-	if (blu + data[(y * win_size.x) + (x * 4) + 0] > 255)
+	data[(y * win_size.x) + (x * 4) + 1] = (char)grn;
+	int blu = ((color << 8 * 3) >> 8 * 3) * (color >> 8 * 3);
+	blu += data[(y * win_size.x) + (x * 4) + 0];
+	if (blu > 255)
 		blu = 255;
-	else if (blu + data[(y * win_size.x) + (x * 4) + 0] < 0)
+	if (blu < 0)
 		blu = 0;
-	else
-		blu = blu + data[(y * win_size.x) + (x * 4) + 0];
-	data[(y * win_size.x) + (x * 4) + 0] = blu;
+	data[(y * win_size.x) + (x * 4) + 0] = (char)blu;
 }
 
 void	pixel_put(int x, int y, unsigned color)
