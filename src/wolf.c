@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 14:37:14 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 14:39:04 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,9 @@ static void	player_movement(t_float_xy *location,
 	if (is_key_down(125) && 1 != loc_on_map_b.y && 2 != loc_on_map_b.y && loc_on_map_b.y != 3)
 		location->y -= direction->y * 100;
 	(void)map_size;
-	/*
-	if (location->x < 1.1)
-		location->x = 1.1;
-	else if (location->x > map_size.y - 1.1)
-		location->x = map_size.y - 1.1;
-	if (location->y < 1.1)
-		location->y = 1.1;
-	else if (location->y > map_size.x - 1.1)
-		location->y = map_size.x - 1.1;
-	*/
 	if (map[(int)location->x][(int)(location->y)] == 4)
 	{
+		//load next map
 		printf("Victory\n");
 		exit(0);
 	}

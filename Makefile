@@ -6,7 +6,7 @@
 #    By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/30 20:09:24 by rpehkone          #+#    #+#              #
-#    Updated: 2020/08/17 13:32:41 by rpehkone         ###   ########.fr        #
+#    Updated: 2020/08/20 14:56:35 by rpehkone         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = wolf3d
 LIB = libft/libft.a
 FOLDERS = libft mlx_io src
 IO_FILES = init_window.c handle_hook.c input_state.c input_state_wrappers.c image.c
-FILES = main.c wolf.c render.c fps.c
+FILES = main.c wolf.c render.c menu/fps.c
 FLAGS = -Wall -Wextra -Werror -O3
 .PHONY: clean fclean re all
 
