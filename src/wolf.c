@@ -44,25 +44,19 @@ static void	player_movement(t_float_xy *location,
 					t_float_xy *direction, t_int_xy map_size, int **map)
 {
 	t_int_xy	cursor;
-	int speed;
+	t_float_xy	tangent;
+	int speed = 40;
 	int fwd;
 	int bwd;
 
 	fwd = is_key_down(126) + is_key_down(13);
 	bwd = is_key_down(125) + is_key_down(1);
 	cursor = get_cursor();
-	if ((fwd || bwd) && (is_key_down(124) || is_key_down(123)))
-		speed = 80;
-	else
-		speed = 60;
 	int32_t deltaY;
 	int32_t deltaX;
 	CGGetLastMouseDelta(&deltaX, &deltaY);
 	if (deltaX)
-	{
 		rotate(direction, deltaX * -0.005);
-		speed = 80;
-	}
 	if (is_key_down(124))
 		rotate(direction, -0.05);
 	if (is_key_down(123))
@@ -71,6 +65,12 @@ static void	player_movement(t_float_xy *location,
 		collision(location, direction, speed, 1, map);
 	if (bwd)
 		collision(location, direction, speed, -1, map);
+	tangent = *direction;
+	rotate(&tangent, 1.57079633);
+	if (is_key_down(0))
+		collision(location, &tangent, speed, 1, map);
+	if (is_key_down(2))
+		collision(location, &tangent, speed, -1, map);
 	(void)map_size;
 	if (map[(int)location->x][(int)(location->y)] == 4)
 	{
