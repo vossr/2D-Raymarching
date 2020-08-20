@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include "mlx_io.h"
-
+//////////
+#include <stdio.h>
 int		handle_keyboard_down(int key)
 {
+	//printf("key %d\n", key);
 	set_key(1, key);
 	wolf();
 	return (0);

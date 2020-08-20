@@ -35,9 +35,13 @@ static void	player_movement(t_float_xy *location,
 	t_int_xy	loc_on_map_b;
 	t_int_xy	cursor;
 	int speed;
+	int fwd;
+	int bwd;
 
+	fwd = is_key_down(126) + is_key_down(13);
+	bwd = is_key_down(125) + is_key_down(1);
 	cursor = get_cursor();
-	if ((is_key_down(126) || is_key_down(125)) && (is_key_down(124) || is_key_down(123)))
+	if ((fwd || bwd) && (is_key_down(124) || is_key_down(123)))
 		speed = 80;
 	else
 		speed = 60;
@@ -57,13 +61,13 @@ static void	player_movement(t_float_xy *location,
 	loc_on_map_f.y = map[(int)location->x][(int)(location->y + direction->y * speed)];
 	loc_on_map_b.x = map[(int)(location->x - direction->x * speed)][(int)location->y];
 	loc_on_map_b.y = map[(int)location->x][(int)(location->y - direction->y * speed)];
-	if (is_key_down(126) && 1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
+	if (fwd && 1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
 		location->x += direction->x * speed;
-	if (is_key_down(126) && 1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
+	if (fwd && 1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
 		location->y += direction->y * speed;
-	if (is_key_down(125) && 1 != loc_on_map_b.x && 2 != loc_on_map_b.x && loc_on_map_b.x != 3)
+	if (bwd && 1 != loc_on_map_b.x && 2 != loc_on_map_b.x && loc_on_map_b.x != 3)
 		location->x -= direction->x * speed;
-	if (is_key_down(125) && 1 != loc_on_map_b.y && 2 != loc_on_map_b.y && loc_on_map_b.y != 3)
+	if (bwd && 1 != loc_on_map_b.y && 2 != loc_on_map_b.y && loc_on_map_b.y != 3)
 		location->y -= direction->y * speed;
 	(void)map_size;
 	if (map[(int)location->x][(int)(location->y)] == 4)
@@ -99,6 +103,7 @@ static void	texture_offsets(t_float_xy direction,
 	}
 }
 
+/*
 static void	put_sprite(int x, int cast_length)
 {
 	//(void)cast_length;
@@ -133,6 +138,7 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map, int sta
 		x++;
 	}
 }
+*/
 
 static void	raycast(t_float_xy location, t_float_xy direction, int **map, int start, int stop)
 {
@@ -232,7 +238,7 @@ void	test(t_settings *settings, int id)
 {
 	int scale = WIN_WIDTH / THREAD_AMOUNT;
 	raycast(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
-	sprite(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
+	//sprite(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
 }
 
 void	*split_screen(void *settings)
