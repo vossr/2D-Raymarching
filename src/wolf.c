@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 14:39:04 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:29:32 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,28 @@ static void	player_movement(t_float_xy *location,
 {
 	t_int_xy loc_on_map_f;
 	t_int_xy loc_on_map_b;
+	int speed;
 
+	if ((is_key_down(126) || is_key_down(125)) && (is_key_down(124) || is_key_down(123)))
+		speed = 80;
+	else
+		speed = 60;
 	if (is_key_down(124))
 		rotate(direction, -0.05);
 	if (is_key_down(123))
 		rotate(direction, 0.05);
-	loc_on_map_f.x = map[(int)(location->x + direction->x * 100)][(int)location->y];
-	loc_on_map_f.y = map[(int)location->x][(int)(location->y + direction->y * 100)];
-	loc_on_map_b.x = map[(int)(location->x - direction->x * 100)][(int)location->y];
-	loc_on_map_b.y = map[(int)location->x][(int)(location->y - direction->y * 100)];
+	loc_on_map_f.x = map[(int)(location->x + direction->x * speed)][(int)location->y];
+	loc_on_map_f.y = map[(int)location->x][(int)(location->y + direction->y * speed)];
+	loc_on_map_b.x = map[(int)(location->x - direction->x * speed)][(int)location->y];
+	loc_on_map_b.y = map[(int)location->x][(int)(location->y - direction->y * speed)];
 	if (is_key_down(126) && 1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
-		location->x += direction->x * 100;
+		location->x += direction->x * speed;
 	if (is_key_down(126) && 1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
-		location->y += direction->y * 100;
+		location->y += direction->y * speed;
 	if (is_key_down(125) && 1 != loc_on_map_b.x && 2 != loc_on_map_b.x && loc_on_map_b.x != 3)
-		location->x -= direction->x * 100;
+		location->x -= direction->x * speed;
 	if (is_key_down(125) && 1 != loc_on_map_b.y && 2 != loc_on_map_b.y && loc_on_map_b.y != 3)
-		location->y -= direction->y * 100;
+		location->y -= direction->y * speed;
 	(void)map_size;
 	if (map[(int)location->x][(int)(location->y)] == 4)
 	{
@@ -234,19 +239,22 @@ void	put_gun(void)
 
 int			wolf(void)
 {
-	static t_float_xy	location = {.x = 1.5, .y = 1.5};
-	static t_float_xy	direction = {.x = 0.0, .y = .001};
-	static t_int_xy		map_size;
-	static int			**map = NULL;
+	static t_settings settings;
 
 	if (is_key_down(53))
 		exit(0);
-	else if (!map)
-		map = read_map(NULL, &map_size);
-	player_movement(&location, &direction, map_size, map);
-	raycast(location, direction, map);
-	sprite(location, direction, map);
-	map_print(location, map_size, map);
+	else if (!settings.map)
+	{
+		settings.location.x = 1.5;
+		settings.location.y = 1.5;
+		settings.direction.x = 0.0;
+		settings.direction.y = 0.001;
+		settings.map = read_map(NULL, &settings.map_size);
+	}
+	player_movement(&settings.location, &settings.direction, settings.map_size, settings.map);
+	raycast(settings.location, settings.direction, settings.map);
+	sprite(settings.location, settings.direction, settings.map);
+	map_print(settings.location, settings.map_size, settings.map);
 	update_image();
 	put_gun();
 	fps();

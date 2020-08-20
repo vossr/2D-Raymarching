@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/17 13:34:05 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:18:28 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,12 @@ typedef struct	s_float_xy {
 	float		y;
 }				t_float_xy;
 
-typedef struct	s_float_xyz {
-	float		x;
-	float		y;
-	float		z;
-}				t_float_xyz;
-/////////poista
-typedef struct	s_double_xy {
-	double		x;
-	double		y;
-}				t_double_xy;
+typedef struct	s_settings {
+	t_float_xy	location;
+	t_float_xy	direction;
+	t_int_xy	map_size;
+	int			**map;
+}				t_settings;
 
 int				**read_map(char *str, t_int_xy *map_size);
 void			map_print(t_float_xy location, t_int_xy map_size, int **map);
