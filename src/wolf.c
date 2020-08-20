@@ -81,8 +81,8 @@ static void	texture_offsets(t_float_xy direction,
 static void	put_sprite(int x, int cast_length)
 {
 	//(void)cast_length;
-	for (int y = 0; y < cast_length / 10; y++)
-		pixel_put(x, WIN_HEIGHT / 2 + y, 0xFF0000);
+	for (int y = 0; y < cast_length; y++)
+		pixel_put_blend(x, WIN_HEIGHT / 2 - cast_length / 2 + y, 0xDD550000);
 }
 
 static void	sprite(t_float_xy location, t_float_xy direction, int **map)
@@ -91,7 +91,7 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map)
 	int			x;
 	int			cast_length;
 	static float fov = 0.00163625;
-	//static int	wmod = 310000;
+	static int	wmod = 310000;
 
 	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
 	x = 0;
@@ -107,7 +107,7 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map)
 			cast_length++;
 		}
 		if (map[(int)cast.x][(int)cast.y] == 3)
-			put_sprite(WIN_WIDTH - x - 1, cast_length);
+			put_sprite(WIN_WIDTH - x - 1, wmod / cast_length / 2);
 		x++;
 	}
 }

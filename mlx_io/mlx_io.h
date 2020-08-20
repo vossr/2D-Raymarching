@@ -35,6 +35,7 @@ int				wolf(void);
 void			init_window(int width, int height, char *filename);
 void			update_image(void);
 void			pixel_put(int x, int y, unsigned color);
+void			pixel_put_blend(int x, int y, unsigned color);
 void			string_to_image(int x, int y, int color, char *str);
 int				is_mouse_down(int button);
 int				is_key_down(int key);

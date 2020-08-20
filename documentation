@@ -1,4 +1,6 @@
-set spawn <^>v
+set optional spawn <^>v
 no multiple spawn
 only numbers and spawn
 e enemy sprite
+
+specify next map filename in map

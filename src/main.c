@@ -40,6 +40,13 @@ void	set_map(char *filename, t_int_xy *map_size, int **map)
 	}
 }
 
+#include <stdio.h>
+void	parse_error(char *filename)
+{
+	printf("error reading %s\n", filename);
+	exit(0);
+}
+
 void	read_map_size(char *filename, t_int_xy *map_size)
 {
 	char	buf[10001];
@@ -47,8 +54,17 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	int		i;
 
 	ft_memset(&buf, 0, 10001);
-	fd = open(filename, O_RDONLY);
-	read(fd, buf, 10000);
+	if (2 > (fd = open(filename, O_RDONLY)))
+		parse_error(filename);
+	if (!read(fd, buf, 10000))
+		parse_error(filename);
+	i = 0;
+	while (buf[i])
+	{
+		if (buf[i] != ' ' && buf[i] != '\n' && (buf[i] > '9' || buf[i] < '0'))
+			parse_error(filename);
+		i++;
+	}
 	i = 0;
 	while (buf[i])
 	{
