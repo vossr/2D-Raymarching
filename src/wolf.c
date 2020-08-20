@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/19 21:33:34 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 13:11:24 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,38 @@ void	print_fractal(t_settings *settings)
 	}
 }*/
 
+void	*load_gun(int *line_s)
+{
+	void	**mlx = NULL;
+	char	filename[2][40] = {"textures/gun.xpm"};
+	void	**texture;
+	int			bps;
+
+	texture = (void**)malloc(sizeof(void*) * 2);
+	mlx = get_mlx(NULL);
+	texture[0] = mlx_xpm_file_to_image(mlx[0], filename[0], &bps, line_s);
+	if (texture[0] == NULL)
+	{
+		printf("gun load fail\n");
+		exit(0);
+	}
+	return (texture[0]);
+}
+
+void	put_gun(void)
+{
+	static void *gun = NULL;
+	static int line_s;
+	static void	**mlx = NULL;
+
+	if (!gun)
+	{
+		gun = load_gun(&line_s);
+		mlx = get_mlx(NULL);
+	}
+	mlx_put_image_to_window(mlx[0], mlx[1], gun, WIN_WIDTH / 2, WIN_HEIGHT - 200);
+}
+
 int			wolf(void)
 {
 	static t_float_xy	location = {.x = 1, .y = 1};
@@ -203,6 +235,7 @@ int			wolf(void)
 	sprite(location, direction, map);
 	map_print(location, map_size, map);
 	update_image();
+	put_gun();
 	fps();
 	return (0);
 }
