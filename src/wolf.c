@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 15:29:32 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 17:45:46 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,24 @@ static void	rotate(t_float_xy *direction, double angle)
 static void	player_movement(t_float_xy *location,
 					t_float_xy *direction, t_int_xy map_size, int **map)
 {
-	t_int_xy loc_on_map_f;
-	t_int_xy loc_on_map_b;
+	t_int_xy	loc_on_map_f;
+	t_int_xy	loc_on_map_b;
+	t_int_xy	cursor;
 	int speed;
 
+	cursor = get_cursor();
 	if ((is_key_down(126) || is_key_down(125)) && (is_key_down(124) || is_key_down(123)))
 		speed = 80;
 	else
 		speed = 60;
+	int32_t deltaY;
+	int32_t deltaX;
+	CGGetLastMouseDelta(&deltaX, &deltaY);
+	if (deltaX)
+	{
+		rotate(direction, deltaX * -0.005);
+		speed = 80;
+	}
 	if (is_key_down(124))
 		rotate(direction, -0.05);
 	if (is_key_down(123))
@@ -216,6 +226,22 @@ void	**load_gun(int *line_s)
 	return (texture);
 }
 
+void	crosshair(int x, int y)
+{
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 3; j++)
+			pixel_put(x + i - 14, y + j, 0xFF0000);
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 3; j++)
+			pixel_put(x + i + 4, y + j, 0xFF0000);
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 10; j++)
+			pixel_put(x + i - 1, y + j - 14, 0xFF0000);
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 10; j++)
+			pixel_put(x + i - 1, y + j + 6, 0xFF0000);
+}
+
 void	put_gun(void)
 {
 	static void **gun = NULL;
@@ -255,8 +281,20 @@ int			wolf(void)
 	raycast(settings.location, settings.direction, settings.map);
 	sprite(settings.location, settings.direction, settings.map);
 	map_print(settings.location, settings.map_size, settings.map);
+	crosshair(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	update_image();
 	put_gun();
 	fps();
+
+
+	UInt32 dispid;
+	dispid = CGMainDisplayID();
+	CGDisplayHideCursor(dispid);
+
+	CGPoint cursor;
+	cursor.x = 700;
+	cursor.y = 800;
+	//CGDisplayMoveCursorToPoint(dispid, cursor);
+	CGWarpMouseCursorPosition(cursor);
 	return (0);
 }
