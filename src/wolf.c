@@ -6,12 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 13:27:43 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/20 14:23:34 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
+#include <stdio.h>
 static void	rotate(t_float_xy *direction, double angle)
 {
 	double	sin_angle;
@@ -30,17 +31,21 @@ static void	rotate(t_float_xy *direction, double angle)
 static void	player_movement(t_float_xy *location,
 					t_float_xy *direction, t_int_xy map_size, int **map)
 {
+	t_int_xy loc_on_map;
+
+	loc_on_map.x = map[(int)(location->x + direction->x * 100)][(int)location->y];
+	loc_on_map.y = map[(int)location->x][(int)(location->y + direction->y * 100)];
 	if (is_key_down(124))
 		rotate(direction, -0.05);
 	if (is_key_down(123))
 		rotate(direction, 0.05);
-	if (is_key_down(126) && 0 == map[(int)(location->x + direction->x * 100)][(int)location->y])
+	if (is_key_down(126) && 1 != loc_on_map.x && 2 != loc_on_map.x && loc_on_map.x != 3)
 		location->x += direction->x * 100;
-	if (is_key_down(126) && 0 == map[(int)location->x][(int)(location->y + direction->y * 100)])
+	if (is_key_down(126) && 1 != loc_on_map.y && 2 != loc_on_map.y && loc_on_map.y != 3)
 		location->y += direction->y * 100;
-	if (is_key_down(125) && 0 == map[(int)(location->x - direction->x * 100)][(int)location->y])
+	if (is_key_down(125) && 1 != loc_on_map.x && 2 != loc_on_map.x && loc_on_map.x != 3)
 		location->x -= direction->x * 100;
-	if (is_key_down(125) && 0 == map[(int)location->x][(int)(location->y - direction->y * 100)])
+	if (is_key_down(125) && 1 != loc_on_map.y && 2 != loc_on_map.y && loc_on_map.y != 3)
 		location->y -= direction->y * 100;
 	if (location->x < 1.1)
 		location->x = 1.1;
@@ -50,9 +55,13 @@ static void	player_movement(t_float_xy *location,
 		location->y = 1.1;
 	else if (location->y > map_size.x - 1.1)
 		location->y = map_size.x - 1.1;
+	if (map[(int)location->x][(int)(location->y)] == 4)
+	{
+		printf("Victory\n");
+		exit(0);
+	}
 }
 
-#include <stdio.h>
 static void	texture_offsets(t_float_xy direction,
 				t_float_xy cast, int wall_height, int x, int texture_id)
 {
