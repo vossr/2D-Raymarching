@@ -28,8 +28,9 @@ static void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
-void		collision(t_float_xy *location, t_float_xy *direction, int speed, int neg, int **map)
+void		collision(t_float_xy *location, t_float_xy *direction, int neg, int **map)
 {
+	int speed = 40;
 	t_int_xy	loc_on_map_f;
 
 	loc_on_map_f.x = map[(int)(location->x + neg * direction->x * speed)][(int)location->y];
@@ -40,12 +41,10 @@ void		collision(t_float_xy *location, t_float_xy *direction, int speed, int neg,
 		location->y += direction->y * speed * neg;
 }
 
-static void	player_movement(t_float_xy *location,
-					t_float_xy *direction, t_int_xy map_size, int **map)
+static void	player_movement(t_settings *settings)
 {
 	t_int_xy	cursor;
 	t_float_xy	tangent;
-	int speed = 40;
 	int fwd;
 	int bwd;
 
@@ -56,23 +55,22 @@ static void	player_movement(t_float_xy *location,
 	int32_t deltaX;
 	CGGetLastMouseDelta(&deltaX, &deltaY);
 	if (deltaX)
-		rotate(direction, deltaX * -0.005);
+		rotate(&settings->direction, deltaX * -0.005);
 	if (is_key_down(124))
-		rotate(direction, -0.05);
+		rotate(&settings->direction, -0.05);
 	if (is_key_down(123))
-		rotate(direction, 0.05);
+		rotate(&settings->direction, 0.05);
 	if (fwd)
-		collision(location, direction, speed, 1, map);
+		collision(&settings->location, &settings->direction, 1, settings->map);
 	if (bwd)
-		collision(location, direction, speed, -1, map);
-	tangent = *direction;
+		collision(&settings->location, &settings->direction, -1, settings->map);
+	tangent = settings->direction;
 	rotate(&tangent, 1.57079633);
 	if (is_key_down(0))
-		collision(location, &tangent, speed, 1, map);
+		collision(&settings->location, &tangent, 1, settings->map);
 	if (is_key_down(2))
-		collision(location, &tangent, speed, -1, map);
-	(void)map_size;
-	if (map[(int)location->x][(int)(location->y)] == 4)
+		collision(&settings->location, &tangent, -1, settings->map);
+	if (settings->map[(int)settings->location.x][(int)(settings->location.y)] == 4)
 	{
 		//load next map
 		printf("Victory\n");
@@ -199,8 +197,11 @@ void	**load_gun(int *line_s)
 	return (texture);
 }
 
-void	crosshair(int x, int y)
+void	crosshair(void)
 {
+	int x = WIN_WIDTH / 2;
+	int y = WIN_HEIGHT / 2;
+
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < 3; j++)
 			pixel_put(x + i - 14, y + j, 0xFF0000);
@@ -230,10 +231,10 @@ void	put_gun(void)
 
 	if (last && is_mouse_down(1))
 		mlx_put_image_to_window(mlx[0], mlx[1], gun[0], WIN_WIDTH / 2 + 20, WIN_HEIGHT - 200 - 20);
+	mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2, WIN_HEIGHT - 200);
 	last = 1;
 	if (is_mouse_down(1))
 		last = 0;
-	mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2, WIN_HEIGHT - 200);
 }
 
 void	test(t_settings *settings, int id)
@@ -274,6 +275,18 @@ void	make_threads(t_settings *settings)
 	}
 }
 
+void		capture_cursor(void)
+{
+	UInt32 dispid;
+	dispid = CGMainDisplayID();
+	CGDisplayHideCursor(dispid);
+	CGPoint cursor;
+	cursor.x = 700;
+	cursor.y = 700;
+	//move releative to window;
+	CGWarpMouseCursorPosition(cursor);
+}
+
 int			wolf(void)
 {
 	static t_settings settings;
@@ -288,24 +301,13 @@ int			wolf(void)
 		settings.direction.y = 0.001;
 		settings.map = read_map(NULL, &settings.map_size);
 	}
-	player_movement(&settings.location, &settings.direction, settings.map_size, settings.map);
-
+	player_movement(&settings);
 	make_threads(&settings);
-
-	map_print(settings.location, settings.map_size, settings.map);
-	crosshair(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	map_print(&settings);
+	crosshair();
 	update_image();
 	put_gun();
 	fps();
-
-	UInt32 dispid;
-	dispid = CGMainDisplayID();
-	CGDisplayHideCursor(dispid);
-
-	CGPoint cursor;
-	cursor.x = 700;
-	cursor.y = 700;
-	//CGDisplayMoveCursorToPoint(dispid, cursor);
-	CGWarpMouseCursorPosition(cursor);
+	capture_cursor();
 	return (0);
 }

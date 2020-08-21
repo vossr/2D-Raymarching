@@ -59,18 +59,18 @@ void			megapixel_put(int x, int y, int color)
 	}
 }
 
-void			map_print(t_float_xy location, t_int_xy map_size, int **map)
+void			map_print(t_settings *settings)
 {
 	int			x;
 	int			y;
 
 	y = 0;
-	while (y < map_size.y)
+	while (y < settings->map_size.y)
 	{
 		x = 0;
-		while (x < map_size.x)
+		while (x < settings->map_size.x)
 		{
-			if (map[y][x] != 0)
+			if (settings->map[y][x] != 0)
 				megapixel_put(x * 8, y * 8, 0xFFFFFF);
 			else
 				megapixel_put(x * 8, y * 8, 0);
@@ -78,9 +78,10 @@ void			map_print(t_float_xy location, t_int_xy map_size, int **map)
 		}
 		y++;
 	}
-	location.x *= 8;
-	location.y *= 8;
-	megapixel_put((int)location.y - 4, (int)location.x - 4, 0xFF00);
+	t_float_xy location2;
+	location2.x = settings->location.x * 8;
+	location2.y = settings->location.y * 8;
+	megapixel_put((int)location2.y - 4, (int)location2.x - 4, 0xFF00);
 }
 
 void			put_texture(int line_x, t_float_xy line,
