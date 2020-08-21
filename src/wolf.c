@@ -70,7 +70,7 @@ static void	player_movement(t_settings *settings)
 		collision(&settings->location, &tangent, 1, settings->map);
 	if (is_key_down(2))
 		collision(&settings->location, &tangent, -1, settings->map);
-	if (settings->map[(int)settings->location.x][(int)(settings->location.y)] == 4)
+	if (settings->map[(int)settings->location.y][(int)(settings->location.x)] == 4)
 	{
 		//load next map
 		printf("Victory\n");
@@ -78,11 +78,14 @@ static void	player_movement(t_settings *settings)
 	}
 }
 
-static void	texture_offsets(t_float_xy direction,
-				t_float_xy cast, int wall_height, int x, int texture_id)
+static void	texture_offsets(t_settings *settings, t_float_xy direction, t_float_xy cast, int wall_height, int x)
 {
 	t_float_xy	line;
+	int texture_id;
 
+	texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1) * 4;
+	if (settings->cs_mode)
+		texture_id = 8;
 	line.x = WIN_HEIGHT / 2 - wall_height;
 	line.y = WIN_HEIGHT / 2 + wall_height;
 	if ((int)cast.x < (int)(cast.x - direction.x))
@@ -140,14 +143,16 @@ static void	sprite(t_float_xy location, t_float_xy direction, int **map, int sta
 }
 */
 
-static void	raycast(t_float_xy location, t_float_xy direction, int **map, int start, int stop)
+static void	raycast(t_settings *settings, int start, int stop)
 {
+	t_float_xy	direction;
 	t_float_xy	cast;
 	int			x;
 	int			cast_length;
 	static float fov = 0.00163625;
 	static int	wmod = 310000;
 
+	direction = settings->direction;
 	if (is_key_down(18))
 		wmod += 10000;
 	if (is_key_down(19))
@@ -163,18 +168,17 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map, int st
 	x = start;
 	while (x < stop)
 	{
-		cast = location;
+		cast = settings->location;
 		rotate(&direction, fov);
 		cast_length = 1;
-		while (map[(int)cast.y][(int)cast.x] != 1 && map[(int)cast.y][(int)cast.x] != 2)
+		while (settings->map[(int)cast.y][(int)cast.x] != 1 && settings->map[(int)cast.y][(int)cast.x] != 2)
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
 			cast_length++;
 		}
-		//if (map[(int)cast.x][(int)cast.y] != 3)
-		texture_offsets(direction, cast, wmod / cast_length,
-		WIN_WIDTH - x - 1, (map[(int)cast.y][(int)cast.x] - 1) * 4);
+		//if (settings->map[(int)cast.x][(int)cast.y] != 3)
+		texture_offsets(settings, direction, cast, wmod / cast_length, WIN_WIDTH - x - 1);
 		x++;
 	}
 }
@@ -244,7 +248,7 @@ void	put_gun(t_settings *settings)
 void	test(t_settings *settings, int id)
 {
 	int scale = WIN_WIDTH / THREAD_AMOUNT;
-	raycast(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
+	raycast(settings, scale * (id - 1), scale * id);
 	//sprite(settings->location, settings->direction, settings->map, scale * (id - 1), scale * id);
 }
 

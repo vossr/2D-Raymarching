@@ -93,6 +93,8 @@ void			put_texture(int line_x, t_float_xy line,
 
 	if (!texture)
 		texture = load_texture(&line_s, 0, 0);
+	if (texture_id > 7)
+		texture_id = 1;
 	y = 0;
 	while (y < line.x)
 	{
