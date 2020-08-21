@@ -29,13 +29,11 @@ void	set_map(char *filename, t_int_xy *map_size, int **map)
 		coord.x = 0;
 		while (coord.x < map_size->x)
 		{
-			map[coord.y][coord.x] = ft_atoi(&buf[i]);
-			while (buf[i] && buf[i] >= '0' && buf[i] <= '9')
-				i++;
-			while (buf[i] && (buf[i] < '0' || buf[i] > '9'))
-				i++;
+			map[coord.y][coord.x] = buf[i] - '0';
 			coord.x++;
+			i++;
 		}
+		i++;
 		coord.y++;
 	}
 }
@@ -61,7 +59,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	i = 0;
 	while (buf[i])
 	{
-		if (buf[i] != ' ' && buf[i] != '\n' && (buf[i] > '9' || buf[i] < '0'))
+		if (buf[i] != '\n' && (buf[i] > '9' || buf[i] < '0'))
 			parse_error(filename);
 		i++;
 	}
@@ -75,10 +73,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	i = 0;
 	while (buf[i] != '\n')
 	{
-		while (buf[i] != '\n' && buf[i] >= '0' && buf[i] <= '9')
-			i++;
-		while (buf[i] != '\n' && (buf[i] < '0' || buf[i] > '9'))
-			i++;
+		i++;
 		map_size->x++;
 	}
 }
@@ -86,6 +81,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 #include <stdio.h>
 int		**read_map(char *str, t_int_xy *get_map_size)
 {
+//read to char arraya
 	static int		**map = NULL;
 	static t_int_xy	map_size;
 	int				y;
@@ -97,8 +93,6 @@ int		**read_map(char *str, t_int_xy *get_map_size)
 		return (map);
 	}
 	read_map_size(str, &map_size);
-	printf("x = %d\n", map_size.x);
-	printf("y = %d\n", map_size.y);
 	map = (int**)malloc(sizeof(int*) * map_size.y);
 	y = 0;
 	while (y < map_size.y)
