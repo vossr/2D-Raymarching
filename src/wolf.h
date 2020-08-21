@@ -31,6 +31,7 @@ typedef struct	s_settings {
 	t_float_xy	location;
 	t_float_xy	direction;
 	t_int_xy	map_size;
+	int			menu;
 	int			**map;
 }				t_settings;
 

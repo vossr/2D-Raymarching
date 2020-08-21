@@ -220,7 +220,7 @@ void	crosshair(void)
 		}
 }
 
-void	put_gun(void)
+void	put_gun(t_settings *settings)
 {
 	static void **gun = NULL;
 	static int line_s;
@@ -233,7 +233,7 @@ void	put_gun(void)
 	}
 	static int last = 0;
 
-	if (last && is_mouse_down(1))
+	if (last && is_mouse_down(1) && !settings->menu)
 		mlx_put_image_to_window(mlx[0], mlx[1], gun[0], WIN_WIDTH / 2 + 20, WIN_HEIGHT - 200 - 20);
 	mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2, WIN_HEIGHT - 200);
 	last = 1;
@@ -279,16 +279,29 @@ void	make_threads(t_settings *settings)
 	}
 }
 
-void		capture_cursor(void)
+void		capture_cursor(t_settings *settings)
 {
 	UInt32 dispid;
-	dispid = CGMainDisplayID();
-	CGDisplayHideCursor(dispid);
 	CGPoint cursor;
+	static int last_menu_state = 1;
+
+	dispid = CGMainDisplayID();
 	cursor.x = 700;
 	cursor.y = 700;
 	//move releative to window;
-	CGWarpMouseCursorPosition(cursor);
+	if (!settings->menu)
+		CGWarpMouseCursorPosition(cursor);
+	if (last_menu_state != settings->menu)
+	{
+		if (!settings->menu)
+			CGDisplayHideCursor(dispid);
+		else
+		{
+			CGDisplayShowCursor(dispid);
+			CGDisplayMoveCursorToPoint(dispid, cursor);
+		}
+	}
+	last_menu_state = settings->menu;
 }
 
 int			wolf(void)
@@ -299,17 +312,17 @@ int			wolf(void)
 		exit(0);
 	else if (!settings.map)
 		read_map(NULL, &settings);
-	//if (settings->menu)
+	if (!settings.menu)
 	{
 		player_movement(&settings);
 		make_threads(&settings);
 		map_print(&settings);
 		crosshair();
 		update_image();
-		put_gun();
 	}
-	fps();
 	buttons(&settings);
-	//capture_cursor();
+	put_gun(&settings);
+	fps();
+	capture_cursor(&settings);
 	return (0);
 }

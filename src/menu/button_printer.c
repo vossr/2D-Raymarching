@@ -24,7 +24,7 @@ void		horizontal_line(int y, int x, int size, int color)
 	}
 }
 
-void		print_button_text(int color, int text_color, t_button b)
+void		print_button(int color, int text_color, t_button b)
 {
 (void)text_color;
 (void)color;
@@ -47,7 +47,6 @@ void		print_button_text(int color, int text_color, t_button b)
 		stop.y++;
 		i++;
 	}
-	string_to_image(b.x + 2, 4, text_color, b.text);
 }
 
 int			handle_button(t_button b)
@@ -75,7 +74,7 @@ int			handle_button(t_button b)
 			res++;
 	}
 		text_color = 0xFF0000;
-	print_button_text(color, text_color, b);
+	print_button(color, text_color, b);
 	return (res);
 }
 

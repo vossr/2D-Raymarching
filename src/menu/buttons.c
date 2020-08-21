@@ -104,9 +104,19 @@ void		buttons(t_settings *settings)
 {
 	static t_button	*all_b = NULL;
 	static int		click[3] = {0, 0, 0};
+	static int		last = 0;
 	int				i;
 
-	(void)settings;
+	if (is_key_down(48))
+	{
+		if (!last)
+			settings->menu = settings->menu ? 0 : 1;
+		last = 1;
+	}
+	else
+		last = 0;
+	if (!settings->menu)
+		return ;
 	if (!(i = 0) && !all_b)
 		all_b = init_buttons();
 	while (i < 3)
@@ -125,6 +135,13 @@ void		buttons(t_settings *settings)
 				//reset(settings, all_b);
 			}
 		}
+		i++;
+	}
+	update_image();
+	i = 0;
+	while (i < 3)
+	{
+		string_to_image(all_b[i].x + 2, 4, 0xFF0000, all_b[i].text);
 		i++;
 	}
 	//modify_settings(settings);

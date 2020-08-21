@@ -135,7 +135,6 @@ void	set_start(t_settings *settings)
 	settings->direction.y = 0.001;
 }
 
-#include <stdio.h>
 void	read_map(char *str, t_settings *settings)
 {
 //read to char arraya
@@ -145,13 +144,11 @@ void	read_map(char *str, t_settings *settings)
 
 	if (!str)
 	{
-		printf("1\n");
 		settings->map_size.x = map_size.x;
 		settings->map_size.y = map_size.y;
 		settings->map = map;
-		printf("2\n");
+		settings->menu = 0;
 		set_start(settings);
-		printf("3\n");
 		return ;
 	}
 	read_map_size(str, &map_size);
