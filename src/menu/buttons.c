@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   button_layer.c                                     :+:      :+:    :+:   */
+/*   buttons.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
-
+/*
 void		disable_others(t_settings *s, t_button *b, int i)
 {
 	if (!b[i].is_on && (i == 1 || i == 3 || i == 5))
@@ -99,16 +99,17 @@ void		modify_settings(t_settings *settings)
 	if (settings->cycle_b)
 		cycle_colors(&settings->color);
 }
-
-void		button_layer(t_settings *settings)
+*/
+void		buttons(t_settings *settings)
 {
 	static t_button	*all_b = NULL;
-	static int		click[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	static int		click[3] = {0, 0, 0};
 	int				i;
 
+	(void)settings;
 	if (!(i = 0) && !all_b)
 		all_b = init_buttons();
-	while (i < 9)
+	while (i < 3)
 	{
 		if (handle_button(all_b[i]) || (click[i] = 0))
 		{
@@ -118,13 +119,13 @@ void		button_layer(t_settings *settings)
 				click[i]++;
 			else if (click[i] == 3)
 			{
-				disable_others(settings, all_b, i);
-				on_click(settings, i, click);
-				all_b[i].is_on = all_b[i].is_on ? 0 : 1;
-				reset(settings, all_b);
+				//disable_others(settings, all_b, i);
+				//on_click(settings, i, click);
+				//all_b[i].is_on = all_b[i].is_on ? 0 : 1;
+				//reset(settings, all_b);
 			}
 		}
 		i++;
 	}
-	modify_settings(settings);
+	//modify_settings(settings);
 }

@@ -34,6 +34,17 @@ typedef struct	s_settings {
 	int			**map;
 }				t_settings;
 
+typedef struct	s_button {
+	int			x;
+	int			size_x;
+	int			is_on;
+	//unsigned		click : 2;
+	char		*text;
+}				t_button;
+void			buttons(t_settings *settings);
+t_button		*init_buttons(void);
+int				handle_button(t_button b);
+
 void			read_map(char *str, t_settings *settings);
 void			map_print(t_settings *settings);
 void			put_texture(int line_x, t_float_xy line,

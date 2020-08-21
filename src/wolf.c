@@ -299,14 +299,17 @@ int			wolf(void)
 		exit(0);
 	else if (!settings.map)
 		read_map(NULL, &settings);
-	player_movement(&settings);
-	make_threads(&settings);
-	map_print(&settings);
-	crosshair();
-	update_image();
-	put_gun();
-	//buttons(&settings);
+	//if (settings->menu)
+	{
+		player_movement(&settings);
+		make_threads(&settings);
+		map_print(&settings);
+		crosshair();
+		update_image();
+		put_gun();
+	}
 	fps();
-	capture_cursor();
+	buttons(&settings);
+	//capture_cursor();
 	return (0);
 }
