@@ -29,6 +29,7 @@ void	set_map(char *filename, t_int_xy *map_size, int **map)
 		coord.x = 0;
 		while (coord.x < map_size->x)
 		{
+			//älä muuta intiks
 			map[coord.y][coord.x] = buf[i] - '0';
 			coord.x++;
 			i++;
@@ -59,7 +60,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	i = 0;
 	while (buf[i])
 	{
-		if (buf[i] != '\n' && (buf[i] > '9' || buf[i] < '0'))
+		if (buf[i] != '\n' && buf[i] != '^' && buf[i] != '<' && buf[i] != 'v' && buf[i] != '>' && (buf[i] > '9' || buf[i] < '0'))
 			parse_error(filename);
 		i++;
 	}
@@ -78,8 +79,64 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	}
 }
 
+void	set_start_direction(t_settings *settings, int c)
+{
+	if (c == '^' - '0')
+	{
+		settings->direction.x = 0.0;
+		settings->direction.y = 0.001;
+	}
+	else if (c == '<' - '0')
+	{
+		settings->direction.x = -0.001;
+		settings->direction.y = 0.0;
+	}
+	else if (c == 'v' - '0')
+	{
+		settings->direction.x = 0.0;
+		settings->direction.y = -0.001;
+	}
+	else if (c == '>' - '0')
+	{
+		settings->direction.x = 0.001;
+		settings->direction.y = 0.0;
+	}
+}
+
+void	set_start(t_settings *settings)
+{
+	int x;
+	int y;
+	int c;
+
+	y = 0;
+	while (y < settings->map_size.y)
+	{
+		x = 0;
+		while (x < settings->map_size.x)
+		{
+			c = settings->map[y][x];
+			if (c == '^' - '0' || c == '<' - '0' ||
+					c == 'v' - '0' || c == '>' - '0')
+			{
+				settings->location.x = y + .5;
+				settings->location.y = x + .5;//wtf
+				set_start_direction(settings, c);
+				return ;
+			}
+			x++;
+		}
+		y++;
+	}
+	//set to first free position
+	settings->location.x = 1.5;
+	settings->location.y = 1.5;
+	settings->direction.x = 0.0;
+	settings->direction.y = 0.001;
+}
+
 #include <stdio.h>
-int		**read_map(char *str, t_settings *settings)
+void	read_map(char *str, t_settings *settings)
 {
 //read to char arraya
 	static int		**map = NULL;
@@ -88,13 +145,14 @@ int		**read_map(char *str, t_settings *settings)
 
 	if (!str)
 	{
+		printf("1\n");
 		settings->map_size.x = map_size.x;
 		settings->map_size.y = map_size.y;
-		settings->location.x = 1.5;
-		settings->location.y = 1.5;
-		settings->direction.x = 0.0;
-		settings->direction.y = 0.001;
-		return (map);
+		settings->map = map;
+		printf("2\n");
+		set_start(settings);
+		printf("3\n");
+		return ;
 	}
 	read_map_size(str, &map_size);
 	map = (int**)malloc(sizeof(int*) * map_size.y);
@@ -105,7 +163,6 @@ int		**read_map(char *str, t_settings *settings)
 		y++;
 	}
 	set_map(str, &map_size, map);
-	return (NULL);
 }
 
 int		main(int argc, char **argv)

@@ -298,13 +298,14 @@ int			wolf(void)
 	if (is_key_down(53))
 		exit(0);
 	else if (!settings.map)
-		settings.map = read_map(NULL, &settings);
+		read_map(NULL, &settings);
 	player_movement(&settings);
 	make_threads(&settings);
 	map_print(&settings);
 	crosshair();
 	update_image();
 	put_gun();
+	//buttons(&settings);
 	fps();
 	capture_cursor();
 	return (0);

@@ -70,7 +70,7 @@ void			map_print(t_settings *settings)
 		x = 0;
 		while (x < settings->map_size.x)
 		{
-			if (settings->map[y][x] != 0)
+			if (settings->map[y][x] == 1 || settings->map[y][x] == 2)
 				megapixel_put(x * 8, y * 8, 0xFFFFFF);
 			else
 				megapixel_put(x * 8, y * 8, 0);
