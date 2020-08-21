@@ -201,19 +201,23 @@ void	crosshair(void)
 {
 	int x = WIN_WIDTH / 2;
 	int y = WIN_HEIGHT / 2;
+	int i;
+	int j;
 
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < 3; j++)
-			pixel_put(x + i - 14, y + j, 0xFF0000);
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < 3; j++)
-			pixel_put(x + i + 4, y + j, 0xFF0000);
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 10; j++)
-			pixel_put(x + i - 1, y + j - 14, 0xFF0000);
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 10; j++)
-			pixel_put(x + i - 1, y + j + 6, 0xFF0000);
+	i = -1;
+	while (++i < 10 && (j = -1))
+		while (++j < 3)
+		{
+			pixel_put(x + i - 14, y + j, 0xFF00);
+			pixel_put(x + i + 4, y + j, 0xFF00);
+		}
+	i = -1;
+	while (++i < 3 && (j = -1))
+		while (++j < 10)
+		{
+			pixel_put(x + i - 1, y + j - 14, 0xFF00);
+			pixel_put(x + i - 1, y + j + 6, 0xFF00);
+		}
 }
 
 void	put_gun(void)
@@ -294,13 +298,7 @@ int			wolf(void)
 	if (is_key_down(53))
 		exit(0);
 	else if (!settings.map)
-	{
-		settings.location.x = 1.5;
-		settings.location.y = 1.5;
-		settings.direction.x = 0.0;
-		settings.direction.y = 0.001;
-		settings.map = read_map(NULL, &settings.map_size);
-	}
+		settings.map = read_map(NULL, &settings);
 	player_movement(&settings);
 	make_threads(&settings);
 	map_print(&settings);

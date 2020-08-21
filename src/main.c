@@ -79,7 +79,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 }
 
 #include <stdio.h>
-int		**read_map(char *str, t_int_xy *get_map_size)
+int		**read_map(char *str, t_settings *settings)
 {
 //read to char arraya
 	static int		**map = NULL;
@@ -88,8 +88,12 @@ int		**read_map(char *str, t_int_xy *get_map_size)
 
 	if (!str)
 	{
-		get_map_size->x = map_size.x;
-		get_map_size->y = map_size.y;
+		settings->map_size.x = map_size.x;
+		settings->map_size.y = map_size.y;
+		settings->location.x = 1.5;
+		settings->location.y = 1.5;
+		settings->direction.x = 0.0;
+		settings->direction.y = 0.001;
 		return (map);
 	}
 	read_map_size(str, &map_size);

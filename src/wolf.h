@@ -34,7 +34,7 @@ typedef struct	s_settings {
 	int			**map;
 }				t_settings;
 
-int				**read_map(char *str, t_int_xy *map_size);
+int				**read_map(char *str, t_settings *settings);
 void			map_print(t_settings *settings);
 void			put_texture(int line_x, t_float_xy line,
 								int texture_id, float texture_x);
