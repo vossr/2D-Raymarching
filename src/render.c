@@ -81,7 +81,7 @@ void			map_print(t_settings *settings)
 	t_float_xy location2;
 	location2.x = settings->location.x * 8;
 	location2.y = settings->location.y * 8;
-	megapixel_put((int)location2.y - 4, (int)location2.x - 4, 0xFF00);
+	megapixel_put((int)location2.x - 4, (int)location2.y - 4, 0xFF00);
 }
 
 void			put_texture(int line_x, t_float_xy line,

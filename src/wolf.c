@@ -33,8 +33,8 @@ void		collision(t_float_xy *location, t_float_xy *direction, int neg, int **map)
 	int speed = 40;
 	t_int_xy	loc_on_map_f;
 
-	loc_on_map_f.x = map[(int)(location->x + neg * direction->x * speed)][(int)location->y];
-	loc_on_map_f.y = map[(int)location->x][(int)(location->y + neg * direction->y * speed)];
+	loc_on_map_f.y = map[(int)(location->y + neg * direction->y * speed)][(int)location->x];
+	loc_on_map_f.x = map[(int)location->y][(int)(location->x + neg * direction->x * speed)];
 	if (1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
 		location->x += direction->x * speed * neg;
 	if (1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
@@ -166,7 +166,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map, int st
 		cast = location;
 		rotate(&direction, fov);
 		cast_length = 1;
-		while (map[(int)cast.x][(int)cast.y] != 1 && map[(int)cast.x][(int)cast.y] != 2)
+		while (map[(int)cast.y][(int)cast.x] != 1 && map[(int)cast.y][(int)cast.x] != 2)
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
@@ -174,7 +174,7 @@ static void	raycast(t_float_xy location, t_float_xy direction, int **map, int st
 		}
 		//if (map[(int)cast.x][(int)cast.y] != 3)
 		texture_offsets(direction, cast, wmod / cast_length,
-		WIN_WIDTH - x - 1, (map[(int)cast.x][(int)cast.y] - 1) * 4);
+		WIN_WIDTH - x - 1, (map[(int)cast.y][(int)cast.x] - 1) * 4);
 		x++;
 	}
 }

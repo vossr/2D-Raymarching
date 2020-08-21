@@ -84,7 +84,7 @@ void	set_start_direction(t_settings *settings, int c)
 	if (c == '^' - '0')
 	{
 		settings->direction.x = 0.0;
-		settings->direction.y = 0.001;
+		settings->direction.y = -0.001;
 	}
 	else if (c == '<' - '0')
 	{
@@ -94,7 +94,7 @@ void	set_start_direction(t_settings *settings, int c)
 	else if (c == 'v' - '0')
 	{
 		settings->direction.x = 0.0;
-		settings->direction.y = -0.001;
+		settings->direction.y = 0.001;
 	}
 	else if (c == '>' - '0')
 	{
@@ -119,8 +119,8 @@ void	set_start(t_settings *settings)
 			if (c == '^' - '0' || c == '<' - '0' ||
 					c == 'v' - '0' || c == '>' - '0')
 			{
-				settings->location.x = y + .5;
-				settings->location.y = x + .5;//wtf
+				settings->location.x = x + .5;
+				settings->location.y = y + .5;
 				set_start_direction(settings, c);
 				return ;
 			}
