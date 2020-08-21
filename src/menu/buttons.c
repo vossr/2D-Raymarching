@@ -131,8 +131,15 @@ void		buttons(t_settings *settings)
 			{
 				//disable_others(settings, all_b, i);
 				//on_click(settings, i, click);
-				//all_b[i].is_on = all_b[i].is_on ? 0 : 1;
+				all_b[i].is_on = all_b[i].is_on ? 0 : 1;
 				//reset(settings, all_b);
+				click[i] = 0;
+				if (i == 0)
+					settings->fps = settings->fps ? 0 : 1;
+				else if (i == 1)
+					settings->print_map = settings->print_map ? 0 : 1;
+				else if (i == 2)
+					settings->cs_mode = settings->cs_mode ? 0 : 1;
 			}
 		}
 		i++;
@@ -141,7 +148,7 @@ void		buttons(t_settings *settings)
 	i = 0;
 	while (i < 3)
 	{
-		string_to_image(all_b[i].x + 2, 4, 0xFF0000, all_b[i].text);
+		string_to_image(all_b[i].x + 2, all_b[i].y + 4, 0xFF0000, all_b[i].text);
 		i++;
 	}
 	//modify_settings(settings);

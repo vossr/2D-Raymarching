@@ -148,6 +148,9 @@ void	read_map(char *str, t_settings *settings)
 		settings->map_size.y = map_size.y;
 		settings->map = map;
 		settings->menu = 0;
+		settings->fps = 0;
+		settings->print_map = 0;
+		settings->cs_mode = 0;
 		set_start(settings);
 		return ;
 	}

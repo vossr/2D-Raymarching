@@ -34,9 +34,9 @@ void		print_button(int color, int text_color, t_button b)
 
 	i = 0;
 	start.x = b.x;
-	start.y = 0;
+	start.y = b.y;
 	stop.x = b.x + b.size_x;
-	stop.y = 0;
+	stop.y = b.y;
 	while (i < 30)
 	{
 		if (!i || i == 29)
@@ -63,7 +63,7 @@ int			handle_button(t_button b)
 		color = 0x2755b2;
 	text_color = b.is_on ? 0xFFFFFFF : 0;
 	if (cursor.x > b.x && cursor.x < b.x + b.size_x &&
-	cursor.y > 0 && cursor.y < 30)
+	cursor.y > b.y && cursor.y < b.y + 30)
 	{
 		res++;
 		color = 0x807e7f;
@@ -94,21 +94,22 @@ void		set_button_text(t_button *b, int i)
 t_button	*init_buttons(void)
 {
 	t_button	*all_b;
-	int			x;
+	//int			x;
 	int			i;
 
 	if (!(all_b = (t_button*)malloc(sizeof(t_button) * 3)))
 		;
 		//ft_error();
-	x = 0;
+	//x = 0;
 	i = 0;
 	while (i < 3)
 	{
-		all_b[i].x = x;
+		all_b[i].y = (WIN_HEIGHT / 4) + i * 32 + 30;
 		all_b[i].is_on = 0;
 		set_button_text(&all_b[i], i);
 		all_b[i].size_x = ft_strlen(all_b[i].text) * 12;
-		x += all_b[i].size_x + 1;
+		all_b[i].x = WIN_WIDTH / 2 - all_b[i].size_x / 2;
+		//x += all_b[i].size_x + 1;
 		i++;
 	}
 	return (all_b);

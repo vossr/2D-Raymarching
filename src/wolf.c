@@ -313,16 +313,18 @@ int			wolf(void)
 	else if (!settings.map)
 		read_map(NULL, &settings);
 	if (!settings.menu)
-	{
 		player_movement(&settings);
-		make_threads(&settings);
-		map_print(&settings);
+	make_threads(&settings);
+	if (settings.cs_mode)
 		crosshair();
+	if (settings.print_map)
+		map_print(&settings);
+	if (!settings.menu)
 		update_image();
-	}
 	buttons(&settings);
 	put_gun(&settings);
-	fps();
+	if (settings.fps)
+		fps();
 	capture_cursor(&settings);
 	return (0);
 }

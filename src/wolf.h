@@ -31,12 +31,16 @@ typedef struct	s_settings {
 	t_float_xy	location;
 	t_float_xy	direction;
 	t_int_xy	map_size;
-	int			menu;
 	int			**map;
+	int			menu;
+	int			fps;
+	int			print_map;
+	int			cs_mode;
 }				t_settings;
 
 typedef struct	s_button {
 	int			x;
+	int			y;
 	int			size_x;
 	int			is_on;
 	//unsigned		click : 2;
