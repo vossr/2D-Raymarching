@@ -11,13 +11,12 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
-#define TEX_SIZE 64
 
-unsigned char	**load_texture(int *line_s, int bps, int j)
+static unsigned char	**load_texture(int *line_s, int bps, int j)
 {
 	void			**mlx;
-	char			*files[8];
-	void			*texture[8];
+	char			*files[9];
+	void			*texture[9];
 	unsigned char	**data;
 	int				endian;
 
@@ -29,10 +28,11 @@ unsigned char	**load_texture(int *line_s, int bps, int j)
 	files[5] = "textures/achtung.xpm";
 	files[6] = "textures/flag.xpm";
 	files[7] = "textures/eagle.xpm";
-	data = (unsigned char**)malloc(sizeof(unsigned char*) * 8);
+	files[8] = "textures/sandstone.xpm";
+	data = (unsigned char**)malloc(sizeof(unsigned char*) * 9);
 	mlx = get_mlx(NULL);
 	j = 0;
-	while (j < 8)
+	while (j < 9)
 	{
 		texture[j] = mlx_xpm_file_to_image(mlx[0], files[j], &bps, line_s);
 		data[j] = (unsigned char*)mlx_get_data_addr(texture[j], &bps, line_s, &endian);
@@ -88,13 +88,20 @@ void			put_texture(int line_x, t_float_xy line,
 					int texture_id, float texture_x)
 {
 	static unsigned char	**texture = NULL;
-	static int				line_s;
+	int						line_s;
 	int						y;
+	float					tex_size;
 
 	if (!texture)
 		texture = load_texture(&line_s, 0, 0);
+	tex_size = 64.0;
+	line_s = 256;
 	if (texture_id > 7)
-		texture_id = 1;
+	{
+		texture_id = 8;
+		tex_size = 512.0;
+		line_s = 2024;
+	}
 	y = 0;
 	while (y < line.x)
 	{
@@ -104,10 +111,11 @@ void			put_texture(int line_x, t_float_xy line,
 	y = line.x;
 	if (y < 0)
 		y = 0;
+	int xd = (int)(tex_size * texture_x);
+	int yd;
 	while (y < line.y && y < WIN_HEIGHT)
 	{
-		int xd = (int)(TEX_SIZE * texture_x);
-		int yd = (int)(TEX_SIZE * (((float)y - line.x) / (line.y - line.x)));
+		yd = (int)(tex_size * (((float)y - line.x) / (line.y - line.x)));
 		pixel_put(line_x, y, texture[texture_id][yd * line_s + xd * 4 + 2] * 0x10000 +
 				texture[texture_id][yd * line_s + xd * 4 + 1] * 0x100 + texture[texture_id][yd * line_s + xd * 4 + 0]);
 		y++;

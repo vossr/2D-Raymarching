@@ -43,19 +43,24 @@ void		collision(t_float_xy *location, t_float_xy *direction, int neg, int **map)
 
 static void	player_movement(t_settings *settings)
 {
-	t_int_xy	cursor;
+	static int	anti_jump = 0;
 	t_float_xy	tangent;
-	int fwd;
-	int bwd;
+	int32_t		deltaX;
+	int			fwd;
+	int			bwd;
 
+	CGGetLastMouseDelta(&deltaX, &fwd);
 	fwd = is_key_down(126) + is_key_down(13);
 	bwd = is_key_down(125) + is_key_down(1);
-	cursor = get_cursor();
-	int32_t deltaY;
-	int32_t deltaX;
-	CGGetLastMouseDelta(&deltaX, &deltaY);
-	if (deltaX)
+	if (settings->menu)
+	{
+		anti_jump = 1;
+		return ;
+	}
+	if (deltaX && !anti_jump)
 		rotate(&settings->direction, deltaX * -0.005);
+	if (deltaX)
+		anti_jump = 0;
 	if (is_key_down(124))
 		rotate(&settings->direction, -0.05);
 	if (is_key_down(123))
@@ -289,6 +294,7 @@ void		capture_cursor(t_settings *settings)
 	CGPoint cursor;
 	static int last_menu_state = 1;
 
+	//if lose focus menu = 1;
 	dispid = CGMainDisplayID();
 	cursor.x = 700;
 	cursor.y = 700;
@@ -316,8 +322,7 @@ int			wolf(void)
 		exit(0);
 	else if (!settings.map)
 		read_map(NULL, &settings);
-	if (!settings.menu)
-		player_movement(&settings);
+	player_movement(&settings);
 	make_threads(&settings);
 	if (settings.cs_mode)
 		crosshair();
