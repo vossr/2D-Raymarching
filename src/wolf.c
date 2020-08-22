@@ -194,11 +194,14 @@ void	**load_gun(int *line_s)
 	void	**texture;
 	int			bps;
 
-	texture = (void**)malloc(sizeof(void*) * 2);
+	texture = (void**)malloc(sizeof(void*) * 4);
 	mlx = get_mlx(NULL);
-	texture[0] = mlx_xpm_file_to_image(mlx[0], "textures/flash.xpm", &bps, line_s);
-	texture[1] = mlx_xpm_file_to_image(mlx[0], "textures/gun.xpm", &bps, line_s);
-	if (texture[0] == NULL || texture[1] == NULL)
+	texture[0] = mlx_xpm_file_to_image(mlx[0], "textures/wolfgun.xpm", &bps, line_s);
+	texture[1] = mlx_xpm_file_to_image(mlx[0], "textures/wolfgunfire.xpm", &bps, line_s);
+	texture[2] = mlx_xpm_file_to_image(mlx[0], "textures/flash.xpm", &bps, line_s);
+	texture[3] = mlx_xpm_file_to_image(mlx[0], "textures/gun.xpm", &bps, line_s);
+	if (texture[0] == NULL || texture[1] == NULL ||
+			texture[2] == NULL || texture[3] == NULL)
 	{
 		printf("gun load fail\n");
 		exit(0);
@@ -242,9 +245,19 @@ void	put_gun(t_settings *settings)
 	}
 	static int last = 0;
 
-	if (last && is_mouse_down(1) && !settings->menu)
-		mlx_put_image_to_window(mlx[0], mlx[1], gun[0], WIN_WIDTH / 2 + 20, WIN_HEIGHT - 200 - 20);
-	mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2, WIN_HEIGHT - 200);
+	if (settings->cs_mode)
+	{
+		if (last && is_mouse_down(1) && !settings->menu)
+			mlx_put_image_to_window(mlx[0], mlx[1], gun[2], WIN_WIDTH / 2 + 20, WIN_HEIGHT - 200 - 20);
+		mlx_put_image_to_window(mlx[0], mlx[1], gun[3], WIN_WIDTH / 2, WIN_HEIGHT - 200);
+	}
+	else
+	{
+		if (last && is_mouse_down(1) && !settings->menu)
+			mlx_put_image_to_window(mlx[0], mlx[1], gun[1], WIN_WIDTH / 2 - (192 / 2), WIN_HEIGHT - 192);
+		else
+			mlx_put_image_to_window(mlx[0], mlx[1], gun[0], WIN_WIDTH / 2- (192 / 2), WIN_HEIGHT - 192);
+	}
 	last = 1;
 	if (is_mouse_down(1))
 		last = 0;
