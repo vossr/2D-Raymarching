@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 16:28:38 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:37:31 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void					map_print(t_settings *settings)
 		x = 0;
 		while (x < settings->map_size.x)
 		{
-			if (settings->map[y][x] == 1 || settings->map[y][x] == 2)
+			if (settings->map[y][x] == '1' || settings->map[y][x] == '2')
 				megapixel_put(x * 8, y * 8, 0xFFFFFF);
 			else
 				megapixel_put(x * 8, y * 8, 0);

@@ -6,13 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 15:36:25 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:38:17 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void	set_map(char *filename, t_int_xy *map_size, int **map)
+void	set_map(char *filename, t_int_xy *map_size, char **map)
 {
 	t_int_xy	coord;
 	char	buf[10001];
@@ -29,8 +29,7 @@ void	set_map(char *filename, t_int_xy *map_size, int **map)
 		coord.x = 0;
 		while (coord.x < map_size->x)
 		{
-			//älä muuta intiks
-			map[coord.y][coord.x] = buf[i] - '0';
+			map[coord.y][coord.x] = buf[i];
 			coord.x++;
 			i++;
 		}
@@ -74,22 +73,22 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 
 void	set_start_direction(t_settings *settings, int c)
 {
-	if (c == '^' - '0')
+	if (c == '^')
 	{
 		settings->direction.x = 0.0;
 		settings->direction.y = -0.001;
 	}
-	else if (c == '<' - '0')
+	else if (c == '<')
 	{
 		settings->direction.x = -0.001;
 		settings->direction.y = 0.0;
 	}
-	else if (c == 'v' - '0')
+	else if (c == 'v')
 	{
 		settings->direction.x = 0.0;
 		settings->direction.y = 0.001;
 	}
-	else if (c == '>' - '0')
+	else if (c == '>')
 	{
 		settings->direction.x = 0.001;
 		settings->direction.y = 0.0;
@@ -109,8 +108,8 @@ void	set_start(t_settings *settings)
 		while (x < settings->map_size.x)
 		{
 			c = settings->map[y][x];
-			if (c == '^' - '0' || c == '<' - '0' ||
-					c == 'v' - '0' || c == '>' - '0')
+			if (c == '^' || c == '<' ||
+					c == 'v' || c == '>')
 			{
 				settings->location.x = x + .5;
 				settings->location.y = y + .5;
@@ -130,9 +129,8 @@ void	set_start(t_settings *settings)
 
 void	read_map(char *str, t_settings *settings)
 {
-//read to char arraya
-	static int		**map = NULL;
 	static t_int_xy	map_size;
+	static char		**map = NULL;
 	int				y;
 
 	if (!str)
@@ -148,11 +146,11 @@ void	read_map(char *str, t_settings *settings)
 		return ;
 	}
 	read_map_size(str, &map_size);
-	map = (int**)malloc(sizeof(int*) * map_size.y);
+	map = (char**)malloc(sizeof(char*) * map_size.y);
 	y = 0;
 	while (y < map_size.y)
 	{
-		map[y] = (int*)malloc(sizeof(int) * map_size.x);
+		map[y] = (char*)malloc(sizeof(char) * map_size.x);
 		y++;
 	}
 	set_map(str, &map_size, map);

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 15:34:11 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:31:48 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct	s_settings {
 	t_float_xy	location;
 	t_float_xy	direction;
 	t_int_xy	map_size;
-	int			**map;
+	char		**map;
 	int			menu;
 	int			fps;
 	int			print_map;

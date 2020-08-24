@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 15:17:11 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:43:55 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ static void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
-void		collision(t_float_xy *location, t_float_xy *direction, int neg, int **map)
+void		collision(t_float_xy *location, t_float_xy *direction, int neg, char **map)
 {
 	int speed = 40;
 	t_int_xy	loc_on_map_f;
 
 	loc_on_map_f.y = map[(int)(location->y + neg * direction->y * speed)][(int)location->x];
 	loc_on_map_f.x = map[(int)location->y][(int)(location->x + neg * direction->x * speed)];
-	if (1 != loc_on_map_f.x && 2 != loc_on_map_f.x && loc_on_map_f.x != 3)
+	if ('1' != loc_on_map_f.x && '2' != loc_on_map_f.x && loc_on_map_f.x != '3')
 		location->x += direction->x * speed * neg;
-	if (1 != loc_on_map_f.y && 2 != loc_on_map_f.y && loc_on_map_f.y != 3)
+	if ('1' != loc_on_map_f.y && '2' != loc_on_map_f.y && loc_on_map_f.y != '3')
 		location->y += direction->y * speed * neg;
 }
 
@@ -75,7 +75,7 @@ static void	player_movement(t_settings *settings)
 		collision(&settings->location, &tangent, 1, settings->map);
 	if (is_key_down(2))
 		collision(&settings->location, &tangent, -1, settings->map);
-	if (settings->map[(int)settings->location.y][(int)(settings->location.x)] == 4)
+	if (settings->map[(int)settings->location.y][(int)(settings->location.x)] == '4')
 	{
 		//load next map
 		printf("Victory\n");
@@ -176,7 +176,7 @@ static void	raycast(t_settings *settings, int start, int stop)
 		cast = settings->location;
 		rotate(&direction, fov);
 		cast_length = 1;
-		while (settings->map[(int)cast.y][(int)cast.x] != 1 && settings->map[(int)cast.y][(int)cast.x] != 2)
+		while (settings->map[(int)cast.y][(int)cast.x] != '1' && settings->map[(int)cast.y][(int)cast.x] != '2')
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
@@ -188,7 +188,7 @@ static void	raycast(t_settings *settings, int start, int stop)
 		t_float_xy	line;
 		int texture_id;
 
-		texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1) * 4;
+		texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1 - '0') * 4;
 		if (settings->cs_mode)
 			texture_id = 8;
 		int wall_height = wmod / cast_length;
