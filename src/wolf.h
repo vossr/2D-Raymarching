@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 19:54:07 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 20:22:30 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,5 @@ void			make_threads(t_settings *settings);
 void			rotate(t_float_xy *direction, double angle);
 void			crosshair(void);
 void			put_gun(t_settings *settings);
+void			capture_cursor(t_settings *settings);
 #endif

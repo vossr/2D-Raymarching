@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 19:51:38 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 20:22:06 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,31 @@ void	put_gun(t_settings *settings)
 		mlx_put_image_to_window(mlx[0], mlx[1], gun[0],
 				WIN_WIDTH / 2 - (192 / 2), WIN_HEIGHT - 192);
 	last = is_mouse_down(1) ? 0 : 1;
+}
+
+void		capture_cursor(t_settings *settings)
+{
+	UInt32		dispid;
+	CGPoint		cursor;
+	static int	last_menu_state = 1;
+
+	//if lose focus menu = 1;
+	//CGAssociateMouseAndMouseCursorPosition(0);
+	dispid = CGMainDisplayID();
+	cursor.x = 700;
+	cursor.y = 700;
+	//move releative to window;
+	if (!settings->menu)
+		CGWarpMouseCursorPosition(cursor);
+	if (last_menu_state != settings->menu)
+	{
+		if (!settings->menu)
+			CGDisplayHideCursor(dispid);
+		else
+		{
+			CGDisplayShowCursor(dispid);
+			CGDisplayMoveCursorToPoint(dispid, cursor);
+		}
+	}
+	last_menu_state = settings->menu;
 }

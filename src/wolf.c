@@ -6,13 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 19:53:30 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 20:24:02 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void	rotate(t_float_xy *direction, double angle)
+void		rotate(t_float_xy *direction, double angle)
 {
 	double	sin_angle;
 	double	cos_angle;
@@ -27,11 +27,13 @@ void	rotate(t_float_xy *direction, double angle)
 	direction->y = y * cos_angle - x * sin_angle;
 }
 
-void		collision(t_float_xy *location, t_float_xy *direction, int neg, char **map)
+void		collision(t_float_xy *location, t_float_xy *direction,
+												int neg, char **map)
 {
-	int speed = 40;
 	t_int_xy	loc_on_map_f;
+	int			speed;
 
+	speed = 40;
 	loc_on_map_f.y = map[(int)(location->y + neg * direction->y * speed)]
 							[(int)location->x];
 	loc_on_map_f.x = map[(int)location->y]
@@ -42,22 +44,18 @@ void		collision(t_float_xy *location, t_float_xy *direction, int neg, char **map
 		location->y += direction->y * speed * neg;
 }
 
-static void	player_movement(t_settings *settings)
+static void	player_rotation(t_settings *settings)
 {
-	static int	anti_jump = 0;
-	t_float_xy	tangent;
+	static int	anti_jump = 1;
 	int32_t		deltax;
-	int			fwd;
-	int			bwd;
+	int			unused;
 
-	CGGetLastMouseDelta(&deltax, &fwd);
-	fwd = is_key_down(126) + is_key_down(13);
-	bwd = is_key_down(125) + is_key_down(1);
 	if (settings->menu)
 	{
 		anti_jump = 1;
 		return ;
 	}
+	CGGetLastMouseDelta(&deltax, &unused);
 	if (deltax && !anti_jump)
 		rotate(&settings->direction, deltax * -0.005);
 	if (deltax)
@@ -66,6 +64,19 @@ static void	player_movement(t_settings *settings)
 		rotate(&settings->direction, -0.05);
 	if (is_key_down(123))
 		rotate(&settings->direction, 0.05);
+}
+
+static void	player_movement(t_settings *settings)
+{
+	t_float_xy	tangent;
+	int			fwd;
+	int			bwd;
+
+	fwd = is_key_down(126) + is_key_down(13);
+	bwd = is_key_down(125) + is_key_down(1);
+	player_rotation(settings);
+	if (settings->menu)
+		return ;
 	if (fwd)
 		collision(&settings->location, &settings->direction, 1, settings->map);
 	if (bwd)
@@ -82,32 +93,6 @@ static void	player_movement(t_settings *settings)
 		printf("Victory\n");
 		exit(0);
 	}
-}
-
-void		capture_cursor(t_settings *settings)
-{
-	UInt32		dispid;
-	CGPoint		cursor;
-	static int	last_menu_state = 1;
-
-	//if lose focus menu = 1;
-	dispid = CGMainDisplayID();
-	cursor.x = 700;
-	cursor.y = 700;
-	//move releative to window;
-	if (!settings->menu)
-		CGWarpMouseCursorPosition(cursor);
-	if (last_menu_state != settings->menu)
-	{
-		if (!settings->menu)
-			CGDisplayHideCursor(dispid);
-		else
-		{
-			CGDisplayShowCursor(dispid);
-			CGDisplayMoveCursorToPoint(dispid, cursor);
-		}
-	}
-	last_menu_state = settings->menu;
 }
 
 int			wolf(void)
