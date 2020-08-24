@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 17:03:01 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 19:54:07 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,8 @@ void			put_texture(int line_x, t_float_xy line,
 void			fps(void);
 void			fatal_error(char *error);
 void			set_start(t_settings *settings);
+void			make_threads(t_settings *settings);
+void			rotate(t_float_xy *direction, double angle);
+void			crosshair(void);
+void			put_gun(t_settings *settings);
 #endif
