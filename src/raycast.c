@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 19:49:26 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 21:32:27 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,84 +40,57 @@ static void	texture_offsets(t_float_xy direction, t_float_xy cast,
 	}
 }
 
-static void	raycast(t_settings *settings, int start, int stop)
+static void	raycast(t_settings *settings, int x, int stop, t_float_xy direction)
 {
-	static float	fov = 0.00163625;
-	static int		wmod = 310000;
-	t_float_xy		direction;
 	t_float_xy		cast;
 	t_float_xy		line;
 	int				cast_length;
-	int				wall_height;
-	int				texture_id;
-	int				x;
 	int				wall_dir;
 	float			tex_x;
 
 	wall_dir = 0;
-	direction = settings->direction;
-	if (is_key_down(18))
-		wmod += 10000;
-	if (is_key_down(19))
-		wmod -= 10000;
-	if (is_key_down(20))
-		fov += 0.0001;
-	if (is_key_down(21))
-		fov -= 0.0001;
-	//printf("fov = %f\n", fov);
-	//printf("wmod = %d\n", wmod);
-	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
-	rotate(&direction, fov * (start));
-	x = start;
-	while (x < stop)
+	rotate(&direction, FOV * (x + 1));
+	while (x++ <= stop)
 	{
 		cast = settings->location;
-		rotate(&direction, fov);
+		rotate(&direction, FOV);
 		cast_length = 1;
-		while (settings->map[(int)cast.y][(int)cast.x] != '1' &&
-					settings->map[(int)cast.y][(int)cast.x] != '2')
+		while (settings->map[(int)cast.y][(int)cast.x] != '1' && settings->
+			map[(int)cast.y][(int)cast.x] != '2' && (cast_length++))
 		{
 			cast.x += direction.x;
 			cast.y += direction.y;
-			cast_length++;
 		}
-		texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1 - '0') * 4;
-		if (settings->cs_mode)
-			texture_id = 8;
-		wall_height = wmod / cast_length;
-		line.x = WIN_HEIGHT / 2 - wall_height;
-		line.y = WIN_HEIGHT / 2 + wall_height;
+		line.x = WIN_HEIGHT / 2 - WMOD / cast_length;
+		line.y = WIN_HEIGHT / 2 + WMOD / cast_length;
 		texture_offsets(direction, cast, &wall_dir, &tex_x);
-		put_texture(WIN_WIDTH - 1 - x, line, texture_id + wall_dir, tex_x);
-		x++;
+		put_texture(WIN_WIDTH - 1 - x, line, settings->cs_mode ? 8 : (settings->
+			map[(int)cast.y][(int)cast.x] - 1 - '0') * 4 + wall_dir, tex_x);
 	}
 }
 
-void	test(t_settings *settings, int id)
+void		*split_screen(void *settings)
 {
-	int scale;
+	static int	id = 0;
+	int			scale;
 
+	id++;
 	scale = WIN_WIDTH / THREAD_AMOUNT;
-	raycast(settings, scale * (id - 1), scale * id);
-}
-
-void	*split_screen(void *settings)
-{
-	static int	s = 0;
-
-	s++;
-	test(((t_settings*)settings), s);
-	if (s >= THREAD_AMOUNT)
-		s = 0;
+	raycast((t_settings*)settings, scale * (id - 1) + 1, scale * id,
+							((t_settings*)settings)->cast_dir);
+	if (id >= THREAD_AMOUNT)
+		id = 0;
 	return (NULL);
 }
 
-void	make_threads(t_settings *settings)
+void		make_threads(t_settings *settings)
 {
 	pthread_t	tid[THREAD_AMOUNT];
 	int			i;
 
 	i = 0;
+	settings->cast_dir = settings->direction;
+	rotate(&settings->cast_dir, -1 * FOV * (WIN_WIDTH / 2));
 	while (i < THREAD_AMOUNT)
 	{
 		pthread_create(&tid[i], NULL, split_screen, (void*)settings);

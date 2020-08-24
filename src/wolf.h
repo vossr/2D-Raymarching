@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 20:22:30 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 21:30:57 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define THREAD_AMOUNT 4
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+# define FOV 0.00163625
+# define WMOD 310000
 
 typedef struct	s_float_xy {
 	float		x;
@@ -30,6 +32,7 @@ typedef struct	s_float_xy {
 typedef struct	s_settings {
 	t_float_xy	location;
 	t_float_xy	direction;
+	t_float_xy	cast_dir;
 	t_int_xy	map_size;
 	char		**map;
 	int			menu;

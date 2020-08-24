@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 20:22:06 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 21:33:20 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void	**load_gun(void)
 			"textures/gun.xpm", &bps, &line_s);
 	if (texture[0] == NULL || texture[1] == NULL ||
 			texture[2] == NULL || texture[3] == NULL)
-	{
-		printf("gun load fail\n");
-		exit(0);
-	}
+		fatal_error("gun load fail");
 	return (texture);
 }
 
@@ -90,7 +87,7 @@ void	put_gun(t_settings *settings)
 	last = is_mouse_down(1) ? 0 : 1;
 }
 
-void		capture_cursor(t_settings *settings)
+void	capture_cursor(t_settings *settings)
 {
 	UInt32		dispid;
 	CGPoint		cursor;
