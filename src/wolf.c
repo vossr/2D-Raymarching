@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 19:00:03 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:17:11 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,29 @@ static void	player_movement(t_settings *settings)
 	}
 }
 
-static void	texture_offsets(t_settings *settings, t_float_xy direction, t_float_xy cast, int wall_height, int x)
+static void	texture_offsets(t_float_xy direction, t_float_xy cast, int *wall_dir, float *texture_x)
 {
-	t_float_xy	line;
-	int texture_id;
-
-	texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1) * 4;
-	if (settings->cs_mode)
-		texture_id = 8;
-	line.x = WIN_HEIGHT / 2 - wall_height;
-	line.y = WIN_HEIGHT / 2 + wall_height;
-	if ((int)cast.x < (int)(cast.x - direction.x))
+	if ((int)cast.x != (int)(cast.x - direction.x) && (int)cast.y != (int)(cast.y - direction.y))
+		return ;
+	else if ((int)cast.x < (int)(cast.x - direction.x))
 	{
-		put_texture(x, line, texture_id + 0, 1.0 - (cast.y - (int)cast.y));
+		*wall_dir = 0;
+		*texture_x = 1.0 - (cast.y - (int)cast.y);
 	}
 	else if ((int)cast.y < (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, texture_id + 1, cast.x - (int)cast.x);
+		*wall_dir = 1;
+		*texture_x = cast.x - (int)cast.x;
 	}
 	else if ((int)cast.y > (int)(cast.y - direction.y))
 	{
-		put_texture(x, line, texture_id + 2, 1.0 - (cast.x - (int)cast.x));
+		*wall_dir = 2;
+		*texture_x = 1.0 - (cast.x - (int)cast.x);
 	}
 	else
 	{
-		put_texture(x, line, texture_id + 3, cast.y - (int)cast.y);
+		*wall_dir = 3;
+		*texture_x = cast.y - (int)cast.y;
 	}
 }
 
@@ -171,6 +169,8 @@ static void	raycast(t_settings *settings, int start, int stop)
 	rotate(&direction, -1 * fov * (WIN_WIDTH / 2));
 	rotate(&direction, fov * (start));
 	x = start;
+	int wall_dir = 0;
+	float tex_x;
 	while (x < stop)
 	{
 		cast = settings->location;
@@ -183,7 +183,19 @@ static void	raycast(t_settings *settings, int start, int stop)
 			cast_length++;
 		}
 		//if (settings->map[(int)cast.x][(int)cast.y] != 3)
-		texture_offsets(settings, direction, cast, wmod / cast_length, WIN_WIDTH - x - 1);
+
+
+		t_float_xy	line;
+		int texture_id;
+
+		texture_id = (settings->map[(int)cast.y][(int)cast.x] - 1) * 4;
+		if (settings->cs_mode)
+			texture_id = 8;
+		int wall_height = wmod / cast_length;
+		line.x = WIN_HEIGHT / 2 - wall_height;
+		line.y = WIN_HEIGHT / 2 + wall_height;
+		texture_offsets(direction, cast, &wall_dir, &tex_x);
+		put_texture(WIN_WIDTH - 1 - x, line, texture_id + wall_dir, tex_x);
 		x++;
 	}
 }
