@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 18:51:02 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:34:11 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,5 @@ void			map_print(t_settings *settings);
 void			put_texture(int line_x, t_float_xy line,
 								int texture_id, float texture_x);
 void			fps(void);
+void			put_error(char *error);
 #endif

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/20 14:45:04 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:51:46 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,11 @@ void		horizontal_line(int y, int x, int size, int color)
 	}
 }
 
-void		print_button(int color, int text_color, t_button b)
+void		print_button(int color, t_button b)
 {
-(void)text_color;
-(void)color;
 	t_int_xy	start;
 	t_int_xy	stop;
-	int		i;
+	int			i;
 
 	i = 0;
 	start.x = b.x;
@@ -51,7 +49,6 @@ void		print_button(int color, int text_color, t_button b)
 
 int			handle_button(t_button b)
 {
-	int			text_color;
 	t_int_xy	cursor;
 	int			color;
 	int			res;
@@ -61,28 +58,24 @@ int			handle_button(t_button b)
 	cursor = get_cursor();
 	if (b.is_on)
 		color = 0x2755b2;
-	text_color = b.is_on ? 0xFFFFFFF : 0;
 	if (cursor.x > b.x && cursor.x < b.x + b.size_x &&
 	cursor.y > b.y && cursor.y < b.y + 30)
 	{
 		res++;
 		color = 0x807e7f;
-		text_color = 0x707070;
 		if (is_mouse_down(1))
 			color = 0x2755b2;
 		if (is_mouse_down(1))
 			res++;
 	}
-		text_color = 0xFF0000;
-	print_button(color, text_color, b);
+	print_button(color, b);
 	return (res);
 }
 
 void		set_button_text(t_button *b, int i)
 {
 	if (!(b->text = (char*)malloc(sizeof(char) * 20)))
-		;
-		//ft_error();
+		put_error("malloc fail");
 	if (i == 0)
 		ft_strcpy(b->text, "fps");
 	else if (i == 1)
@@ -94,13 +87,10 @@ void		set_button_text(t_button *b, int i)
 t_button	*init_buttons(void)
 {
 	t_button	*all_b;
-	//int			x;
 	int			i;
 
 	if (!(all_b = (t_button*)malloc(sizeof(t_button) * 3)))
 		;
-		//ft_error();
-	//x = 0;
 	i = 0;
 	while (i < 3)
 	{
@@ -109,7 +99,6 @@ t_button	*init_buttons(void)
 		set_button_text(&all_b[i], i);
 		all_b[i].size_x = ft_strlen(all_b[i].text) * 12;
 		all_b[i].x = WIN_WIDTH / 2 - all_b[i].size_x / 2;
-		//x += all_b[i].size_x + 1;
 		i++;
 	}
 	return (all_b);
