@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 15:51:46 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:46:44 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			handle_button(t_button b)
 void		set_button_text(t_button *b, int i)
 {
 	if (!(b->text = (char*)malloc(sizeof(char) * 20)))
-		put_error("malloc fail");
+		fatal_error("malloc fail");
 	if (i == 0)
 		ft_strcpy(b->text, "fps");
 	else if (i == 1)
@@ -90,7 +90,7 @@ t_button	*init_buttons(void)
 	int			i;
 
 	if (!(all_b = (t_button*)malloc(sizeof(t_button) * 3)))
-		;
+		fatal_error("malloc fail");
 	i = 0;
 	while (i < 3)
 	{

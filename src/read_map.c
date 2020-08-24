@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 16:38:17 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 17:02:43 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	set_map(char *filename, t_int_xy *map_size, char **map)
 {
 	t_int_xy	coord;
-	char	buf[10001];
-	int		fd;
-	int		i;
+	char		buf[10001];
+	int			fd;
+	int			i;
 
 	ft_memset(&buf, 0, 10001);
 	fd = open(filename, O_RDONLY);
@@ -46,85 +46,24 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 
 	ft_memset(&buf, 0, 10001);
 	if (2 > (fd = open(filename, O_RDONLY)))
-		put_error(ft_strjoin("error reading ", filename));
+		fatal_error(ft_strjoin("error reading ", filename));
 	if (!read(fd, buf, 10000))
-		put_error(ft_strjoin("error reading ", filename));
+		fatal_error(ft_strjoin("error reading ", filename));
 	i = 0;
 	while (buf[i])
 	{
-		if (buf[i] != '\n' && buf[i] != '^' && buf[i] != '<' && buf[i] != 'v' && buf[i] != '>' && (buf[i] > '9' || buf[i] < '0'))
-			put_error(ft_strjoin("error reading ", filename));
+		if (buf[i] != '\n' && buf[i] != '^' && buf[i] != '<' &&
+			buf[i] != 'v' && buf[i] != '>' && (buf[i] > '9' || buf[i] < '0'))
+			fatal_error(ft_strjoin("error reading ", filename));
 		i++;
 	}
 	i = 0;
 	while (buf[i])
-	{
-		if (buf[i] == '\n')
+		if (buf[i++] == '\n')
 			map_size->y++;
-		i++;
-	}
 	i = 0;
-	while (buf[i] != '\n')
-	{
-		i++;
+	while (buf[i++] != '\n')
 		map_size->x++;
-	}
-}
-
-void	set_start_direction(t_settings *settings, int c)
-{
-	if (c == '^')
-	{
-		settings->direction.x = 0.0;
-		settings->direction.y = -0.001;
-	}
-	else if (c == '<')
-	{
-		settings->direction.x = -0.001;
-		settings->direction.y = 0.0;
-	}
-	else if (c == 'v')
-	{
-		settings->direction.x = 0.0;
-		settings->direction.y = 0.001;
-	}
-	else if (c == '>')
-	{
-		settings->direction.x = 0.001;
-		settings->direction.y = 0.0;
-	}
-}
-
-void	set_start(t_settings *settings)
-{
-	int x;
-	int y;
-	int c;
-
-	y = 0;
-	while (y < settings->map_size.y)
-	{
-		x = 0;
-		while (x < settings->map_size.x)
-		{
-			c = settings->map[y][x];
-			if (c == '^' || c == '<' ||
-					c == 'v' || c == '>')
-			{
-				settings->location.x = x + .5;
-				settings->location.y = y + .5;
-				set_start_direction(settings, c);
-				return ;
-			}
-			x++;
-		}
-		y++;
-	}
-	//set to first free position
-	settings->location.x = 1.5;
-	settings->location.y = 1.5;
-	settings->direction.x = 0.0;
-	settings->direction.y = 0.001;
 }
 
 void	read_map(char *str, t_settings *settings)

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 16:31:48 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/24 17:03:01 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ typedef struct	s_button {
 	int			y;
 	int			size_x;
 	int			is_on;
-	//unsigned		click : 2;
 	char		*text;
 }				t_button;
+
 void			buttons(t_settings *settings);
 t_button		*init_buttons(void);
 int				handle_button(t_button b);
-
 void			read_map(char *str, t_settings *settings);
 void			map_print(t_settings *settings);
 void			put_texture(int line_x, t_float_xy line,
 								int texture_id, float texture_x);
 void			fps(void);
-void			put_error(char *error);
+void			fatal_error(char *error);
+void			set_start(t_settings *settings);
 #endif
