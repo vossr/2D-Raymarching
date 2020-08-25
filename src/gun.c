@@ -80,10 +80,10 @@ void	put_gun(t_settings *settings)
 	}
 	else if (last && is_mouse_down(1) && !settings->menu)
 		mlx_put_image_to_window(mlx[0], mlx[1], gun[1],
-				WIN_WIDTH / 2 - (192 / 2), WIN_HEIGHT - 192);
+				WIN_WIDTH / 2 - (800 / 2), WIN_HEIGHT - 800);
 	else
 		mlx_put_image_to_window(mlx[0], mlx[1], gun[0],
-				WIN_WIDTH / 2 - (192 / 2), WIN_HEIGHT - 192);
+				WIN_WIDTH / 2 - (800 / 2), WIN_HEIGHT - 800);
 	last = is_mouse_down(1) ? 0 : 1;
 }
 
