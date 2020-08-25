@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 20:24:02 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/25 19:07:28 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,11 @@ static void	player_movement(t_settings *settings)
 	if (is_key_down(2))
 		collision(&settings->location, &tangent, -1, settings->map);
 	if (settings->map[(int)settings->location.y]
-			[(int)(settings->location.x)] == '4')
+			[(int)(settings->location.x)] == 'n')
 	{
-		printf("Victory\n");
-		exit(0);
+		read_map(NULL, settings, 1);
+		//printf("Victory\n");
+		//exit(0);
 	}
 }
 
@@ -102,7 +103,7 @@ int			wolf(void)
 	if (is_key_down(53))
 		exit(0);
 	else if (!settings.map)
-		read_map(NULL, &settings);
+		read_map(NULL, &settings, 0);
 	player_movement(&settings);
 	make_threads(&settings);
 	if (settings.cs_mode)

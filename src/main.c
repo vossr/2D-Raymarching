@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 17:02:08 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/25 17:55:43 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	fatal_error(char *error)
 
 int		main(int argc, char **argv)
 {
-	if (argc != 2)
+	if (argc < 2)
 	{
 		ft_putstr("usage: ");
 		ft_putstr(argv[0]);
@@ -107,7 +107,7 @@ int		main(int argc, char **argv)
 	}
 	else
 	{
-		read_map(argv[1], NULL);
+		read_map(argv, NULL, 1);
 		init_window(WIN_WIDTH, WIN_HEIGHT, "Wolf3D");
 	}
 	return (0);

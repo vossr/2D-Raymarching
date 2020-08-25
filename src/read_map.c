@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 17:02:43 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/08/25 22:31:39 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	i = 0;
 	while (buf[i])
 	{
-		if (buf[i] != '\n' && buf[i] != '^' && buf[i] != '<' &&
+		if (buf[i] != '\n' && buf[i] != 'n' && buf[i] != '^' && buf[i] != '<' &&
 			buf[i] != 'v' && buf[i] != '>' && (buf[i] > '9' || buf[i] < '0'))
 			fatal_error(ft_strjoin("error reading ", filename));
 		i++;
@@ -66,31 +66,59 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 		map_size->x++;
 }
 
-void	read_map(char *str, t_settings *settings)
+void	get_next_map(char *filename, t_int_xy *map_size, char ***map)
 {
+	int y;
+
+	if (map[0])
+	{
+		y = 0;
+		while (y < map_size->y)
+		{
+			free(map[0][y]);
+			y++;
+		}
+		free(map[0]);
+	}
+	y = 0;
+	map_size->x = 0;
+	map_size->y = 0;
+	read_map_size(filename, map_size);
+	map[0] = (char**)malloc(sizeof(char*) * map_size->y);
+	y = 0;
+	while (y < map_size->y)
+	{
+		map[0][y] = (char*)malloc(sizeof(char) * map_size->x);
+		y++;
+	}
+	set_map(filename, map_size, map[0]);
+}
+
+void	read_map(char **argv, t_settings *settings, int next)
+{
+	static char		**argv2;
 	static t_int_xy	map_size;
 	static char		**map = NULL;
-	int				y;
+	static int		i = 1;
 
-	if (!str)
+	if (argv)
+		argv2 = argv;
+	if (next)
+	{
+		if (argv2[i] == NULL)
+			fatal_error("no more maps");
+		else
+		{
+			get_next_map(argv2[i], &map_size, &map);
+			//check_map(map, map_size);
+		}
+		i++;
+	}
+	if (settings)
 	{
 		settings->map_size.x = map_size.x;
 		settings->map_size.y = map_size.y;
 		settings->map = map;
-		settings->menu = 0;
-		settings->fps = 0;
-		settings->print_map = 0;
-		settings->cs_mode = 0;
 		set_start(settings);
-		return ;
 	}
-	read_map_size(str, &map_size);
-	map = (char**)malloc(sizeof(char*) * map_size.y);
-	y = 0;
-	while (y < map_size.y)
-	{
-		map[y] = (char*)malloc(sizeof(char) * map_size.x);
-		y++;
-	}
-	set_map(str, &map_size, map);
 }
