@@ -94,6 +94,30 @@ void	get_next_map(char *filename, t_int_xy *map_size, char ***map)
 	set_map(filename, map_size, map[0]);
 }
 
+void	check_map_edge(char **map, t_int_xy map_size)
+{
+	int i;
+
+	i = 0;
+	while (i < map_size.x)
+	{
+		if (map[0][i] != '1' && map[0][i] != '2')
+			fatal_error("invalid map edge");
+		if (map[map_size.y - 1][i] != '1' && map[map_size.y - 1][i] != '2')
+			fatal_error("invalid map edge");
+		i++;
+	}
+	i = 0;
+	while (i < map_size.y)
+	{
+		if (map[i][0] != '1' && map[i][0] != '2')
+			fatal_error("invalid map edge");
+		if (map[i][map_size.x - 1] != '1' && map[i][map_size.x - 1] != '2')
+			fatal_error("invalid map edge");
+		i++;
+	}
+}
+
 void	read_map(char **argv, t_settings *settings, int next)
 {
 	static char		**argv2;
@@ -110,7 +134,7 @@ void	read_map(char **argv, t_settings *settings, int next)
 		else
 		{
 			get_next_map(argv2[i], &map_size, &map);
-			//check_map(map, map_size);
+			check_map_edge(map, map_size);
 		}
 		i++;
 	}
