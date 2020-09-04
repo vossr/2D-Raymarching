@@ -6,13 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/04 16:59:48 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/04 17:48:23 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void	put_sprite(int x, t_float_xy line)
+void	put_sprite(int x, float x_offset, t_float_xy line)
 {
 	void					*guard = NULL;
 	static unsigned char	*guard_data = NULL;
@@ -31,19 +31,40 @@ void	put_sprite(int x, t_float_xy line)
 		guard_data = (unsigned char*)mlx_get_data_addr(guard, &bps,
 												&line_s, &endian);
 	}
-	(void)line;
-	(void)x;
+	//int a = x;
+	int max = line.y - line.x;
+	int start = line.x;
+	while (line.x < line.y)
+	{
+		int a = 450 * ((line.x - start) / max);
+		int b = x_offset;
+		if (!guard_data[a * (int)(360 * 4) + b * 4 + 3])
+			pixel_put(x, line.x,
+			guard_data[a * (int)(360 * 4) + b * 4 + 2] * 0x10000 +
+			guard_data[a * (int)(360 * 4) + b * 4 + 1] * 0x100 +
+			guard_data[a * (int)(360 * 4) + b * 4 + 0]);
+		line.x++;
+	}
+	/*
 	for (int a = 0; a < 450; a++)
 		for (int b = 0; b < 360; b++)
-	pixel_put(a, b, guard_data[a * (int)(360 * 4) +
-			b * 4 + 2] * 0x10000 + guard_data[
-			a * (int)(360 * 4) + b * 4 + 1] * 0x100 +
-			guard_data[a * (int)(360 * 4) + b * 4 + 0]);
+		{
+			if (!guard_data[a * (int)(360 * 4) + b * 4 + 3])
+				pixel_put(b, a,
+				guard_data[a * (int)(360 * 4) + b * 4 + 2] * 0x10000 +
+				guard_data[a * (int)(360 * 4) + b * 4 + 1] * 0x100 +
+				guard_data[a * (int)(360 * 4) + b * 4 + 0]);
+			//guard_data[a * (int)(360 * 4) + b * 4 + 3] * 0x1000000 +
+		}
+		*/
+
 			//pixel_put(x, y, guard_data[y * line_s + x]);
 	//for (int y = line.x; y < line.y; y++)
 		//pixel_put(x, y, 0xFF0000);
 		//pixel_put_blend(x, y, guard_data[(int)((450 * (y / (line.y - line.x))) * line_s) + (int)(360 * (x / WIN_WIDTH))]);
 	//if (settings->cs_mode)
+	(void)line;
+	(void)x;
 }
 
 void	sprite(t_settings *settings, int x, int stop, t_float_xy direction)
@@ -91,12 +112,10 @@ void	sprite(t_settings *settings, int x, int stop, t_float_xy direction)
 				line.x = 0;
 			if (line.y > WIN_HEIGHT)
 				line.y = WIN_HEIGHT;
-			//for (int y = line.x; y < line.y; y++)
-			{
-			//	put_sprite(WIN_WIDTH - 1 - x, line);
-				//pixel_put_blend(WIN_WIDTH - 1 - x, y, 0x11FF0000);
-			}
+			for (int y = line.x; y < line.y; y++)
+				pixel_put_blend(WIN_WIDTH - 1 - x, y, 0x11FF0000);
+			put_sprite(WIN_WIDTH - 1 - x, WIN_WIDTH - 1 - x, line);
 		}
 	}
-				put_sprite(WIN_WIDTH - 1 - x, line);
+	//put_sprite(WIN_WIDTH - 1 - x, line);
 }
