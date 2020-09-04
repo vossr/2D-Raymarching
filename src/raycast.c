@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 21:32:27 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/03 20:59:18 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void		*split_screen(void *settings)
 	id++;
 	scale = WIN_WIDTH / THREAD_AMOUNT;
 	raycast((t_settings*)settings, scale * (id - 1) + 1, scale * id,
+							((t_settings*)settings)->cast_dir);
+	sprite((t_settings*)settings, scale * (id - 1) + 1, scale * id,
 							((t_settings*)settings)->cast_dir);
 	if (id >= THREAD_AMOUNT)
 		id = 0;

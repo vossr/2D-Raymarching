@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/25 19:07:28 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/03 17:47:05 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ static void	player_movement(t_settings *settings)
 			[(int)(settings->location.x)] == 'n')
 	{
 		read_map(NULL, settings, 1);
-		//printf("Victory\n");
-		//exit(0);
 	}
 }
 
