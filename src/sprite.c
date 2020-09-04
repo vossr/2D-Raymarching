@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/04 20:02:41 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/04 22:28:45 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,24 +74,36 @@ int		get_x_offset(t_float_xy sprite, t_float_xy cast, t_float_xy direction)
 	float	prev_dist;
 	int		neg;
 
-	prev_dist = 100000;
+	prev_dist = 10000000;
 	neg = 0;
-	if (fabs(cast.x - sprite.x) - fabs(cast.y - sprite.y) < 0)
+	if (fabs(cast.x - sprite.x) + fabs(cast.y - sprite.y) < 0)
 		neg = 1;
-	center_dist = fabs(fabs(cast.x - sprite.x) - fabs(cast.y - sprite.y));
+	//if (cast.x > sprite.x)
+	//float kk  = fabs(fabs(cast.y * 2 - sprite.y) / fabs(cast.x * 2 - sprite.x));
+	center_dist = fabs(fabs(cast.x - sprite.x) + fabs(cast.y - sprite.y));
+
+	//if (cast.x > prite.x)
+	//if (center_dist < prev_dist)
+	//	return (0);
 	while (center_dist < prev_dist)
 	{
 		prev_dist = center_dist;
 		cast.x += direction.x;
 		cast.y += direction.y;
-		center_dist = fabs(fabs(cast.x - sprite.x) - fabs(cast.y - sprite.y));
+		center_dist = fabs(fabs(cast.x - sprite.x) + fabs(cast.y - sprite.y));
+		//center_dist = fabs(fabs(cast.y * 2 - sprite.y) / fabs(cast.x * 2 - sprite.x));
 	}
+	center_dist = prev_dist;
+	printf("res = %f\n", center_dist);
 	//printf("res = %f\n", 360 * (0 + (center_dist / 0.4)));
+	//return ((int)(360 * (center_dist / 0.4)));
+
 	if (!neg)
 	{
-		center_dist +=  0.2;
+		//return (0);
 		return ((int)(360 * (center_dist / 0.4)));
 	}
+	//center_dist += 0.2;
 	return (180 - (int)(360 * (center_dist / 0.4)));
 }
 
@@ -128,9 +140,9 @@ void	sprite(t_settings *settings, int x, int stop, t_float_xy direction)
 		}
 		//printf("cl = %d\n", cast_length);
 		//cast_length = sprite_dist;
-	//	printf("sd = %f\n", sprite_dist);
+		//printf("sd = %f\n", sprite_dist);
 		(void)sprite_dist;
-	//	cast_length = 3000;
+		//cast_length = 3000;
 		//if (settings->map[(int)cast.y][(int)cast.x] == '3')
 		if (asd)
 		{
