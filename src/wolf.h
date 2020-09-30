@@ -6,13 +6,14 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/03 20:58:55 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/30 15:37:47 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF_H
 # define WOLF_H
 # include "mlx_io.h"
+# include "live_texture.h"
 # include <CoreGraphics/CoreGraphics.h>
 # include <sys/time.h>
 # include <pthread.h>

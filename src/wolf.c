@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/03 17:47:05 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/30 15:36:32 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ int			wolf(void)
 	if (settings.fps)
 		fps();
 	capture_cursor(&settings);
+	update_live_texture();
 	return (0);
 }

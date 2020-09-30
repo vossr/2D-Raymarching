@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/24 16:37:31 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/30 15:37:07 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static unsigned char	**load_texture(int *line_s, int bps, int j)
 		data[j] = (unsigned char*)mlx_get_data_addr(texture[j], &bps,
 											line_s, &endian);
 	}
+	init_live_texture(data);
 	return (data);
 }
 

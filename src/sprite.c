@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/30 15:28:36 by rpehkone         ###   ########.fr       */
+/*   Updated: 2020/09/30 15:50:21 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ int		anti_mirror(t_float_xy sprite, t_float_xy cast, t_float_xy location)
 	double dot = cast.x + cast.y;
 	//double dot = sprite.x * cast.x + sprite.y * cast.y;
 	//printf("dot = %lf\n", dot);
-	printf("loc.x = %f\n", location.x);
-	printf("loc.y = %f\n", location.y);
+	//printf("loc.x = %f\n", location.x);
+	//printf("loc.y = %f\n", location.y);
 	int test = sprite.x + sprite.y;
 	if (dot > 0)
 		return (1);
