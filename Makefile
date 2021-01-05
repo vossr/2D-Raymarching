@@ -12,7 +12,7 @@
 
 NAME = wolf3d
 LIB = libft/libft.a
-FOLDERS = libft mlx_io src src/live_texture
+FOLDERS = libft mlx_io src src/live_texture minilibx
 IO_FILES = init_window.c handle_hook.c input_state.c input_state_wrappers.c image.c
 LIVE_TEXTURES = live_texture.c fdf/*.c fractal/*.c
 FILES = main.c read_map.c wolf.c render.c raycast.c sprite.c gun.c menu/fps.c menu/buttons.c menu/button_printer.c $(addprefix live_texture/, $(LIVE_TEXTURES))
@@ -23,7 +23,7 @@ all: $(NAME)
 
 $(NAME):
 	@make re -C libft
-	gcc $(FLAGS) $(addprefix mlx_io/, $(IO_FILES)) $(addprefix src/, $(FILES)) $(LIB) $(addprefix -I , $(FOLDERS)) -lmlx -framework OpenGL -framework Appkit -o $(NAME)
+	gcc $(FLAGS) $(addprefix mlx_io/, $(IO_FILES)) $(addprefix src/, $(FILES)) $(LIB) $(addprefix -I , $(FOLDERS)) -L minilibx -lmlx -framework OpenGL -framework Appkit -o $(NAME)
 
 clean:
 	@make clean -C libft
