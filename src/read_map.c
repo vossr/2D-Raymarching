@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 09:01:23 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 11:11:37 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,5 @@ t_settings	*read_map(char *filename)
 	check_map_validity(settings->map, settings->map_width, settings->map_height);
 	settings->location.x = 2;
 	settings->location.y = 2;
-	settings->direction.x = 0;
-	settings->direction.y = 0.001;
 	return (NULL);
 }

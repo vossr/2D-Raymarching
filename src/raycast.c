@@ -6,13 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 19:47:35 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 11:05:50 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 13:25:07 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-static void	texture_offsets(t_float_xy direction, t_float_xy cast,
+static void	texture_mapper(t_float_xy direction, t_float_xy cast,
 									int *wall_dir, float *texture_x)
 {
 	if ((int)cast.x != (int)(cast.x - direction.x) &&
@@ -42,36 +42,38 @@ static void	texture_offsets(t_float_xy direction, t_float_xy cast,
 	}
 }
 
-void	raycast(t_settings *settings)
+void	raycast(t_settings *settings)//const? not pointer?
 {
+	int				x;
 	t_float_xy		cast;
+	t_float_xy		step;
 	t_float_xy		line;
-	int				cast_length;
 	int				wall_dir;
 	float			tex_x;
 
+	float ray_angle = settings->angle - FOV / 2;
+
 	wall_dir = 0;
 	tex_x = 0;
-	t_float_xy direction = settings->direction;
-	int x = 0;
-	while (x++ <= WIN_WIDTH / 2)
-		rotate(&direction, -FOV);
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
+		step.x = sinf(deg_to_rad(ray_angle)) / RAY_PREC;
+		step.y = cosf(deg_to_rad(ray_angle)) / RAY_PREC;
 		cast = settings->location;
-		rotate(&direction, FOV);
-		cast_length = 1;
 		while (settings->map[(int)cast.y][(int)cast.x] != 1)
 		{
-			cast.x += direction.x;
-			cast.y += direction.y;
-			cast_length++;
+			cast.x += step.x;
+			cast.y += step.y;
 		}
-		texture_offsets(direction, cast, &wall_dir, &tex_x);
-		line.x = WIN_HEIGHT / 2 - WMOD / cast_length;
-		line.y = WIN_HEIGHT / 2 + WMOD / cast_length;
+		texture_mapper(step, cast, &wall_dir, &tex_x);
+		cast.x -= settings->location.x;
+		cast.y -= settings->location.y;
+		float dist = sqrt(cast.x * cast.x + cast.y * cast.y) * cos(deg_to_rad(ray_angle - settings->angle));
+		line.x = WIN_HEIGHT / 2 - WIN_HEIGHT / 2 / dist;
+		line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
 		put_texture(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);
+		ray_angle += FOV / WIN_WIDTH;
 		x++;
 	}
 }
