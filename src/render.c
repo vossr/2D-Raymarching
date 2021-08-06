@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 14:31:31 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 15:34:38 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,11 @@ static void	texture_x_pos(t_float_xy direction, t_float_xy cast,
 
 void	texture_mapper(t_float_xy step, t_float_xy cast, int x, t_settings *settings)
 {
-	t_float_xy	line;
-	int			wall_dir;
-	float		tex_x;
-	float		dist;
+	static int		wall_dir = 0;
+	static float	tex_x = 0;
+	t_float_xy		line;
+	float			dist;
 
-	wall_dir = 0;
-	tex_x = 0;
 	texture_x_pos(step, cast, &wall_dir, &tex_x);
 	cast.x -= settings->location.x;
 	cast.y -= settings->location.y;
@@ -117,7 +115,6 @@ void	texture_mapper(t_float_xy step, t_float_xy cast, int x, t_settings *setting
 	line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
 	render(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);
 }
-
 
 void	raycast(t_settings *settings)
 {

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/05/25 16:29:22 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 15:36:37 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		main(int argc, char **argv)
 	}
 	else
 	{
-		read_map(argv[1]);
+		init(argv[1]);
 		init_window(WIN_WIDTH, WIN_HEIGHT, "Wolf3D");
 	}
 	return (0);

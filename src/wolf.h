@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 14:29:42 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 15:33:19 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ typedef struct	s_settings {
 
 void			fatal_error(char *error);
 float			deg_to_rad(float d);
-t_settings		*read_map(char *filename);
+t_settings		*init(char *filename);
 void			raycast(t_settings *settings);
 #endif

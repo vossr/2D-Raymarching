@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 14:08:26 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 15:37:09 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int			wolf(void)
 	static t_settings *settings = NULL;
 
 	if (!settings)
-		settings = read_map(NULL);
+		settings = init(NULL);
 	if (is_key_down(53))
 		exit(0);
 	player_movement(settings);
