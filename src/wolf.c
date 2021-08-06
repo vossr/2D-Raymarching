@@ -6,62 +6,57 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 15:37:09 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 21:41:04 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-float		deg_to_rad(float d)
+float	deg_to_rad(float d)
 {
 	return (d * (M_PI / 180));
 }
 
-static void		collision(t_float_xy *location, float angle,
+static void	collision(t_float_xy *location, float angle,
 												int neg, char **map)
 {
 	t_int_xy	loc_on_map_f;
-	int			speed;
-	t_float_xy direction;
+	t_float_xy	dir;
 
-	direction.x = sinf(deg_to_rad(angle)) / RAY_PREC;
-	direction.y = cosf(deg_to_rad(angle)) / RAY_PREC;
-
-	speed = 40;
-	loc_on_map_f.y = map[(int)(location->y + neg * direction.y * speed)]
-							[(int)location->x];
-	loc_on_map_f.x = map[(int)location->y]
-							[(int)(location->x + neg * direction.x * speed)];
+	dir.x = sinf(deg_to_rad(angle)) * PLAYER_SPEED;
+	dir.y = cosf(deg_to_rad(angle)) * PLAYER_SPEED;
+	loc_on_map_f.y = map[(int)(location->y + neg * dir.y)][(int)location->x];
+	loc_on_map_f.x = map[(int)location->y][(int)(location->x + neg * dir.x)];
 	if (1 != loc_on_map_f.x)
-		location->x += direction.x * speed * neg;
+		location->x += dir.x * neg;
 	if (1 != loc_on_map_f.y)
-		location->y += direction.y * speed * neg;
+		location->y += dir.y * neg;
 }
 
-static void	player_movement(t_settings *settings)
+static void	player_movement(t_settings *set)
 {
 	int		fwd;
 	int		bwd;
 
 	if (is_key_down(124))
-		settings->angle -= 2;
+		set->angle -= 2;
 	if (is_key_down(123))
-		settings->angle += 2;
+		set->angle += 2;
 	fwd = is_key_down(126) + is_key_down(13);
 	bwd = is_key_down(125) + is_key_down(1);
 	if (fwd)
-		collision(&settings->location, settings->angle, 1, settings->map);
+		collision(&set->location, set->angle, 1, set->map);
 	if (bwd)
-		collision(&settings->location, settings->angle, -1, settings->map);
+		collision(&set->location, set->angle, -1, set->map);
 	if (is_key_down(0))
-		collision(&settings->location, settings->angle + 90 , 1, settings->map);
+		collision(&set->location, set->angle + 90, 1, set->map);
 	if (is_key_down(2))
-		collision(&settings->location, settings->angle + 90 , -1, settings->map);
+		collision(&set->location, set->angle + 90, -1, set->map);
 }
 
-int			wolf(void)
+int	wolf(void)
 {
-	static t_settings *settings = NULL;
+	static t_settings	*settings = NULL;
 
 	if (!settings)
 		settings = init(NULL);

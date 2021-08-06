@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 15:33:19 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 16:57:01 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define WIN_WIDTH 900
 # define WIN_HEIGHT 720
 # define FOV 61.0
+# define PLAYER_SPEED 0.05
 # define RAY_PREC 800
 
 typedef struct	s_float_xy {

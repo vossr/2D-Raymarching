@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 15:34:38 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 22:37:37 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ static unsigned char	**load_texture(int *line_s, int bps, int j)
 		data[j] = (unsigned char*)mlx_get_data_addr(texture[j], &bps,
 											line_s, &endian);
 	}
+	*line_s /= 4;
 	return (data);
 }
 
-static void				render(int line_x, t_float_xy line,
+static void	render(int line_x, t_float_xy line,
 							int texture_id, float texture_x)
 {
 	static unsigned char	**texture = NULL;
+	static int				tex_size;
 	int						y;
-	int						tex_size;
 	int						xd;
 	int						yd;
 
-	tex_size = 64;
 	if (!texture)
-		texture = load_texture(&y, 0, 0);
+		texture = load_texture(&tex_size, 0, 0);
 	y = -1;
 	while (++y < line.x)
 		pixel_put(line_x, y, 0x87ceeb);
@@ -59,9 +59,9 @@ static void				render(int line_x, t_float_xy line,
 		yd = (int)(tex_size * (((float)y - line.x) / (line.y - line.x)));
 
 		pixel_put(line_x, y,
-				texture[texture_id][yd * (int)tex_size * 4 + xd * 4 + 2] * 0x10000 +
-				texture[texture_id][yd * (int)tex_size * 4 + xd * 4 + 1] * 0x100 +
-				texture[texture_id][yd * (int)tex_size * 4 + xd * 4 + 0]);
+				texture[texture_id][yd * tex_size * 4 + xd * 4 + 2] * 0x10000 +
+				texture[texture_id][yd * tex_size * 4 + xd * 4 + 1] * 0x100 +
+				texture[texture_id][yd * tex_size * 4 + xd * 4 + 0]);
 		y++;
 	}
 	y--;
@@ -70,13 +70,11 @@ static void				render(int line_x, t_float_xy line,
 }
 
 static void	texture_x_pos(t_float_xy direction, t_float_xy cast,
-									int *wall_dir, float *texture_x)
+											int *wall_dir, float *texture_x)
 {
 	if ((int)cast.x != (int)(cast.x - direction.x) &&
 				(int)cast.y != (int)(cast.y - direction.y))
-	{
 		return ;
-	}
 	else if ((int)cast.x < (int)(cast.x - direction.x))
 	{
 		*wall_dir = 0;
@@ -99,7 +97,8 @@ static void	texture_x_pos(t_float_xy direction, t_float_xy cast,
 	}
 }
 
-void	texture_mapper(t_float_xy step, t_float_xy cast, int x, t_settings *settings)
+void	texture_mapper(t_float_xy step, t_float_xy cast,
+											int x, t_settings *settings)
 {
 	static int		wall_dir = 0;
 	static float	tex_x = 0;
