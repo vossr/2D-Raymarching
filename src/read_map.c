@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:52:04 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 14:49:30 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,33 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 		map_size->x++;
 }
 
-void	check_map_validity(char **map, int width, int height)
+void	check_map_validity(t_settings *settings)
 {
-	int i;
+	int		x;
+	int		y;
 
-	i = 0;
-	while (i < width)
+	y = 0;
+	while (y < settings->map_height)
 	{
-		if (map[0][i] != 1)
-			fatal_error("invalid map edge");
-		if (map[height - 1][i] != 1)
-			fatal_error("invalid map edge");
-		i++;
+		x = 0;
+		while (x < settings->map_width)
+		{
+			if (!x || !y || x == settings->map_width - 1 || y == settings->map_height - 1)
+			{
+				if (settings->map[y][x] != 1)
+					fatal_error("invalid map edge");
+			}
+			else if (settings->map[y][x] != 1)
+			{
+				settings->location.x = x;
+				settings->location.y = y;
+			}
+			x++;
+		}
+		y++;
 	}
-	i = 0;
-	while (i < height)
-	{
-		if (map[i][0] != 1)
-			fatal_error("invalid map edge");
-		if (map[i][width - 1] != 1)
-			fatal_error("invalid map edge");
-		i++;
-	}
+	if (settings->location.x == 0 || settings->location.y == 0)
+		fatal_error("no empty space in map");
 }
 
 t_settings	*read_map(char *filename)
@@ -98,8 +103,6 @@ t_settings	*read_map(char *filename)
 		fatal_error("map allocation failed");
 	ft_memset(settings, 0, sizeof(t_settings));
 	set_map(filename, settings);
-	check_map_validity(settings->map, settings->map_width, settings->map_height);
-	settings->location.x = 2;
-	settings->location.y = 2;
+	check_map_validity(settings);
 	return (NULL);
 }
