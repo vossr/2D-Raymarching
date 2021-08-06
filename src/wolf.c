@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/09/30 15:36:32 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 09:01:51 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,14 @@ void		collision(t_float_xy *location, t_float_xy *direction,
 							[(int)location->x];
 	loc_on_map_f.x = map[(int)location->y]
 							[(int)(location->x + neg * direction->x * speed)];
-	if ('1' != loc_on_map_f.x && '2' != loc_on_map_f.x && loc_on_map_f.x != '3')
+	if (1 != loc_on_map_f.x)
 		location->x += direction->x * speed * neg;
-	if ('1' != loc_on_map_f.y && '2' != loc_on_map_f.y && loc_on_map_f.y != '3')
+	if (1 != loc_on_map_f.y)
 		location->y += direction->y * speed * neg;
 }
 
 static void	player_rotation(t_settings *settings)
 {
-	static int	anti_jump = 1;
-	int32_t		deltax;
-	int			unused;
-
-	if (settings->menu)
-	{
-		anti_jump = 1;
-		return ;
-	}
-	CGGetLastMouseDelta(&deltax, &unused);
-	if (deltax && !anti_jump)
-		rotate(&settings->direction, deltax * -0.005);
-	if (deltax)
-		anti_jump = 0;
 	if (is_key_down(124))
 		rotate(&settings->direction, -0.05);
 	if (is_key_down(123))
@@ -75,8 +61,6 @@ static void	player_movement(t_settings *settings)
 	fwd = is_key_down(126) + is_key_down(13);
 	bwd = is_key_down(125) + is_key_down(1);
 	player_rotation(settings);
-	if (settings->menu)
-		return ;
 	if (fwd)
 		collision(&settings->location, &settings->direction, 1, settings->map);
 	if (bwd)
@@ -87,34 +71,18 @@ static void	player_movement(t_settings *settings)
 		collision(&settings->location, &tangent, 1, settings->map);
 	if (is_key_down(2))
 		collision(&settings->location, &tangent, -1, settings->map);
-	if (settings->map[(int)settings->location.y]
-			[(int)(settings->location.x)] == 'n')
-	{
-		read_map(NULL, settings, 1);
-	}
 }
 
 int			wolf(void)
 {
-	static t_settings settings;
+	static t_settings *settings = NULL;
 
+	if (!settings)
+		settings = read_map(NULL);
 	if (is_key_down(53))
 		exit(0);
-	else if (!settings.map)
-		read_map(NULL, &settings, 0);
-	player_movement(&settings);
-	make_threads(&settings);
-	if (settings.cs_mode)
-		crosshair();
-	if (settings.print_map)
-		map_print(&settings);
-	if (!settings.menu)
-		update_image();
-	buttons(&settings);
-	put_gun(&settings);
-	if (settings.fps)
-		fps();
-	capture_cursor(&settings);
-	update_live_texture();
+	player_movement(settings);
+	raycast(settings);
+	update_image();
 	return (0);
 }

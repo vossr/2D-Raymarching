@@ -6,36 +6,34 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/25 22:31:39 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 09:01:23 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void	set_map(char *filename, t_int_xy *map_size, char **map)
+void	set_map(char *filename, t_settings *settings)
 {
-	t_int_xy	coord;
-	char		buf[10001];
-	int			fd;
-	int			i;
+	int i;
 
-	ft_memset(&buf, 0, 10001);
-	fd = open(filename, O_RDONLY);
-	read(fd, buf, 10000);
+	settings->map_height = 10;
+	settings->map_width = 10;
+	if (!(settings->map = (char**)malloc(sizeof(char*) * settings->map_height)))
+		fatal_error("map allocation failed");
 	i = 0;
-	coord.y = 0;
-	while (coord.y < map_size->y)
+	while (i < settings->map_height)
 	{
-		coord.x = 0;
-		while (coord.x < map_size->x)
-		{
-			map[coord.y][coord.x] = buf[i];
-			coord.x++;
-			i++;
-		}
+		if (!(settings->map[i] = (char*)malloc(sizeof(char) * settings->map_width)))
+			fatal_error("map allocation failed");
+		if (!i || i == settings->map_height - 1)
+			ft_memset(settings->map[i], 1, settings->map_width);
+		else
+			ft_memset(settings->map[i], 0, settings->map_width);
+		settings->map[i][0] = 1;
+		settings->map[i][settings->map_width - 1] = 1;
 		i++;
-		coord.y++;
 	}
+	(void)filename;
 }
 
 void	read_map_size(char *filename, t_int_xy *map_size)
@@ -52,8 +50,7 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 	i = 0;
 	while (buf[i])
 	{
-		if (buf[i] != '\n' && buf[i] != 'n' && buf[i] != '^' && buf[i] != '<' &&
-			buf[i] != 'v' && buf[i] != '>' && (buf[i] > '9' || buf[i] < '0'))
+		if (buf[i] != '\n' && buf[i] != '1' && buf[i] != '2' && buf[i] != '0')
 			fatal_error(ft_strjoin("error reading ", filename));
 		i++;
 	}
@@ -66,83 +63,44 @@ void	read_map_size(char *filename, t_int_xy *map_size)
 		map_size->x++;
 }
 
-void	get_next_map(char *filename, t_int_xy *map_size, char ***map)
-{
-	int y;
-
-	if (map[0])
-	{
-		y = 0;
-		while (y < map_size->y)
-		{
-			free(map[0][y]);
-			y++;
-		}
-		free(map[0]);
-	}
-	y = 0;
-	map_size->x = 0;
-	map_size->y = 0;
-	read_map_size(filename, map_size);
-	map[0] = (char**)malloc(sizeof(char*) * map_size->y);
-	y = 0;
-	while (y < map_size->y)
-	{
-		map[0][y] = (char*)malloc(sizeof(char) * map_size->x);
-		y++;
-	}
-	set_map(filename, map_size, map[0]);
-}
-
-void	check_map_edge(char **map, t_int_xy map_size)
+void	check_map_validity(char **map, int width, int height)
 {
 	int i;
 
 	i = 0;
-	while (i < map_size.x)
+	while (i < width)
 	{
-		if (map[0][i] != '1' && map[0][i] != '2')
+		if (map[0][i] != 1)
 			fatal_error("invalid map edge");
-		if (map[map_size.y - 1][i] != '1' && map[map_size.y - 1][i] != '2')
+		if (map[height - 1][i] != 1)
 			fatal_error("invalid map edge");
 		i++;
 	}
 	i = 0;
-	while (i < map_size.y)
+	while (i < height)
 	{
-		if (map[i][0] != '1' && map[i][0] != '2')
+		if (map[i][0] != 1)
 			fatal_error("invalid map edge");
-		if (map[i][map_size.x - 1] != '1' && map[i][map_size.x - 1] != '2')
+		if (map[i][width - 1] != 1)
 			fatal_error("invalid map edge");
 		i++;
 	}
 }
 
-void	read_map(char **argv, t_settings *settings, int next)
+t_settings	*read_map(char *filename)
 {
-	static char		**argv2;
-	static t_int_xy	map_size;
-	static char		**map = NULL;
-	static int		i = 1;
+	static t_settings *settings;
 
-	if (argv)
-		argv2 = argv;
-	if (next)
-	{
-		if (argv2[i] == NULL)
-			fatal_error("no more maps");
-		else
-		{
-			get_next_map(argv2[i], &map_size, &map);
-			check_map_edge(map, map_size);
-		}
-		i++;
-	}
-	if (settings)
-	{
-		settings->map_size.x = map_size.x;
-		settings->map_size.y = map_size.y;
-		settings->map = map;
-		set_start(settings);
-	}
+	if (!filename)
+		return (settings);
+	if (!(settings = (t_settings*)malloc(sizeof(t_settings))))
+		fatal_error("map allocation failed");
+	ft_memset(settings, 0, sizeof(t_settings));
+	set_map(filename, settings);
+	check_map_validity(settings->map, settings->map_width, settings->map_height);
+	settings->location.x = 2;
+	settings->location.y = 2;
+	settings->direction.x = 0;
+	settings->direction.y = 0.001;
+	return (NULL);
 }

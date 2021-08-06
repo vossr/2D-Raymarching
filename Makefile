@@ -6,17 +6,17 @@
 #    By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/30 20:09:24 by rpehkone          #+#    #+#              #
-#    Updated: 2020/09/30 15:49:09 by rpehkone         ###   ########.fr        #
+#    Updated: 2021/08/05 19:31:23 by rpehkone         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = wolf3d
 LIB = libft/libft.a
-FOLDERS = libft mlx_io src src/live_texture minilibx
+FOLDERS = libft mlx_io src minilibx
 IO_FILES = init_window.c handle_hook.c input_state.c input_state_wrappers.c image.c
-LIVE_TEXTURES = live_texture.c fdf/*.c fractal/*.c
-FILES = main.c read_map.c wolf.c render.c raycast.c sprite.c gun.c menu/fps.c menu/buttons.c menu/button_printer.c $(addprefix live_texture/, $(LIVE_TEXTURES))
-FLAGS = -Wall -Wextra -Werror -O3
+FILES = main.c read_map.c wolf.c render.c raycast.c
+#FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -fsanitize=address -Wall -Wextra -Werror -O3 -g
 .PHONY: clean fclean re all
 
 all: $(NAME)
