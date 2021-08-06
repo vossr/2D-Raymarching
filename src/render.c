@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:35:27 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 13:45:02 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	raycast(t_settings *settings)//const? not pointer?
 		texture_mapper(step, cast, &wall_dir, &tex_x);
 		cast.x -= settings->location.x;
 		cast.y -= settings->location.y;
-		float dist = sqrt(cast.x * cast.x + cast.y * cast.y) * cos(deg_to_rad(ray_angle - settings->angle));
+		float dist = sqrtf(cast.x * cast.x + cast.y * cast.y) * cosf(deg_to_rad(ray_angle - settings->angle));
 		line.x = WIN_HEIGHT / 2 - WIN_HEIGHT / 2 / dist;
 		line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
 		draw_wall(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);

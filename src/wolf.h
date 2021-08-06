@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:36:14 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 13:43:20 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@
 # include <fcntl.h>
 # include <math.h>
 #include <stdio.h>//del
-# define WIN_WIDTH 1280
+# define WIN_WIDTH 900
 # define WIN_HEIGHT 720
 # define FOV 61.0
-# define WMOD 310000
-#define RAY_PREC 800
+# define RAY_PREC 800
 
 typedef struct	s_float_xy {
 	float		x;
