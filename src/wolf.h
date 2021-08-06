@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:43:20 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 14:29:42 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct	s_float_xy {
 typedef struct	s_settings {
 	t_float_xy	location;
 	float		angle;
+	float		ray_angle;
 	int			map_width;
 	int			map_height;
 	char		**map;

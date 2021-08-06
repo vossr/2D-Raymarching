@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:45:02 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 14:31:31 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static unsigned char	**load_texture(int *line_s, int bps, int j)
 	return (data);
 }
 
-static void				draw_wall(int line_x, t_float_xy line,
+static void				render(int line_x, t_float_xy line,
 							int texture_id, float texture_x)
 {
 	static unsigned char	**texture = NULL;
@@ -69,7 +69,7 @@ static void				draw_wall(int line_x, t_float_xy line,
 		pixel_put(line_x, y, texture_id == 8 ? 0xFFFFE0 : 0x444444);
 }
 
-static void	texture_mapper(t_float_xy direction, t_float_xy cast,
+static void	texture_x_pos(t_float_xy direction, t_float_xy cast,
 									int *wall_dir, float *texture_x)
 {
 	if ((int)cast.x != (int)(cast.x - direction.x) &&
@@ -99,38 +99,46 @@ static void	texture_mapper(t_float_xy direction, t_float_xy cast,
 	}
 }
 
-void	raycast(t_settings *settings)//const? not pointer?
+void	texture_mapper(t_float_xy step, t_float_xy cast, int x, t_settings *settings)
+{
+	t_float_xy	line;
+	int			wall_dir;
+	float		tex_x;
+	float		dist;
+
+	wall_dir = 0;
+	tex_x = 0;
+	texture_x_pos(step, cast, &wall_dir, &tex_x);
+	cast.x -= settings->location.x;
+	cast.y -= settings->location.y;
+	dist = sqrtf(cast.x * cast.x + cast.y * cast.y);
+	dist *= cosf(deg_to_rad(settings->ray_angle - settings->angle));
+	line.x = WIN_HEIGHT / 2 - WIN_HEIGHT / 2 / dist;
+	line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
+	render(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);
+}
+
+
+void	raycast(t_settings *settings)
 {
 	int				x;
 	t_float_xy		cast;
 	t_float_xy		step;
-	t_float_xy		line;
-	int				wall_dir;
-	float			tex_x;
 
-	float ray_angle = settings->angle - FOV / 2;
-
-	wall_dir = 0;
-	tex_x = 0;
+	settings->ray_angle = settings->angle - FOV / 2;
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		step.x = sinf(deg_to_rad(ray_angle)) / RAY_PREC;
-		step.y = cosf(deg_to_rad(ray_angle)) / RAY_PREC;
+		step.x = sinf(deg_to_rad(settings->ray_angle)) / RAY_PREC;
+		step.y = cosf(deg_to_rad(settings->ray_angle)) / RAY_PREC;
 		cast = settings->location;
 		while (settings->map[(int)cast.y][(int)cast.x] != 1)
 		{
 			cast.x += step.x;
 			cast.y += step.y;
 		}
-		texture_mapper(step, cast, &wall_dir, &tex_x);
-		cast.x -= settings->location.x;
-		cast.y -= settings->location.y;
-		float dist = sqrtf(cast.x * cast.x + cast.y * cast.y) * cosf(deg_to_rad(ray_angle - settings->angle));
-		line.x = WIN_HEIGHT / 2 - WIN_HEIGHT / 2 / dist;
-		line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
-		draw_wall(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);
-		ray_angle += FOV / WIN_WIDTH;
+		texture_mapper(step, cast, x, settings);
+		settings->ray_angle += FOV / WIN_WIDTH;
 		x++;
 	}
 }

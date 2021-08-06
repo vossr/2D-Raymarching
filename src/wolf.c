@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 13:43:57 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 14:08:26 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static void	player_movement(t_settings *settings)
 	int		fwd;
 	int		bwd;
 
-	fwd = is_key_down(126) + is_key_down(13);
-	bwd = is_key_down(125) + is_key_down(1);
 	if (is_key_down(124))
 		settings->angle -= 2;
 	if (is_key_down(123))
 		settings->angle += 2;
+	fwd = is_key_down(126) + is_key_down(13);
+	bwd = is_key_down(125) + is_key_down(1);
 	if (fwd)
 		collision(&settings->location, settings->angle, 1, settings->map);
 	if (bwd)

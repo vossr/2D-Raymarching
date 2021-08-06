@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:26:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 11:11:37 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/06 13:52:04 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	set_map(char *filename, t_settings *settings)
 		settings->map[i][settings->map_width - 1] = 1;
 		i++;
 	}
+	settings->map[5][5] = 1;
 	(void)filename;
 }
 
