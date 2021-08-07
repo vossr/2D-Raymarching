@@ -21,7 +21,7 @@ FLAGS = -Wall -Wextra -Werror -O3
 all: $(NAME)
 
 $(NAME):
-	@make re -C libft
+	@make -C libft
 	gcc $(FLAGS) $(addprefix mlx_io/, $(MLX_IO_FILES)) $(addprefix src/, $(FILES)) $(LIB) $(addprefix -I , $(FOLDERS)) -L minilibx -lmlx -framework OpenGL -framework Appkit -o $(NAME)
 
 clean:
