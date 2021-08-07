@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 07:17:47 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 12:11:49 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ t_settings	*init(char *filename)
 	fd = open(filename, O_RDONLY);
 	read_map(filename, settings, 0, fd);
 	check_map_validity(settings);
+	if (settings->map_width > 100 || settings->map_height > 100)
+		fatal_error("map too slow");
 	if (settings->location.x == 0 || settings->location.y == 0)
 		fatal_error("no empty space in map");
 	return (NULL);

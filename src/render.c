@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 10:49:49 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 12:00:43 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static unsigned int	**load_texture(int *w, int bps, int j)
 	return ((unsigned int **)data);
 }
 
-static void	render(int line_x, t_float_xy line,
+static void	render(int line_x, t_vec2 line,
 							int texture_id, float texture_x)
 {
 	static unsigned int		**texture = NULL;
@@ -57,7 +57,7 @@ static void	render(int line_x, t_float_xy line,
 		xd--;
 	while (y < line.y && y < WIN_HEIGHT)
 	{
-		yd = (int)(tex_size * (((float)y - line.x) / (line.y - line.x)));
+		yd = (int)(tex_size * (((double)y - line.x) / (line.y - line.x)));
 		pixel_put(line_x, y, texture[texture_id][yd * tex_size + xd]);
 		y++;
 	}
@@ -66,7 +66,7 @@ static void	render(int line_x, t_float_xy line,
 		pixel_put(line_x, y, 0x444444);
 }
 
-static void	texture_x(t_float_xy step, t_float_xy cast, int *wall, float *tex_x)
+static void	texture_x(t_vec2 step, t_vec2 cast, int *wall, double *tex_x)
 {
 	if ((int)cast.x != (int)(cast.x - step.x) &&
 			(int)cast.y != (int)(cast.y - step.y))
@@ -93,13 +93,13 @@ static void	texture_x(t_float_xy step, t_float_xy cast, int *wall, float *tex_x)
 	}
 }
 
-static void	texture_mapper(t_float_xy step, t_float_xy cast,
+static void	texture_mapper(t_vec2 step, t_vec2 cast,
 											int x, t_settings *settings)
 {
 	static int		wall_dir = 0;
-	static float	tex_x = 0;
-	t_float_xy		line;
-	float			dist;
+	static double	tex_x = 0;
+	t_vec2			line;
+	double			dist;
 
 	texture_x(step, cast, &wall_dir, &tex_x);
 	cast.x -= settings->location.x;
@@ -113,9 +113,9 @@ static void	texture_mapper(t_float_xy step, t_float_xy cast,
 
 void	raycast(t_settings *settings)
 {
-	int				x;
-	t_float_xy		cast;
-	t_float_xy		step;
+	int		x;
+	t_vec2	cast;
+	t_vec2	step;
 
 	settings->ray_angle = settings->angle - FOV / 2;
 	x = 0;

@@ -6,22 +6,22 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 10:50:13 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 12:07:52 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-float	deg_to_rad(float deg)
+double	deg_to_rad(double deg)
 {
 	return (deg * (M_PI / 180));
 }
 
-static void	collision(t_float_xy *location, float angle,
-												int neg, char **map)
+static void	collision(t_vec2 *location, double angle,
+									int neg, char **map)
 {
 	t_int_xy	loc_on_map_f;
-	t_float_xy	dir;
+	t_vec2		dir;
 
 	dir.x = sin(deg_to_rad(angle)) * PLAYER_SPEED;
 	dir.y = cos(deg_to_rad(angle)) * PLAYER_SPEED;
