@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 19:19:34 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/10/28 17:51:55 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:29:14 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void	ft_putnbr(int n)
 	if (n == -2147483648)
 		write(1, "-2147483648", 11);
 	else if (n < 0)
-		if (n *= -1)
-			ft_putchar('-');
+		ft_putchar('-');
+	if (n < 0 && n != -2147483648)
+		n *= -1;
 	tmp = n;
 	while (tmp > 0 && ++size)
 		tmp /= 10;

@@ -6,11 +6,11 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 14:09:27 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/07 16:22:47 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:22:12 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strequ(const char *s1, const char *s2)
+int	ft_strequ(const char *s1, const char *s2)
 {
 	if (!s1 || !s2 || (!*s1 && *s2) || (*s1 && !*s2))
 		return (0);

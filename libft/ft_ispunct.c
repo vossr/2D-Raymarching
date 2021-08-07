@@ -6,11 +6,11 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/31 16:25:19 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/10/31 16:32:59 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:47:56 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_ispunct(int c)
+int	ft_ispunct(int c)
 {
 	if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@'))
 		return (1);

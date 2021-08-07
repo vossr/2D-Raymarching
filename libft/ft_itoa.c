@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 18:58:41 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/13 20:48:39 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:14:33 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ char	*ft_itoa(int n)
 	long	neg;
 
 	neg = n;
-	size = (neg > 0) ? 0 : 1;
-	neg = (neg > 0) ? neg : -neg;
+	size = neg < 0;
+	if (neg < 0)
+		neg = -neg;
 	while (n)
-		n = size++ ? n / 10 : n / 10;
-	if (!(res = (char *)malloc(sizeof(res) * size + 1)))
+		n = size++ / 10;
+	res = (char *)malloc(sizeof(res) * size + 1);
+	if (!res)
 		return (NULL);
 	*(res + size--) = '\0';
 	while (neg > 0)

@@ -6,17 +6,17 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 15:12:58 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/07 16:29:18 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:34:00 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		ft_set_value(char **fresh, const char *s, int wrd, char c)
+static void	ft_set_value(char **fresh, const char *s, int wrd, char c)
 {
-	int i;
-	int len;
-	int wnum;
+	int	i;
+	int	len;
+	int	wnum;
 
 	i = 0;
 	wnum = 0;
@@ -36,7 +36,7 @@ static void		ft_set_value(char **fresh, const char *s, int wrd, char c)
 	}
 }
 
-static void		ft_allocate_sizes(char **fresh, const char *s, int wrd, char c)
+static void	ft_allocate_sizes(char **fresh, const char *s, int wrd, char c)
 {
 	int		wnum;
 	int		len;
@@ -56,7 +56,8 @@ static void		ft_allocate_sizes(char **fresh, const char *s, int wrd, char c)
 		}
 		while (s[i] == c && s[i])
 			i++;
-		if (!(fresh[wnum] = (char*)malloc(sizeof(char) * (len + 1))))
+		fresh[wnum] = (char *)malloc(sizeof(char) * (len + 1));
+		if (!fresh[wnum])
 			return ;
 		fresh[wnum][len] = '\0';
 		wnum++;
@@ -64,7 +65,7 @@ static void		ft_allocate_sizes(char **fresh, const char *s, int wrd, char c)
 	ft_set_value(fresh, s, wrd, c);
 }
 
-char			**ft_strsplit(char const *s, char c)
+char	**ft_strsplit(char const *s, char c)
 {
 	char	**fresh;
 	int		wrd;
@@ -84,7 +85,8 @@ char			**ft_strsplit(char const *s, char c)
 		while (s[i] == c && s[i])
 			i++;
 	}
-	if (!(fresh = (char**)malloc(sizeof(char*) * (wrd + 1))))
+	fresh = (char **)malloc(sizeof(char *) * (wrd + 1));
+	if (!fresh)
 		return (NULL);
 	fresh[wrd] = NULL;
 	ft_allocate_sizes(fresh, s, wrd, c);

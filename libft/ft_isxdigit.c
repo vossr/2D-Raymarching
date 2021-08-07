@@ -6,11 +6,11 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 18:23:24 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/10/31 16:32:26 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:35:18 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isxdigit(int c)
+int	ft_isxdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);

@@ -6,16 +6,18 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 13:14:20 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/07 16:15:01 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:31:15 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 void	ft_strclr(char *s)
 {
 	if (s)
+	{
 		while (*s)
 		{
 			*s = '\0';
 			s++;
 		}
+	}
 }

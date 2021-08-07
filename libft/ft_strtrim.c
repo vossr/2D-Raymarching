@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 14:59:36 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/13 20:30:59 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:49:50 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ char	*ft_strtrim(char const *s)
 	if (!i)
 		return (ft_strdup(s));
 	size -= i;
-	if (!(fresh = (char*)malloc(sizeof(char) * (size + 1))))
+	fresh = (char *)malloc(sizeof(char) * (size + 1));
+	if (!fresh)
 		return (NULL);
 	fresh[size] = '\0';
 	while (size--)

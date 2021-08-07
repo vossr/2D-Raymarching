@@ -6,11 +6,11 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 18:26:19 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/10/23 18:54:35 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:16:26 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int		neg;
 	int		res;

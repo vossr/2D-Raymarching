@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:21:57 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/10/31 12:54:52 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:47:13 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 {
-	t_list *nx;
+	t_list	*nx;
 
 	nx = *alst;
 	while (nx)

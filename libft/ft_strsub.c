@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 14:22:15 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/13 20:14:13 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 07:39:55 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	i = 0;
-	if (!(fresh = (char*)malloc(sizeof(char) * (len + 1))))
+	fresh = (char *)malloc(sizeof(char) * (len + 1));
+	if (!fresh)
 		return (NULL);
 	while (i < len)
 	{
