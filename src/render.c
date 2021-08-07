@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 12:00:43 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 20:27:42 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ static unsigned int	**load_texture(int *w, int bps, int j)
 	j = -1;
 	while (++j < 4)
 	{
+		txtur[j] = NULL;
 		txtur[j] = mlx_xpm_file_to_image(mlx[0], files[j], &bps, w);
+		if (!txtur[j])
+			fatal_error("texture file not found");
 		data[j] = (unsigned char *)mlx_get_data_addr(txtur[j], &bps, w, &endi);
 	}
 	*w /= 4;
