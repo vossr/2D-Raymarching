@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 20:58:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 09:32:28 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 11:32:32 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,6 @@ void	init_window(int w, int h, char *title)
 	get_mlx(mlx);
 	mlx_hook(win_ptr, 2, 0, handle_keyboard_down, mlx);
 	mlx_hook(win_ptr, 3, 0, handle_keyboard_up, mlx);
-	mlx_hook(win_ptr, 4, 0, handle_mouse_down, mlx);
-	mlx_hook(win_ptr, 5, 0, handle_mouse_up, mlx);
-	mlx_hook(win_ptr, 6, 0, handle_cursor, mlx);
 	mlx_hook(win_ptr, 17, 0, handle_exit, mlx);
 	mlx_loop_hook(mlx_ptr, wolf, mlx);
 	mlx_loop(mlx_ptr);

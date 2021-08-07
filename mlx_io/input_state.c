@@ -6,25 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 22:35:09 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 09:45:21 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 11:36:35 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx_io.h"
 
-t_int_xy	set_cursor(int call, int x, int y)
-{
-	static t_int_xy	c = {.x = 0, .y = 0};
-
-	if (call)
-	{
-		c.x = x;
-		c.y = y;
-	}
-	return (c);
-}
-
-int	set_key(int call, int key)
+static int	set_key(int call, int key)
 {
 	static int	*keyb = NULL;
 	int			i;
@@ -50,28 +38,21 @@ int	set_key(int call, int key)
 	return (0);
 }
 
-int	set_mouse(int call, int button)
+int	handle_keyboard_down(int key)
 {
-	static int	*mouse = NULL;
-	int			i;
-
-	if (!mouse)
-	{
-		i = 0;
-		mouse = (int *)malloc(sizeof(int) * 7);
-		if (!mouse)
-			exit(0);
-		while (i < 6)
-		{
-			mouse[i] = 0;
-			i++;
-		}
-	}
-	if (call == 0)
-		return (mouse[button]);
-	else if (call == 1)
-		mouse[button] = 1;
-	else if (call == 2)
-		mouse[button] = 0;
+	set_key(1, key);
+	wolf();
 	return (0);
+}
+
+int	handle_keyboard_up(int key)
+{
+	set_key(2, key);
+	wolf();
+	return (0);
+}
+
+int	is_key_down(int key)
+{
+	return (set_key(0, key));
 }
