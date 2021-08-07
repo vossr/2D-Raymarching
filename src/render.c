@@ -6,41 +6,42 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 22:37:37 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 07:35:09 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-static unsigned char	**load_texture(int *line_s, int bps, int j)
+static unsigned int	**load_texture(int *w, int bps, int j)
 {
 	void			**mlx;
 	char			*files[4];
-	void			*texture[4];
+	void			*txtur[4];
 	unsigned char	**data;
-	int				endian;
+	int				endi;
 
 	files[0] = "textures/stone.xpm";
 	files[1] = "textures/redbrick.xpm";
 	files[2] = "textures/bluewall.xpm";
 	files[3] = "textures/door.xpm";
-	data = (unsigned char**)malloc(sizeof(unsigned char*) * 4);
+	data = (unsigned char **)malloc(sizeof(unsigned char *) * 4);
+	if (!data)
+		fatal_error("memory allocation failed");
 	mlx = get_mlx(NULL);
 	j = -1;
 	while (++j < 4)
 	{
-		texture[j] = mlx_xpm_file_to_image(mlx[0], files[j], &bps, line_s);
-		data[j] = (unsigned char*)mlx_get_data_addr(texture[j], &bps,
-											line_s, &endian);
+		txtur[j] = mlx_xpm_file_to_image(mlx[0], files[j], &bps, w);
+		data[j] = (unsigned char *)mlx_get_data_addr(txtur[j], &bps, w, &endi);
 	}
-	*line_s /= 4;
-	return (data);
+	*w /= 4;
+	return ((unsigned int **)data);
 }
 
 static void	render(int line_x, t_float_xy line,
 							int texture_id, float texture_x)
 {
-	static unsigned char	**texture = NULL;
+	static unsigned int		**texture = NULL;
 	static int				tex_size;
 	int						y;
 	int						xd;
@@ -57,47 +58,42 @@ static void	render(int line_x, t_float_xy line,
 	while (y < line.y && y < WIN_HEIGHT)
 	{
 		yd = (int)(tex_size * (((float)y - line.x) / (line.y - line.x)));
-
-		pixel_put(line_x, y,
-				texture[texture_id][yd * tex_size * 4 + xd * 4 + 2] * 0x10000 +
-				texture[texture_id][yd * tex_size * 4 + xd * 4 + 1] * 0x100 +
-				texture[texture_id][yd * tex_size * 4 + xd * 4 + 0]);
+		pixel_put(line_x, y, texture[texture_id][yd * tex_size + xd]);
 		y++;
 	}
 	y--;
 	while (++y < WIN_HEIGHT)
-		pixel_put(line_x, y, texture_id == 8 ? 0xFFFFE0 : 0x444444);
+		pixel_put(line_x, y, 0x444444);
 }
 
-static void	texture_x_pos(t_float_xy direction, t_float_xy cast,
-											int *wall_dir, float *texture_x)
+static void	texture_x(t_float_xy step, t_float_xy cast, int *wall, float *tex_x)
 {
-	if ((int)cast.x != (int)(cast.x - direction.x) &&
-				(int)cast.y != (int)(cast.y - direction.y))
+	if ((int)cast.x != (int)(cast.x - step.x) &&
+			(int)cast.y != (int)(cast.y - step.y))
 		return ;
-	else if ((int)cast.x < (int)(cast.x - direction.x))
+	if ((int)cast.x < (int)(cast.x - step.x))
 	{
-		*wall_dir = 0;
-		*texture_x = 1.0 - (cast.y - (int)cast.y);
+		*wall = 0;
+		*tex_x = 1.0 - (cast.y - (int)cast.y);
 	}
-	else if ((int)cast.y < (int)(cast.y - direction.y))
+	else if ((int)cast.y < (int)(cast.y - step.y))
 	{
-		*wall_dir = 1;
-		*texture_x = cast.x - (int)cast.x;
+		*wall = 1;
+		*tex_x = cast.x - (int)cast.x;
 	}
-	else if ((int)cast.y > (int)(cast.y - direction.y))
+	else if ((int)cast.y > (int)(cast.y - step.y))
 	{
-		*wall_dir = 2;
-		*texture_x = 1.0 - (cast.x - (int)cast.x);
+		*wall = 2;
+		*tex_x = 1.0 - (cast.x - (int)cast.x);
 	}
 	else
 	{
-		*wall_dir = 3;
-		*texture_x = cast.y - (int)cast.y;
+		*wall = 3;
+		*tex_x = cast.y - (int)cast.y;
 	}
 }
 
-void	texture_mapper(t_float_xy step, t_float_xy cast,
+static void	texture_mapper(t_float_xy step, t_float_xy cast,
 											int x, t_settings *settings)
 {
 	static int		wall_dir = 0;
@@ -105,7 +101,7 @@ void	texture_mapper(t_float_xy step, t_float_xy cast,
 	t_float_xy		line;
 	float			dist;
 
-	texture_x_pos(step, cast, &wall_dir, &tex_x);
+	texture_x(step, cast, &wall_dir, &tex_x);
 	cast.x -= settings->location.x;
 	cast.y -= settings->location.y;
 	dist = sqrtf(cast.x * cast.x + cast.y * cast.y);

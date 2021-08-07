@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/06 21:36:21 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 07:17:47 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 static void	read_map(char *filename, t_settings *set, int i, int fd)
 {
 	char	*line;
-	int		err;
 	int		len;
 
-	while (0 < (err = get_next_line(fd, &line)) && ++set->map_height)
+	while (0 < get_next_line(fd, &line) && ++set->map_height)
 		free(line);
-	if (err < 0)
+	if (get_next_line(fd, &line) < 0)
 		fatal_error("file reading failed");
 	close(fd);
-	if (!(set->map = (char**)malloc(sizeof(char*) * set->map_height)))
+	set->map = (char **)malloc(sizeof(char *) * set->map_height);
+	if (!set->map)
 		fatal_error("map allocation failed");
 	fd = open(filename, O_RDONLY);
-	while (0 < (err = get_next_line(fd, &set->map[i])) && i < set->map_height)
+	while (0 < get_next_line(fd, &set->map[i]) && i < set->map_height)
 	{
 		len = (int)ft_strlen(set->map[i]);
 		if (!i)
@@ -35,7 +35,7 @@ static void	read_map(char *filename, t_settings *set, int i, int fd)
 			fatal_error("map not square");
 		i++;
 	}
-	if (err < 0)
+	if (get_next_line(fd, &line) < 0)
 		fatal_error("file reading failed");
 	close(fd);
 }
@@ -76,7 +76,8 @@ t_settings	*init(char *filename)
 
 	if (!filename)
 		return (settings);
-	if (!(settings = (t_settings*)malloc(sizeof(t_settings))))
+	settings = (t_settings *)malloc(sizeof(t_settings));
+	if (!settings)
 		fatal_error("map allocation failed");
 	ft_memset(settings, 0, sizeof(t_settings));
 	fd = open(filename, O_RDONLY);
