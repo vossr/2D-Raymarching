@@ -6,21 +6,21 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 07:19:43 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 11:14:20 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF_H
 # define WOLF_H
 # include "mlx_io.h"
-# include <sys/time.h>
+# include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
-# define WIN_WIDTH 900
-# define WIN_HEIGHT 720
-# define FOV 61.0
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 500
+# define FOV 50.0
 # define PLAYER_SPEED 0.05
-# define RAY_PREC 800
+# define STEP_LEN 0.001
 
 typedef struct s_float_xy {
 	float		x;

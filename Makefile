@@ -15,8 +15,7 @@ LIB = libft/libft.a
 FOLDERS = libft mlx_io src minilibx
 IO_FILES = init_window.c handle_hook.c input_state.c input_state_wrappers.c image.c
 FILES = main.c wolf.c render.c
-#FLAGS = -Wall -Wextra -Werror -O3
-FLAGS = -fsanitize=address -Wall -Wextra -Werror -O3 -g
+FLAGS = -Wall -Wextra -Werror -O3
 .PHONY: clean fclean re all
 
 all: $(NAME)

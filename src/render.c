@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 07:35:09 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 10:49:49 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ static void	texture_mapper(t_float_xy step, t_float_xy cast,
 	texture_x(step, cast, &wall_dir, &tex_x);
 	cast.x -= settings->location.x;
 	cast.y -= settings->location.y;
-	dist = sqrtf(cast.x * cast.x + cast.y * cast.y);
-	dist *= cosf(deg_to_rad(settings->ray_angle - settings->angle));
+	dist = sqrt(cast.x * cast.x + cast.y * cast.y);
+	dist *= cos(deg_to_rad(settings->ray_angle - settings->angle));
 	line.x = WIN_HEIGHT / 2 - WIN_HEIGHT / 2 / dist;
 	line.y = WIN_HEIGHT / 2 + WIN_HEIGHT / 2 / dist;
 	render(WIN_WIDTH - 1 - x, line, wall_dir, tex_x);
@@ -121,8 +121,8 @@ void	raycast(t_settings *settings)
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		step.x = sinf(deg_to_rad(settings->ray_angle)) / RAY_PREC;
-		step.y = cosf(deg_to_rad(settings->ray_angle)) / RAY_PREC;
+		step.x = sin(deg_to_rad(settings->ray_angle)) * STEP_LEN;
+		step.y = cos(deg_to_rad(settings->ray_angle)) * STEP_LEN;
 		cast = settings->location;
 		while (settings->map[(int)cast.y][(int)cast.x] != 1)
 		{
