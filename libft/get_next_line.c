@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 22:52:45 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 09:05:27 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 16:38:45 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,15 @@ int	ft_make_line(char **line, char **tmp, int fd, int res)
 	char	*tmp2;
 	size_t	line_size;
 
+	if ((res < 0) || (!res && (!tmp[fd] || !tmp[fd][0])))
+		return (res);
 	line_size = 0;
 	while (tmp[fd][line_size] != '\n' && tmp[fd][line_size])
 		line_size++;
 	if (tmp[fd][line_size] == '\n')
 	{
-		ft_set_value(line, tmp[fd], line_size);
+		if (!ft_set_value(line, tmp[fd], line_size))
+			return (-1);
 		tmp2 = ft_join(tmp[fd] + line_size + 1, NULL, &tmp[fd], 0);
 		free(tmp[fd]);
 		tmp[fd] = tmp2;
@@ -85,29 +88,28 @@ int	ft_make_line(char **line, char **tmp, int fd, int res)
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	*tmp[MAXFD_SIZE];
+	static char	*tmp[MAXFD_SIZE + 1];
 	char		buff[BUFF_SIZE + 1];
-	char		*tmp2;
 	int			res;
-	int			i;
 
-	i = 0;
-	if (fd < 0 || !line)
+	res = read(fd, buff, BUFF_SIZE);
+	if (fd < 0 || res == -1 || !line)
 		return (-1);
-	while (0 < (res = read(fd, buff, BUFF_SIZE)))
+	while (0 < res)
 	{
-		if ((buff[res] = '\0') && tmp[fd] == NULL)
-			if ((tmp[fd] = (char *)malloc(sizeof(char) * 2)))
-				if (!(tmp[fd][0] = 0))
-					tmp[fd][1] = '\0';
-		tmp2 = ft_join(tmp[fd], buff, NULL, 0);
+		buff[res] = '\0';
+		if (!tmp[fd])
+			tmp[fd] = ft_strdup("\0\0");
+		if (!tmp[fd])
+			return (-1);
+		tmp[MAXFD_SIZE] = ft_join(tmp[fd], buff, NULL, 0);
 		free(tmp[fd]);
-		tmp[fd] = tmp2;
-		while (buff[i])
-			if (buff[i++] == '\n')
+		tmp[fd] = tmp[MAXFD_SIZE];
+		res = 0;
+		while (buff[res])
+			if (buff[res++] == '\n')
 				break ;
+		res = read(fd, buff, BUFF_SIZE);
 	}
-	if ((res < 0) || (!res && (!tmp[fd] || !tmp[fd][0])))
-		return (res);
 	return (ft_make_line(line, tmp, fd, res));
 }
