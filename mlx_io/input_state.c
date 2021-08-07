@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 22:35:09 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/03/12 20:04:53 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 09:45:21 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_int_xy	set_cursor(int call, int x, int y)
 	return (c);
 }
 
-int			set_key(int call, int key)
+int	set_key(int call, int key)
 {
 	static int	*keyb = NULL;
 	int			i;
@@ -32,7 +32,8 @@ int			set_key(int call, int key)
 	if (!keyb)
 	{
 		i = 0;
-		if (!(keyb = (int*)malloc(sizeof(int) * 310)))
+		keyb = (int *)malloc(sizeof(int) * 310);
+		if (!keyb)
 			exit(0);
 		while (i < 300)
 		{
@@ -49,7 +50,7 @@ int			set_key(int call, int key)
 	return (0);
 }
 
-int			set_mouse(int call, int button)
+int	set_mouse(int call, int button)
 {
 	static int	*mouse = NULL;
 	int			i;
@@ -57,7 +58,8 @@ int			set_mouse(int call, int button)
 	if (!mouse)
 	{
 		i = 0;
-		if (!(mouse = (int*)malloc(sizeof(int) * 7)))
+		mouse = (int *)malloc(sizeof(int) * 7);
+		if (!mouse)
 			exit(0);
 		while (i < 6)
 		{

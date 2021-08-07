@@ -6,11 +6,11 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 18:03:48 by rpehkone          #+#    #+#             */
-/*   Updated: 2019/11/02 18:15:42 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 08:57:27 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isprint(int c)
+int	ft_isprint(int c)
 {
 	return (c >= 32 && c <= 126);
 }

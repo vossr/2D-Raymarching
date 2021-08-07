@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_window.                                       :+:      :+:    :+:   */
+/*   init_window.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 20:58:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/08/15 13:12:50 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/07 09:32:28 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx_io.h"
 
-void		**get_mlx(void **mlx)
+void	**get_mlx(void **mlx)
 {
 	static void	**mlx_save = NULL;
 
@@ -24,7 +24,7 @@ void		**get_mlx(void **mlx)
 
 t_int_xy	set_window_size(int w, int h)
 {
-	static t_int_xy window_size = {.x = 0, .y = 0};
+	static t_int_xy	window_size = {.x = 0, .y = 0};
 
 	if (w)
 	{
@@ -39,12 +39,12 @@ t_int_xy	get_window_size(void)
 	return (set_window_size(0, 0));
 }
 
-int			handle_exit(void)
+int	handle_exit(void)
 {
 	exit(0);
 }
 
-void		init_window(int w, int h, char *title)
+void	init_window(int w, int h, char *title)
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
@@ -55,7 +55,8 @@ void		init_window(int w, int h, char *title)
 	set_window_size(w, h);
 	win_ptr = mlx_new_window(mlx_ptr, w, h, title);
 	img_ptr = mlx_new_image(mlx_ptr, w, h);
-	if (!(mlx = (void **)malloc(sizeof(void *) * 3)))
+	mlx = (void **)malloc(sizeof(void *) * 3);
+	if (!mlx)
 		exit(0);
 	mlx[0] = mlx_ptr;
 	mlx[1] = win_ptr;
