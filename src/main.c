@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:49:05 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 12:11:49 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/18 23:14:17 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	check_map_validity(t_settings *set)
 			set->map[y][x] -= '0';
 			if (!x || !y || x == set->map_width - 1 || y == set->map_height - 1)
 			{
-				if (set->map[y][x] != 1)
+				if (set->map[y][x] != 1 && set->map[y][x] != 2)
 					fatal_error("invalid map edge");
 			}
 			else if (set->map[y][x] == 0)
@@ -62,7 +62,7 @@ static void	check_map_validity(t_settings *set)
 				set->location.x = x + 0.5;
 				set->location.y = y + 0.5;
 			}
-			else if (set->map[y][x] != 1)
+			else if (set->map[y][x] != 1 && set->map[y][x] != 2)
 				fatal_error("invalid character in map");
 		}
 		y++;

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 20:27:42 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/18 23:36:48 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,55 @@
 
 static unsigned int	**load_texture(int *w, int bps, int j)
 {
-	void			**mlx;
 	char			*files[4];
 	void			*txtur[4];
-	unsigned char	**data;
+	unsigned int	**data;
 	int				endi;
 
 	files[0] = "textures/stone.xpm";
 	files[1] = "textures/redbrick.xpm";
 	files[2] = "textures/bluewall.xpm";
 	files[3] = "textures/door.xpm";
-	data = (unsigned char **)malloc(sizeof(unsigned char *) * 4);
+	data = (unsigned int **)malloc(sizeof(unsigned int *));
 	if (!data)
 		fatal_error("memory allocation failed");
-	mlx = get_mlx(NULL);
 	j = -1;
 	while (++j < 4)
 	{
 		txtur[j] = NULL;
-		txtur[j] = mlx_xpm_file_to_image(mlx[0], files[j], &bps, w);
+		txtur[j] = mlx_xpm_file_to_image(*get_mlx(NULL), files[j], &bps, w);
 		if (!txtur[j])
 			fatal_error("texture file not found");
-		data[j] = (unsigned char *)mlx_get_data_addr(txtur[j], &bps, w, &endi);
+		data[j] = (unsigned int *)mlx_get_data_addr(txtur[j], &bps, w, &endi);
 	}
-	*w /= 4;
-	return ((unsigned int **)data);
+	w[0] /= 4;
+	w[1] = LIVE_TEXTURE_SIZE;
+	init_live_texture(data);
+	return (data);
 }
 
 static void	render(int line_x, t_vec2 line,
 							int texture_id, float texture_x)
 {
 	static unsigned int		**texture = NULL;
-	static int				tex_size;
+	static int				tex_size[2];
 	int						y;
 	int						xd;
 	int						yd;
 
 	if (!texture)
-		texture = load_texture(&tex_size, 0, 0);
+		texture = load_texture(&tex_size[0], 0, 0);
+	tex_size[1] = tex_size[0];
 	y = -1;
 	while (++y < line.x)
 		pixel_put(line_x, y, 0x87ceeb);
-	xd = (int)(tex_size * texture_x);
-	if (xd == tex_size)
+	xd = (int)(tex_size[1] * texture_x);
+	if (xd == tex_size[1])
 		xd--;
 	while (y < line.y && y < WIN_HEIGHT)
 	{
-		yd = (int)(tex_size * (((double)y - line.x) / (line.y - line.x)));
-		pixel_put(line_x, y, texture[texture_id][yd * tex_size + xd]);
+		yd = (int)(tex_size[1] * (((double)y - line.x) / (line.y - line.x)));
+		pixel_put(line_x, y, texture[texture_id][yd * tex_size[1] + xd]);
 		y++;
 	}
 	y--;
@@ -76,22 +77,22 @@ static void	texture_x(t_vec2 step, t_vec2 cast, int *wall, double *tex_x)
 		return ;
 	if ((int)cast.x < (int)(cast.x - step.x))
 	{
-		*wall = 0;
+		*wall += 0;
 		*tex_x = 1.0 - (cast.y - (int)cast.y);
 	}
 	else if ((int)cast.y < (int)(cast.y - step.y))
 	{
-		*wall = 1;
+		*wall += 1;
 		*tex_x = cast.x - (int)cast.x;
 	}
 	else if ((int)cast.y > (int)(cast.y - step.y))
 	{
-		*wall = 2;
+		*wall += 2;
 		*tex_x = 1.0 - (cast.x - (int)cast.x);
 	}
 	else
 	{
-		*wall = 3;
+		*wall += 3;
 		*tex_x = cast.y - (int)cast.y;
 	}
 }
@@ -104,6 +105,7 @@ static void	texture_mapper(t_vec2 step, t_vec2 cast,
 	t_vec2			line;
 	double			dist;
 
+	wall_dir = (settings->map[(int)cast.y][(int)cast.x] - 1) * 4;
 	texture_x(step, cast, &wall_dir, &tex_x);
 	cast.x -= settings->location.x;
 	cast.y -= settings->location.y;
@@ -127,7 +129,7 @@ void	raycast(t_settings *settings)
 		step.x = sin(deg_to_rad(settings->ray_angle)) * STEP_LEN;
 		step.y = cos(deg_to_rad(settings->ray_angle)) * STEP_LEN;
 		cast = settings->location;
-		while (settings->map[(int)cast.y][(int)cast.x] != 1)
+		while (settings->map[(int)cast.y][(int)cast.x] == 0)
 		{
 			cast.x += step.x;
 			cast.y += step.y;

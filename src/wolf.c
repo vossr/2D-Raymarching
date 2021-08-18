@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/07 12:07:52 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/18 22:18:17 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static void	collision(t_vec2 *location, double angle,
 	dir.y = cos(deg_to_rad(angle)) * PLAYER_SPEED;
 	loc_on_map_f.y = map[(int)(location->y + neg * dir.y)][(int)location->x];
 	loc_on_map_f.x = map[(int)location->y][(int)(location->x + neg * dir.x)];
-	if (1 != loc_on_map_f.x)
+	if (0 == loc_on_map_f.x)
 		location->x += dir.x * neg;
-	if (1 != loc_on_map_f.y)
+	if (0 == loc_on_map_f.y)
 		location->y += dir.y * neg;
 }
 
