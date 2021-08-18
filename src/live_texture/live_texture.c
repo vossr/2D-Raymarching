@@ -6,14 +6,14 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/18 23:09:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 01:25:10 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 01:40:40 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 #include "live_texture.h"
 
-static void	live_pixel_put(int color, int x, int y,
+void	live_pixel_put(int color, int x, int y,
 							unsigned int **get_textures)
 {
 	static unsigned int	**textures;
@@ -100,6 +100,8 @@ static void	minimap(t_settings *settings)
 
 void	live_texture(t_settings *settings)
 {
+	live_pixel_put(4, -1, 0, NULL);
+	frame_in_frame();
 	live_pixel_put(5, -1, 0, NULL);
 	minimap(settings);
 }

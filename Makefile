@@ -6,7 +6,7 @@
 #    By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/30 20:09:24 by rpehkone          #+#    #+#              #
-#    Updated: 2021/08/18 23:07:11 by rpehkone         ###   ########.fr        #
+#    Updated: 2021/08/19 01:40:58 by rpehkone         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ LIB = libft/libft.a
 FOLDERS = libft mlx_io src minilibx src/live_texture
 MLX_IO_FILES = init_window.c input_state.c image.c
 FILES = main.c wolf.c render.c
-LIVE_TEXTURE_FILES = live_texture.c
+LIVE_TEXTURE_FILES = live_texture.c frame_in_frame.c
 FILES += $(addprefix live_texture/, $(LIVE_TEXTURE_FILES))
 FLAGS = -Wall -Wextra -Werror -O3
 .PHONY: clean fclean re all
