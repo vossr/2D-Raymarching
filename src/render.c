@@ -6,11 +6,12 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/18 23:36:48 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 00:57:52 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
+#include "live_texture.h"
 
 static unsigned int	**load_texture(int *w, int bps, int j)
 {
@@ -45,24 +46,24 @@ static void	render(int line_x, t_vec2 line,
 							int texture_id, float texture_x)
 {
 	static unsigned int		**texture = NULL;
-	static int				tex_size[2];
+	static int				tex_size[3];
 	int						y;
 	int						xd;
 	int						yd;
 
 	if (!texture)
 		texture = load_texture(&tex_size[0], 0, 0);
-	tex_size[1] = tex_size[0];
+	tex_size[2] = tex_size[texture_id > 3];
 	y = -1;
 	while (++y < line.x)
 		pixel_put(line_x, y, 0x87ceeb);
-	xd = (int)(tex_size[1] * texture_x);
-	if (xd == tex_size[1])
+	xd = (int)(tex_size[2] * texture_x);
+	if (xd == tex_size[2])
 		xd--;
 	while (y < line.y && y < WIN_HEIGHT)
 	{
-		yd = (int)(tex_size[1] * (((double)y - line.x) / (line.y - line.x)));
-		pixel_put(line_x, y, texture[texture_id][yd * tex_size[1] + xd]);
+		yd = (int)(tex_size[2] * (((double)y - line.x) / (line.y - line.x)));
+		pixel_put(line_x, y, texture[texture_id][yd * tex_size[2] + xd]);
 		y++;
 	}
 	y--;

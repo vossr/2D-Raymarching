@@ -6,11 +6,12 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 22:01:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/18 22:18:17 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 00:03:09 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
+#include "live_texture.h"
 
 double	deg_to_rad(double deg)
 {
@@ -64,6 +65,7 @@ int	wolf(void)
 		exit(0);
 	player_movement(settings);
 	raycast(settings);
+	live_texture(settings);
 	update_image();
 	return (0);
 }

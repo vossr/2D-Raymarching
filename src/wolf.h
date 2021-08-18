@@ -6,14 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:02:30 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/18 23:11:41 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/18 23:57:06 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF_H
 # define WOLF_H
 # include "mlx_io.h"
-# include "live_texture.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
