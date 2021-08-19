@@ -6,12 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/18 23:09:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 02:24:20 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 03:40:10 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "live_texture.h"
 #include "fractal.h"
+#include "fdf.h"
 
 void	live_pixel_put(int color, int x, int y,
 							unsigned int **get_textures)
@@ -47,6 +48,7 @@ void	init_live_texture(unsigned int **textures)
 	}
 	live_pixel_put(0, 0, 0, textures);
 	init_fractal();
+	init_fdf();
 }
 
 void	minimap_player(t_settings *settings)
@@ -54,13 +56,13 @@ void	minimap_player(t_settings *settings)
 	int	x;
 	int	y;
 
-	y = -1;
-	while (y < 2)
+	y = -4;
+	while (y < 5)
 	{
-		x = -1;
-		while (x < 2)
+		x = -4;
+		while (x < 5)
 		{
-			live_pixel_put(0xff00, x + (int)(LIVE_TEXTURE_SIZE
+			live_pixel_put(0xaadaff, x + (int)(LIVE_TEXTURE_SIZE
 					* (settings->location.x / settings->map_width)),
 				y + (int)(LIVE_TEXTURE_SIZE
 					* (settings->location.y / settings->map_height)), NULL);
@@ -88,11 +90,11 @@ static void	minimap(t_settings *settings)
 			mapx = settings->map_width
 				* ((float)x / LIVE_TEXTURE_SIZE);
 			if (settings->map[mapy][mapx] == 1)
-				live_pixel_put(0xffffff, x, y, NULL);
+				live_pixel_put(0xfff2af, x, y, NULL);
 			else if (settings->map[mapy][mapx] == 2)
-				live_pixel_put(0x2222ff, x, y, NULL);
+				live_pixel_put(0xc3ecb2, x, y, NULL);
 			else
-				live_pixel_put(0, x, y, NULL);
+				live_pixel_put(0xe8e8e8, x, y, NULL);
 		}
 		y++;
 	}
@@ -101,10 +103,26 @@ static void	minimap(t_settings *settings)
 
 void	live_texture(t_settings *settings)
 {
+	int	x;
+	int	y;
+
 	live_pixel_put(4, -1, 0, NULL);
 	frame_in_frame();
 	live_pixel_put(5, -1, 0, NULL);
 	minimap(settings);
 	live_pixel_put(6, -1, 0, NULL);
 	fractal();
+	live_pixel_put(7, -1, 0, NULL);
+	y = 0;
+	while (y < LIVE_TEXTURE_SIZE)
+	{
+		x = 0;
+		while (x < LIVE_TEXTURE_SIZE)
+		{
+			live_pixel_put(0, x, y, NULL);
+			x++;
+		}
+		y++;
+	}
+	fdf();
 }

@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 01:31:07 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 03:03:06 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 04:04:09 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	frame_in_frame(void)
 		{
 			if (x < 3 || y < 3
 				|| x > LIVE_TEXTURE_SIZE - 4 || y > LIVE_TEXTURE_SIZE - 4)
-				color = 0xff0000;
+				color = 0;
 			else
 				color = frame_in_frame_get_pixel(WIN_WIDTH
 						* ((float)x / LIVE_TEXTURE_SIZE),
