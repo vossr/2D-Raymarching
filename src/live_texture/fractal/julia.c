@@ -6,11 +6,40 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 18:40:28 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 02:41:35 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 20:49:52 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractal.h"
+
+int	get_fire_color(int max, int frame_id, int iter)
+{
+	static int		other2 = 0;
+	static int		wait_i = 1;
+	static int		wait_time = 0;
+	static float	fire_amount = 0;
+
+	if (other2 != frame_id && (wait_i++ + 1))
+		other2 = frame_id;
+	if (wait_i > wait_time)
+	{
+		wait_time = rand() % 10;
+		fire_amount = (float)(rand() % 100) / 100 + 1;
+		if (rand() % 3 < 3)
+			fire_amount = fire_amount + 1.5;
+		wait_i = 0;
+	}
+	if (iter == max)
+		return (0xFFFFFF);
+	else if (iter < max / fire_amount)
+	{
+		max /= fire_amount;
+		return ((int)(0xFF - 0xFF * ((float)(max - iter) / max)) << 16);
+	}
+	iter /= fire_amount;
+	max /= fire_amount;
+	return ((0xFF0000) + ((int)(0xFF * ((float)iter / max)) << 8));
+}
 
 int	julia_iter(PRECISION cx, PRECISION cy, int max_iter, t_position_xy pos)
 {
@@ -56,7 +85,7 @@ void	julia(t_f_settings *settings, int start, int stop)
 				* ((settings->zoom) / LIVE_TEXTURE_SIZE);
 			cy = (y - LIVE_TEXTURE_SIZE / 2)
 				* ((settings->zoom) / LIVE_TEXTURE_SIZE);
-			live_pixel_put(select_color(settings->color, settings->max_iter,
+			live_pixel_put(get_fire_color(settings->max_iter,
 					settings->frame,
 					julia_iter(cx, cy, settings->max_iter, pos)), x, y, NULL);
 			x++;
