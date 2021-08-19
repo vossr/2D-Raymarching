@@ -6,12 +6,12 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/18 23:09:47 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 01:40:40 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 02:24:20 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf.h"
 #include "live_texture.h"
+#include "fractal.h"
 
 void	live_pixel_put(int color, int x, int y,
 							unsigned int **get_textures)
@@ -46,6 +46,7 @@ void	init_live_texture(unsigned int **textures)
 		i++;
 	}
 	live_pixel_put(0, 0, 0, textures);
+	init_fractal();
 }
 
 void	minimap_player(t_settings *settings)
@@ -104,4 +105,6 @@ void	live_texture(t_settings *settings)
 	frame_in_frame();
 	live_pixel_put(5, -1, 0, NULL);
 	minimap(settings);
+	live_pixel_put(6, -1, 0, NULL);
+	fractal();
 }

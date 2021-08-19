@@ -6,11 +6,10 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 01:31:07 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 02:01:04 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 03:03:06 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf.h"
 #include "live_texture.h"
 
 static int	frame_in_frame_get_pixel(int x, int y)
@@ -48,8 +47,8 @@ void	frame_in_frame(void)
 		x = 0;
 		while (x < LIVE_TEXTURE_SIZE)
 		{
-			if (!x || !y
-				|| x == LIVE_TEXTURE_SIZE - 1 || y == LIVE_TEXTURE_SIZE - 1)
+			if (x < 3 || y < 3
+				|| x > LIVE_TEXTURE_SIZE - 4 || y > LIVE_TEXTURE_SIZE - 4)
 				color = 0xff0000;
 			else
 				color = frame_in_frame_get_pixel(WIN_WIDTH

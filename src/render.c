@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:52:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 00:57:52 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/19 02:56:24 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static unsigned int	**load_texture(int *w, int bps, int j)
 	files[1] = "textures/redbrick.xpm";
 	files[2] = "textures/bluewall.xpm";
 	files[3] = "textures/door.xpm";
-	data = (unsigned int **)malloc(sizeof(unsigned int *));
+	data = (unsigned int **)malloc(sizeof(unsigned int *) * 8);
 	if (!data)
 		fatal_error("memory allocation failed");
 	j = -1;
