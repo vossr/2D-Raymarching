@@ -6,16 +6,16 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 21:00:33 by rpehkone          #+#    #+#             */
-/*   Updated: 2020/03/07 19:15:48 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/20 17:42:32 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		save_coord(int start_i, int stop_i, int which)
+int	save_coord(int start_i, int stop_i, int which)
 {
-	static int save_start = 0;
-	static int save_stop = 0;
+	static int	save_start = 0;
+	static int	save_stop = 0;
 
 	if (start_i < 0)
 	{
@@ -28,7 +28,7 @@ int		save_coord(int start_i, int stop_i, int which)
 	return (0);
 }
 
-int		edit_i_height(int i, int which)
+int	edit_i_height(int i, int which)
 {
 	static t_xyz	*map = NULL;
 	int				map_i;
@@ -40,7 +40,7 @@ int		edit_i_height(int i, int which)
 	return (i);
 }
 
-int		color_add_height(int color, int which)
+int	color_add_height(int color, int which)
 {
 	double	red;
 	double	grn;

@@ -6,13 +6,13 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 16:44:10 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 03:30:41 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/20 17:22:13 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	add_perspective(struct s_fdf_settings *settings, t_xyz *start, t_xyz *stop)
+void	add_perspective(t_fdf_settings *settings, t_xyz *start, t_xyz *stop)
 {
 	float	fov;
 
@@ -33,29 +33,23 @@ t_xyz	get_color(int set)
 		color.y = 0xFFFFFF;
 		color.z = 0;
 	}
-	//if (set == -2)
-	//	cycle_colors(&color);
 	else if (set)
 	{
 		color.x = set;
 		color.y = set;
 	}
-	//if (get_settings(7, NULL))
-	//	return (add_color_height(color));
 	return (color);
 }
 
-#include <stdio.h>
-void	move_center(t_xyz *start, t_xyz *stop, struct s_fdf_settings *settings)
+void	move_center(t_xyz *start, t_xyz *stop, t_fdf_settings *settings)
 {
 	static double	zoom = -1200;
+	t_xyz			color;
 
-	//if (is_mouse_down(4))
-	//	zoom += 0.07;
-	//if (is_mouse_down(5))
-	//	zoom -= 0.07;
-	zoom = zoom > 600 ? 600 : zoom;
-	zoom = zoom < -4000 ? -4000 : zoom;
+	if (zoom > 600)
+		zoom = 600;
+	if (zoom < -4000)
+		zoom = -4000;
 	start->z -= zoom;
 	stop->z -= zoom;
 	if (settings->projection_b)
@@ -64,20 +58,16 @@ void	move_center(t_xyz *start, t_xyz *stop, struct s_fdf_settings *settings)
 	start->y += LIVE_TEXTURE_SIZE / 2;
 	stop->x += LIVE_TEXTURE_SIZE / 2;
 	stop->y += LIVE_TEXTURE_SIZE / 2;
-	if (settings->height_color_b)
-		print_line(*start, *stop, add_color_height(settings->color));
-	else
-		print_line(*start, *stop, settings->color);
-	//printf("z = %lf\n", zoom);
+	color = add_color_height(settings->color);
+	print_line(*start, *stop,
+		(unsigned int)color.x, (unsigned int)color.y);
 }
 
-void	center_image(t_xyz *start, t_xyz *stop, int reset, struct s_fdf_settings *settings)
+void	center_image(t_xyz *start, t_xyz *stop, int reset,
+			t_fdf_settings *settings)
 {
 	static int	x = 0;
 	static int	y = 0;
-	//static int	coordx = 0;
-	//static int	coordy = 0;
-	//t_int_xy	cursor;
 
 	if (reset)
 	{
@@ -85,13 +75,6 @@ void	center_image(t_xyz *start, t_xyz *stop, int reset, struct s_fdf_settings *s
 		y = 0;
 		return ;
 	}
-	//cursor = get_cursor();
-	//if (is_mouse_down(3))
-		//x -= coordx - cursor.x;
-	//if (is_mouse_down(3))
-		//y -= coordy - cursor.y;
-	//coordx = cursor.x;
-	//coordy = cursor.y;
 	start->x += x;
 	start->y += y;
 	stop->x += x;

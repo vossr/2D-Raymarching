@@ -6,7 +6,7 @@
 /*   By: rpehkone <rpehkone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:19:28 by rpehkone          #+#    #+#             */
-/*   Updated: 2021/08/19 03:21:13 by rpehkone         ###   ########.fr       */
+/*   Updated: 2021/08/20 17:37:00 by rpehkone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,29 @@ double	ft_abs(double n)
 	return (n);
 }
 
-unsigned	make_fade(t_xyz color, unsigned fade, signed xred)
+unsigned int	make_fade(unsigned int color1, unsigned int color2,
+									unsigned int fade)
 {
-	signed xgrn;
-	signed xblu;
-	signed yred;
-	signed ygrn;
-	signed yblu;
+	unsigned char	*rgb1;
+	unsigned char	*rgb2;
+	unsigned int	newr;
+	unsigned int	newg;
+	unsigned int	newb;
 
-	if (color.x == color.y)
-		return ((signed)color.x);
-	xred = (((signed)color.x % 0x1000000) >> 4 * 4) - fade;
-	xgrn = (((signed)color.x % 0x10000) >> 4 * 2) - fade;
-	xblu = ((signed)color.x % 0x100) - fade;
-	yred = (((signed)color.y % 0x1000000) >> 4 * 4);
-	ygrn = (((signed)color.y % 0x10000) >> 4 * 2);
-	yblu = ((signed)color.y % 0x100);
-	yred = (signed)(((double)fade / 0xFF) * yred);
-	ygrn = (signed)(((double)fade / 0xFF) * ygrn);
-	yblu = (signed)(((double)fade / 0xFF) * yblu);
-	xred = xred < 0 ? 0 : xred;
-	xgrn = xgrn < 0 ? 0 : xgrn;
-	xblu = xblu < 0 ? 0 : xblu;
-	yred = yred > 0xFF ? 0xFF : yred;
-	ygrn = ygrn > 0xFF ? 0xFF : ygrn;
-	yblu = yblu > 0xFF ? 0xFF : yblu;
-	return ((xred << 4 * 4) + (xgrn << 4 * 2) + xblu +
-			(yred << 4 * 4) + (ygrn << 4 * 2) + yblu);
+	rgb1 = (unsigned char *)&color1;
+	rgb2 = (unsigned char *)&color2;
+	newr = (rgb1[2] * (0xff - fade) + rgb2[2] * fade) / 0xff;
+	newg = (rgb1[1] * (0xff - fade) + rgb2[1] * fade) / 0xff;
+	newb = (rgb1[0] * (0xff - fade) + rgb2[0] * fade) / 0xff;
+	return ((newr << 8 * 2) + (newg << 8 * 1) + (newb << 8 * 0) + 0);
 }
 
-void	print_line(t_xyz start, t_xyz stop, t_xyz color)
+void	print_line(t_xyz start, t_xyz stop,
+			unsigned int color1, unsigned int color2)
 {
-	t_xyz	step;
-	t_xyz	pos;
-	int		i;
+	t_xyz			step;
+	t_xyz			pos;
+	int				i;
 
 	if (start.z < 0 || stop.z < 0)
 		return ;
@@ -60,13 +49,15 @@ void	print_line(t_xyz start, t_xyz stop, t_xyz color)
 	pos.x = start.x;
 	pos.y = start.y;
 	pos.z = 0;
-	step.z = ft_abs(stop.x - start.x) > ft_abs(stop.y - start.y) ?
-			ft_abs(stop.x - start.x) : ft_abs(stop.y - start.y);
+	step.z = ft_abs(stop.y - start.y);
+	if (ft_abs(stop.x - start.x) > ft_abs(stop.y - start.y))
+		step.z = ft_abs(stop.x - start.x);
 	step.x = (stop.x - start.x) / (float)step.z;
 	step.y = (stop.y - start.y) / (float)step.z;
 	while (pos.z <= step.z && i < 1000)
 	{
-		live_pixel_put(make_fade(color, 0xFF * ((pos.z) / (step.z)), 0), pos.x, pos.y, NULL);
+		live_pixel_put(make_fade(color1, color2,
+				0xff * ((pos.z) / (step.z))), pos.x, pos.y, NULL);
 		pos.x += step.x;
 		pos.y += step.y;
 		pos.z++;
