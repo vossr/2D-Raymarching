@@ -21,7 +21,7 @@ LIVE_TEXTURE_FILES += $(addprefix fractal/, $(FRACTAL))
 LIVE_TEXTURE_FILES += $(addprefix fdf/, $(FDF))
 FILES = main.c wolf.c render.c
 FILES += $(addprefix live_texture/, $(LIVE_TEXTURE_FILES))
-FLAGS = -Wall -Wextra -Werror -O3 -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -O3
 .PHONY: clean fclean re all
 
 all: $(NAME)
